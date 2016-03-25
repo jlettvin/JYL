@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+#mute {
+  color           :green;
+}
+#main {
+  text-align      :center;
+  font-family     :monospace;
+  font-size       :10px;
+}
+table {
+  border-collapse :collapse;
+  margin          :0px;
+  text-align      :left;
+  vertical-align  :top;
+  color           :black;
+  background-color:white;
+}
+ol {
+  padding-top     :0px;
+  margin-top      :0px;
+  margin-bottom   :0px;
+  padding-left    :30px;
+  /*
+  margin          :0;
+  padding         :0;
+  list-style-type :square;
+  */
+}
+#part {
+  vertical-align  :top;
+  border          :1px solid black;
+  border-collapse :collapse;
+}
+#Commentary {
+  border          :1px solid black;
+  border-collapse :collapse;
+  text-align      :left;
+  vertical-align  :top;
+  color           :white;
+  background-color:black;
+}
+#header1 {
+  font-size       :20px;
+}
+#header2 {
+  font-size       :18px;
+}
+#header2 {
+  font-size       :16px;
+}
+#header2 {
+  font-size       :14px;
+}
+  </style>
+  <script src="wiki.js"></script>
+  <script type="text/javascript">
+
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+(function(w,d) {
+
+  'use strict';
+
+  // Include specializations
+  // Both patterns need work because extra spaces appear in the output.
+  w.wikiappend([
+    'wikipedia',
+    /\!w\s*(.*)\s*\|\s*(.*)\s*w\!/g,
+    '<a href="https://en.wikipedia.org/wiki/$1">$2</a>',
+    '!w a | b w!',
+    '<a href="https://en.wikipedia.org/wiki/a">b</a>'
+    ]);
+  w.wikiappend([
+    'mouseover',
+    /!:\s*([^\,]*)\s*\,\s*([^:]*)\s*:!/g,
+    '<a href="" onmouseover="window.comment.$1()">$2</a>',
+    '!: a, b :!',
+    '<a href="" onmouseover="window.comment.a()">b</a>'
+    ]);
+
+  // Here Document function
+  function HERE(f) { return f.toString().split('\n').slice(1,-1).join('\n'); }
+  // Enable self-reference and wikipedia reference
+  // Enable multiple chained onload handlers
+  function pushEvent(func) {
+    var oldonload = window.onload;
+    if (typeof window.onload != 'function') {
+      window.onload = func;
+    } else {
+      window.onload = function() {
+        if (oldonload) {
+          oldonload();
+        }
+        func();
+      }
+    }
+  }
+
+  // LOCAL DATA ///////////////////////////////////////////////////////////////
+  w.html    = {};   // Control data for generating comment in HTML
+  w.paper   = {};   // Content of the scientific paper
+  w.canvas  = {};   // Control data for generating images on the canvas
+  w.comment = {};   // Commentary provided by Jonathan D. Lettvin
+  w.speaker = {};   // Sound to exemplify pulse rate changes
+
+  // CONTROL DATA /////////////////////////////////////////////////////////////
+  w.canvas.Edge     = 255;
+  w.canvas.Line     = 1;
+  w.canvas.Tick     = 10;
+  w.canvas.Z        = [];
+  w.canvas.Zeros    = 3;
+  w.canvas.Diag     = w.canvas.Tick / Math.sqrt(2.0);
+  w.canvas.Epsilon  = w.canvas.Line / 2;
+  w.canvas.Gap      = w.canvas.Edge / 8;
+  w.canvas.Color    = {black:"#000000", gray:"#777777", white:"#EEEEEE" };
+  w.canvas.Showing  = [];
+  w.canvas.Z0coefficient = 1.2196698912665045;
+  w.canvas.X0 = w.canvas.Y0 = w.canvas.Edge / 2;
+
+  // PAPER CONTENT ////////////////////////////////////////////////////////////
+  //___________________________________________________________________________
+  w.paper.Title = HERE(function() {/*
+== HOW SEEN MOVEMENT APPEARS IN^^^THE FROG'S OPTIC NERVE ==
+*/});
+  //___________________________________________________________________________
+  w.paper.Caption = "Neutral Gray Background";
+  //___________________________________________________________________________
+  w.paper.Citation = HERE(function() {/*
+Federation Proceedings Volume 18 Number 1^^^
+March 1959 Pages 393 and 354.^^^
+!wHumberto_Maturana|H. Maturanaw!,
+!wJerome_Lettvin|J. Y. Lettvinw!,
+!wWalter_Pitts|W. H. Pittsw!,
+!wWarren_Sturgis_McCulloch|W. S. McCullochw!^^^
+<a href="http://www.rle.mit.edu/">RLE</a>
+!wRLE|(Research Laboratory of Electronics, M.I.T. Cambridge, MA)w!
+*/});
+
+  w.paper.Illustration = HERE(function() {/*
+Illustrated by
+<a href="http://jonathan.lettvin.com">Jonathan D. Lettvin</a>, 20160322^^^
+with images against a !:Neutral,Neutral Gray Background:!
+*/});
+  //___________________________________________________________________________
+  w.paper.PartI_title = HERE(function() {/*
+=== Part I (page 393) ===
+*/})
+//___________________________________________________________________________
+  w.paper.PartI_body = HERE(function() {/*
+___The receptive field of a single !:Fiber,optic nerve fiber:!
+(plotted by the on and off responses to small fixed spots)
+is often divisible into !:Concentric,concentric zones:!
+This suggests that the response of the fiber to a moving spot
+may be !:Polar,polar:! with respect to a !:Point,reference point:!
+in the receptive field.
+Movement is indeed polarly encoded and there exists at least
+the following four types of fibers whose rate of firing depends on
+the !:Centrifugal,centrifugal:! component of a movement
+with respect to !:Point,some point:! internal to the receptive field.
+(!:Centripetal,centripetal:! and tangential movements never cause discharge):
+# Some fibers have wide receptive fields and low sensitivity.\
+Of these some prefer the moving object !:Darker,darker:! than background,\
+others prefer it !:Lighter,lighter:!.
+# A second group has !:Constricted,constricted:! fields and high sensitivity.
+# A third set shows a directional !:Weighting,heavy weighting:! of the response.
+# A fourth kind has !:Annular,annular fields:!.
+A fifth variety measures inversely
+the average intensity of !:Illumination,illumination:! in a region.
+Its maximum rate is in the dark.
+*/});
+  //___________________________________________________________________________
+  w.paper.PartII_title = HERE(function() {/*
+=== Part II (page 354) ===
+*/});
+  //___________________________________________________________________________
+  w.paper.PartII_body = HERE(function() {/*
+___The coding of movement described in Part I
+suggests that the frog's eye is designed
+(at least for land operation)
+to abstract the vector and size of a moving object
+and extrapolate the path.
+Because our evidence implies that there exists a coordinate system
+built into the retina and that the coding allows coordinates and velocity
+to arise from general operations on the whole output of the optic nerve,
+we propose some alternative guesses to account for
+<a href="https://en.wikipedia.org/wiki/Roger_Wolcott_Sperry">Sperry's</a>
+results on dislocated eyes.
+We do not propose that his notion of specific reconnection is wrong
+but that it is not necessary.^^^
+___We also present the law by which there is a point-to-point correspondence
+from receptors to optic nerve, vis.,
+if an object is moved within the visual field in a !:Circular,circular:! path
+of any !:Diameter,diameter:! the only fibers that show !:Response,no response:!
+at any time are those that have the centers of their receptive fields
+at the !:Center,center:! of the circle described.
+*/});
+
+  w.html.Paper = function() {
+    d.getElementById('Title')       .innerHTML = w.markdown(w.paper.Title);
+    d.getElementById('Citation')    .innerHTML = w.markdown(w.paper.Citation);
+    d.getElementById('PartI_title') .innerHTML = w.markdown(w.paper.PartI_title);
+    d.getElementById('PartI_body')  .innerHTML = w.markdown(w.paper.PartI_body);
+    d.getElementById('PartII_title').innerHTML = w.markdown(w.paper.PartII_title);
+    d.getElementById('PartII_body') .innerHTML = w.markdown(w.paper.PartII_body);
+    d.getElementById('Illustration').innerHTML = w.markdown(w.paper.Illustration);
+  };
+
+  //###########################################################################
+  // Neutral gray background
+  w.canvas.Neutral = function() {
+    var ctx = w.canvas.ctx;
+    var Z0 = w.canvas.Z0coefficient * w.canvas.Gap;
+    w.canvas.Z = [Z0];
+    for (var z = 1; z < w.canvas.Zeros; z++) {
+      w.canvas.Z.push(Z0 + z * w.canvas.Gap);
+    }
+    ctx.fillStyle = w.canvas.Color.gray;
+    ctx.fillRect(0,0,255,255);
+  };
+
+  //###########################################################################
+  w.canvas.Center = function(radius) {
+    if (!radius) {
+      w.canvas.Center(5);
+    } else {
+      var ctx = w.canvas.ctx;
+      var radius = 10;
+      console.log('Center');
+
+      /*
+      ctx.beginPath();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = w.canvas.Color.black;
+      ctx.fillStyle = w.canvas.Color.white;
+      ctx.fill();
+      ctx.arc(w.canvas.X0,w.canvas.Y0,radius+w.canvas.Epsilon,0,2*Math.PI);
+      ctx.stroke();
+      */
+
+      ctx.beginPath();
+      ctx.moveTo(0,0);
+      ctx.lineTo(255,255);
+      ctx.stroke();
+    }
+  };
+
+  //###########################################################################
+  // Concentric Rings
+  w.canvas.Ring = function(radius) {
+    if (!radius) {
+      for (var z of w.canvas.Z) w.canvas.Ring(z);
+    } else {
+      var ctx = w.canvas.ctx;
+      ctx.lineWidth = w.canvas.Line;
+
+      // Outer ring
+      ctx.beginPath();
+      ctx.strokeStyle = w.canvas.Color.black;
+      ctx.arc(w.canvas.X0,w.canvas.Y0,radius+w.canvas.Epsilon,0,2*Math.PI);
+      ctx.stroke();
+
+      // Inner ring
+      ctx.beginPath();
+      ctx.strokeStyle = w.canvas.Color.white;
+      ctx.arc(w.canvas.X0,w.canvas.Y0,radius-w.canvas.Epsilon,0,2*Math.PI);
+      ctx.stroke();
+    }
+  };
+
+  //###########################################################################
+  // Polar axes
+  w.canvas.Polar = function() {
+    var ctx = w.canvas.ctx;
+    ctx.lineWidth = w.canvas.Line;
+    ctx.strokeStyle = w.canvas.Color.black;
+    var ctrl = w.canvas;
+    var X0 = ctrl.X0, Y0 = ctrl.Y0;
+    var Tick = ctrl.Tick, Edge = ctrl.Edge, Diag = ctrl.Diag;
+    var Showing = ctrl.Showing;
+
+    var draw = function(xy1, xy2) {
+      ctx.beginPath();
+      ctx.moveTo(xy1[0], xy1[1]);
+      ctx.lineTo(xy2[0], xy2[1]);
+      ctx.stroke();
+    };
+
+    // Cartesian axes
+    draw([X0, 0], [X0, Edge]);
+    draw([0, Y0], [Edge, Y0]);
+
+    // Cartesian tick marks
+    var t = 1.7;
+    for (var i=0; i < X0; i += Tick) {
+      // Y axis ticks
+      draw([X0-t, Y0+i], [X0+t, Y0+i]);
+      draw([X0-t, Y0-i], [X0+t, Y0-i]);
+
+      // X axis ticks
+      draw([X0+i, Y0-t], [X0+i, Y0+t]);
+      draw([X0-i, Y0-t], [X0-i, Y0+t]);
+    }
+
+    // Diagonal axes
+    draw([0,         0], [Edge, Edge]);
+    draw([0, Edge], [Edge,         0]);
+
+    // Diagonal tick marks
+    var t = 1.2;
+    for (var i=0; i < X0; i += Diag) {
+      // Down Right axis ticks
+      draw([X0+i-t, Y0+i+t], [X0+i+t, Y0+i-t]);
+      draw([X0-i-t, Y0-i+t], [X0-i+t, Y0-i-t]);
+
+      // Down Left axis ticks
+      draw([X0+i-t, Y0-i-t], [X0+i+t, Y0-i+t]);
+      draw([X0-i-t, Y0+i-t], [X0-i+t, Y0+i+t]);
+    }
+  };
+
+  // FILL FUNCTION ////////////////////////////////////////////////////////////
+  //___________________________________________________________________________
+  w.canvas.fill = function() {
+    var canvas = document.getElementById("illustration");
+    var ctx = canvas.getContext("2d");
+    w.canvas.ctx = ctx;
+
+    // These are the image component functions in alphabetical order.
+    w.canvas.callable = {
+      Annular         :w.canvas.Annular,
+      Center          :w.canvas.Center,
+      Centrifugal     :w.canvas.Centrifugal,
+      Centripetal     :w.canvas.Centripetal,
+      Circular        :w.canvas.Circular,
+      Concentric      :w.canvas.Concentric,
+      Constricted     :w.canvas.Constricted,
+      Darker          :w.canvas.Darker,
+      Diameter        :w.canvas.Diameter,
+      Fiber           :w.canvas.Fiber,
+      Illumination    :w.canvas.Illumination,
+      Lighter         :w.canvas.Lighter,
+      Neutral         :w.canvas.Neutral,
+      Point           :w.canvas.Point,
+      Polar           :w.canvas.Polar,
+      PSF             :w.canvas.PSF,
+      Response        :w.canvas.Response,
+      Ring            :w.canvas.Ring,
+      Weighting       :w.canvas.Weighting,
+    };
+
+    // For each element of Showing, in order, add components to canvas.
+    for (var fun in w.canvas.callable) {
+      if (-1 != w.canvas.Showing.indexOf(fun)) w.canvas.callable[fun]();
+    }
+
+    // Finish up the image drawing sequence.
+    ctx.closePath();
+
+    w.html.Paper();
+  };
+
+  // COMMENTARY FUNCTIONS /////////////////////////////////////////////////////
+  //___________________________________________________________________________
+  w.html.ShowComment = function(text) {
+    d.getElementById('Commentary').innerHTML = text;
+  };
+
+  // COMMENT SERVICE FUNCTION /////////////////////////////////////////////////
+  //___________________________________________________________________________
+  w.html.Common = function(classname, caption, doc, visible) {
+    d.getElementById('Caption').innerHTML = caption;
+    w.html.ShowComment(w.markdown(doc));
+    w.canvas.Showing = [];
+    for (var i = 0; i < visible.length; i++) w.canvas.Showing.push(visible[i]);
+    w.canvas.fill();
+  };
+
+  // COMMENT FUNCTIONS IN PAPER ORDER /////////////////////////////////////////
+  //___________________________________________________________________________
+  w.comment.Neutral = function() { var doc = HERE(function() {/*
+== Neutral Gray ==
+=== Why is this needed? ===
+___Photoreceptors respond to changes in photon flux.
+The change may be an increase or decrease of flux.
+Successful modeling of flux changes in this paper
+requires the ability to represent both types of flux change.
+A neutral gray background enables the display of
+objects both brighter and darker than the background.
+=== Future Modeling ===
+___This has consequence in modeling retinal functions
+as described in additional papers.
+    */});
+    w.html.Common('Neutral', 'Neutral Gray Background', doc, ['Neutral']);
+  };
+  //___________________________________________________________________________
+  w.comment.Concentric = function() { var doc = HERE(function() {/*
+== Concentric Zones ==
+=== When are signals generated? ===
+Responses accompany crossing from inside to outside an annulus.
+Concentric zones are proposed here as bounded by Airy zeros of
+the
+!:PSF,PSF:!
+(Point Spread Function) for a monochromatic point source.
+    */});
+    w.html.Common('Concentric', 'Concentric Airy Zeros', doc, ['Neutral', 'Ring']);
+  };
+  //___________________________________________________________________________
+  w.comment.Polar = function() { var doc = HERE(function() {/*
+Polar axes illustrate equidistance from center of concentric zone boundaries.
+    */});
+    w.html.Common('Polar', 'Polar axes', doc, ['Neutral', 'Polar', 'Ring']);
+  };
+  //___________________________________________________________________________
+  w.comment.Center = function() { var doc = HERE(function() {/*
+Center 
+    */});
+    w.html.Common('Center', 'center', doc, ['Neutral', 'Ring', 'Center']);
+  };
+  //___________________________________________________________________________
+  w.comment.Centrifugal = function() { var doc = HERE(function() {/*
+Centrifugal 
+    */});
+    w.html.Common('Centrifugal', 'Centrifugal motion', doc, ['Neutral', 'Ring']);
+  };
+  //___________________________________________________________________________
+  w.comment.PSF = function() { var doc = HERE(function() {/*
+Point Spread Function
+    */});
+    w.html.Common('Point', 'Point Spread Function', doc, ['Neutral']);
+  };
+  //___________________________________________________________________________
+  w.comment.Point = function() { var doc = HERE(function() {/*
+Point 
+    */});
+    w.html.Common('Point', 'Point', doc, ['Neutral']);
+  };
+  //___________________________________________________________________________
+  w.comment.Centripetal = function() { var doc = HERE(function() {/*
+Centripetal 
+    */});
+    w.html.Common('Centripetal', 'Centripetal', doc, ['Neutral', 'Ring']);
+  };
+  //___________________________________________________________________________
+  w.comment.Darker = function() { var doc = HERE(function() {/*
+Darker 
+    */});
+    w.html.Common('Darker', 'Dark object motion', doc, ['Neutral', 'Ring']);
+  };
+  //___________________________________________________________________________
+  w.comment.Lighter = function() { var doc = HERE(function() {/*
+Lighter 
+    */});
+    w.html.Common('Lighter', 'Light object motion', doc, ['Neutral', 'Ring']);
+  };
+  //___________________________________________________________________________
+  w.comment.Constricted = function() { var doc = HERE(function() {/*
+Constricted 
+    */});
+    w.html.Common('Constricted', 'Constricted fields', doc, ['Neutral', 'Ring']);
+  };
+  //___________________________________________________________________________
+  w.comment.Weighting = function() { var doc = HERE(function() {/*
+Weighting 
+    */});
+    w.html.Common('Weighting', 'Directional weighting', doc, ['Neutral', 'Ring']);
+  };
+  //___________________________________________________________________________
+  w.comment.Annular = function() { var doc = HERE(function() {/*
+Annular 
+    */});
+    w.html.Common('Annular', 'Annular fields', doc, ['Neutral', 'Ring']);
+  };
+  //___________________________________________________________________________
+  w.comment.Illumination = function() { var doc = HERE(function() {/*
+Illumination 
+    */});
+    w.html.Common('Illumination', 'Inverse average intensity', doc, ['Neutral', 'Ring']);
+  };
+  //___________________________________________________________________________
+  w.comment.Circular = function() { var doc = HERE(function() {/*
+Circular 
+    */});
+    w.html.Common('Circular', 'Circular motion', doc, ['Neutral', 'Ring']);
+  };
+  //___________________________________________________________________________
+  w.comment.Fiber = function() { var doc = HERE(function() {/*
+Fiber 
+    */});
+    w.html.Common('Fiber', 'Fiber: Ganglion cell axon', doc, ['Neutral', 'Ring']);
+  };
+  //___________________________________________________________________________
+  w.comment.Diameter = function() { var doc = HERE(function() {/*
+Diameter 
+    */});
+    w.html.Common('Diameter', 'Invariant to diameter', doc, ['Neutral', 'Ring']);
+  };
+  //___________________________________________________________________________
+  w.comment.Response = function() { var doc = HERE(function() {/*
+Response 
+    */});
+    w.html.Common('Response', 'No response at center', doc, ['Neutral', 'Ring']);
+  };
+
+  //###########################################################################
+  w.speaker.Resting = function() {
+
+    w.speaker.audible = false;
+
+    w.speaker.context = new window.AudioContext();
+ 
+    w.speaker.osc = w.speaker.context.createOscillator();
+    w.speaker.osc.frequency.value = 3; //440;
+    w.speaker.osc.type = "square";
+    w.speaker.osc.connect(w.speaker.context.destination);
+    w.speaker.osc.start(0);
+ 
+    w.speaker.gain = w.speaker.context.createGain();
+    w.speaker.volume = 0.50;
+    w.speaker.gain.gain.value = w.speaker.volume;
+    w.speaker.gain.connect(w.speaker.osc.frequency);
+
+    w.speaker.context.suspend(0);   // Begins muted.
+  };
+
+  //___________________________________________________________________________
+  w.speaker.Hear = function() {
+    var mute = d.getElementById("mute");
+    w.speaker.context.resume(0);
+    mute.style.color = "red";
+    mute.innerHTML = "MUTE";
+  };
+
+  //___________________________________________________________________________
+  w.speaker.Mute = function() {
+    var mute = d.getElementById("mute");
+    w.speaker.context.suspend(0);
+    mute.style.color = "green";
+    mute.innerHTML = "HEAR";
+  };
+
+  //___________________________________________________________________________
+  w.speaker.Toggle = function() {
+    w.speaker.audible ^= true;
+    w.speaker.audible ? w.speaker.Hear() : w.speaker.Mute();
+  };
+
+  //###########################################################################
+  pushEvent(w.comment.Neutral);
+  pushEvent(w.speaker.Resting);
+
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+}).call(this, window, document);
+  </script>
+</head>
+<body>
+<!-- HTML FRAMEWORK <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< -->
+<table id="main">
+
+  <tr>
+    <td width="50%">
+      <table>
+        <tr>
+          <td id="part">
+            <u><big><big id="Title"></big></big></u><br />
+            <code id="Citation"></code>
+          </td>
+        </tr>
+        <tr>
+          <td id="part" width="50%">
+            <big id="PartI_title"></big>
+            <p id="PartI_body"></p>
+          </td>
+
+        </tr>
+        <tr>
+          <td id="part" id="part" width="50%" valign="top">
+            <big id="PartII_title"></big>
+            <p id="PartII_body"></p>
+          </td>
+        </tr>
+      </table>
+    </td><td valign="top" width="50%">
+      <table>
+        <tr>
+          <big id="Illustration"></big><br />
+            Click to
+            <button id="mute" type="button" onclick="window.speaker.Toggle()" >
+              HEAR
+            </button>
+            simulated ganglion cell discharges.
+          <td height="255px" width="255px" align="center">
+            <canvas id="illustration" width="255" height="255"></canvas><br />
+            <b id="Caption"></b>
+          </td>
+        </tr>
+        <tr>
+          <td rowspan="2" width="50%">
+            <big>Commentary</big><br />
+            <p id="Commentary"></p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+
+</table>
+<!-- HTML FRAMEWORK >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+</body>
+</html>
