@@ -290,11 +290,14 @@ at the !:Center,center:! of the circle described.
   //###########################################################################
   canvas.Center = function(radius) {
     var ctx = canvas.ctx;
-    console.log('Center');
+    console.log('Center init');
 
     radius = radius || 5;
 
-    canvas.drawLine([0,0], [254,254], '#ff0000', canvas.Line);
+    canvas.drawCircle([30,30], 30, '#fff', 2);
+    canvas.Neutral();
+    //canvas.drawLine([0,0], [254,254], '#f00', canvas.Line);
+    console.log('Center fini');
   };
 
   //###########################################################################
