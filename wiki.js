@@ -130,7 +130,7 @@ var wiki = (function(w,d) {
 
   //___________________________________________________________________________
   function append(pattern) {
-    var me = 'window.wiki.append[FAIL]: ';
+    var me = 'window.wiki.append[FAIL]: TODO ';
     if (pattern.length != 5) console.log(me + 'name, re, to, input, output');
 
     basic_patterns[Object.keys(basic_patterns).length] = pattern;
@@ -405,12 +405,12 @@ var wiki = (function(w,d) {
   // Make markdown function visible.
   if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
     module.exports = markdown;
-    console.log("wiki.js as MAIN");
+    //console.log("wiki.js as MAIN");
   } else {
     w.wiki = {markdown:markdown, append:append};
     w.markdown = markdown;
     w.wikiappend = append;
-    console.log("wiki.js as MODULE");
+    //console.log("wiki.js as MODULE");
     //export {markdown, append};
   }
 

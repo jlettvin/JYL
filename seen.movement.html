@@ -2,14 +2,6 @@
 <html>
 <head>
   <style>
-#mute {
-  color           :green;
-}
-#main {
-  text-align      :center;
-  font-family     :monospace;
-  font-size       :10px;
-}
 table {
   border-collapse :collapse;
   margin          :0px;
@@ -23,11 +15,17 @@ ol {
   margin-top      :0px;
   margin-bottom   :0px;
   padding-left    :30px;
-  /*
-  margin          :0;
-  padding         :0;
-  list-style-type :square;
-  */
+}
+#mute {
+  color           :green;
+}
+#main {
+  text-align      :center;
+  font-family     :monospace;
+  font-size       :10px;
+}
+#Illustration {
+  text-align      :center;
 }
 #part {
   vertical-align  :top;
@@ -68,16 +66,16 @@ ol {
   w.wikiappend([
     'wikipedia',
     /\!w\s*(.*)\s*\|\s*(.*)\s*w\!/g,
-    '<a href="https://en.wikipedia.org/wiki/$1">$2</a>',
+    '<a href="https://en.wikipedia.org/wiki/$1" onmouseover="window.paper.comment.$1()">$2</a>',
     '!w a | b w!',
-    '<a href="https://en.wikipedia.org/wiki/a">b</a>'
+    '<a href="https://en.wikipedia.org/wiki/a" onmouseover="window.paper.comment.a()">b</a>'
     ]);
   w.wikiappend([
     'mouseover',
     /!:\s*([^\,]*)\s*\,\s*([^:]*)\s*:!/g,
-    '<a href="" onmouseover="window.comment.$1()">$2</a>',
+    '<a href="" onmouseover="window.paper.comment.$1()">$2</a>',
     '!: a, b :!',
-    '<a href="" onmouseover="window.comment.a()">b</a>'
+    '<a href="" onmouseover="window.paper.comment.a()">b</a>'
     ]);
 
   // Here Document function
@@ -99,66 +97,114 @@ ol {
   }
 
   // LOCAL DATA ///////////////////////////////////////////////////////////////
-  w.html    = {};   // Control data for generating comment in HTML
-  w.paper   = {};   // Content of the scientific paper
-  w.canvas  = {};   // Control data for generating images on the canvas
-  w.comment = {};   // Commentary provided by Jonathan D. Lettvin
-  w.speaker = {};   // Sound to exemplify pulse rate changes
+
+  // Two top level branch namespaces off of window are reasonable.
+  w.html          = {};   // Control data for generating comment in HTML
+  w.paper         = {};   // Content of the scientific paper
+
+  // Secondary html control data
+  w.html.speaker  = {};   // Sound to exemplify pulse rate changes
+  w.html.canvas   = {};   // Control data for generating images on the canvas
+  w.html.image    = {};   // Images of paper authors
+
+  // Enable syntactic sugar accessors to the two namespaces.
+  var html    = w.html;
+  var paper   = w.paper;
+  var speaker = html.speaker;
+  var canvas  = html.canvas;
+  var image   = html.image;
+
+  paper.comment = {};   // An array of call-by-name comment fill functions.
+
+  var comment = paper.comment;
+
+  // Secondary paper content data
+  paper.who = {
+    authors:{
+      'Humberto_Maturana':'H. Maturana',
+      'Jerome_Lettvin':'J. Y. Lettvin',
+      'Walter_Pitts':'W. H. Pitts',
+      'Warren_McCulloch':'W. S. McCulloch'
+    }, commenters:{
+      'Jonathan_Lettvin':'Jonathan D. Lettvin'
+    }
+  };
+  paper.where = {
+    'RLE':'(Research Laboratory of Electronics, M.I.T. Cambridge, MA)'
+  };
 
   // CONTROL DATA /////////////////////////////////////////////////////////////
-  w.canvas.Edge     = 255;
-  w.canvas.Line     = 1;
-  w.canvas.Tick     = 10;
-  w.canvas.Z        = [];
-  w.canvas.Zeros    = 3;
-  w.canvas.Diag     = w.canvas.Tick / Math.sqrt(2.0);
-  w.canvas.Epsilon  = w.canvas.Line / 2;
-  w.canvas.Gap      = w.canvas.Edge / 8;
-  w.canvas.Color    = {black:"#000000", gray:"#777777", white:"#EEEEEE" };
-  w.canvas.Showing  = [];
-  w.canvas.Z0coefficient = 1.2196698912665045;
-  w.canvas.X0 = w.canvas.Y0 = w.canvas.Edge / 2;
+  canvas.Edge     = 255;
+  canvas.Line     = 1;
+  canvas.Tick     = 10;
+  canvas.Z        = [];
+  canvas.Zeros    = 3;
+  canvas.Diag     = canvas.Tick / Math.sqrt(2.0);
+  canvas.Epsilon  = canvas.Line / 2;
+  canvas.Gap      = canvas.Edge / 8;
+  canvas.Color    = {black:"#000000", gray:"#777777", white:"#EEEEEE" };
+  canvas.Showing  = [];
+  canvas.Z0coefficient = 1.2196698912665045;
+  canvas.X0 = canvas.Y0 = canvas.Edge / 2;
+
+  for (var author in paper.who.authors) {
+    image[author]  = new Image();
+    image[author].src = author + '.jpg';
+  }
+  for (var facility in paper.where) {
+    image[facility]  = new Image();
+    image[facility].src = facility + '.jpg';
+  }
+  for (var commenter in paper.who.commenters) {
+    image[commenter]  = new Image();
+    image[commenter].src = commenter + '.jpg';
+  }
 
   // PAPER CONTENT ////////////////////////////////////////////////////////////
   //___________________________________________________________________________
-  w.paper.Title = HERE(function() {/*
+  paper.Title = HERE(function() {/*
 == HOW SEEN MOVEMENT APPEARS IN^^^THE FROG'S OPTIC NERVE ==
 */});
   //___________________________________________________________________________
-  w.paper.Caption = "Neutral Gray Background";
+  paper.Caption = "Neutral Gray Background";
   //___________________________________________________________________________
-  w.paper.Citation = HERE(function() {/*
+  paper.Citation  = HERE(function() {/*
 Federation Proceedings Volume 18 Number 1^^^
 March 1959 Pages 393 and 354.^^^
-!wHumberto_Maturana|H. Maturanaw!,
-!wJerome_Lettvin|J. Y. Lettvinw!,
-!wWalter_Pitts|W. H. Pittsw!,
-!wWarren_Sturgis_McCulloch|W. S. McCullochw!^^^
-<a href="http://www.rle.mit.edu/">RLE</a>
-!wRLE|(Research Laboratory of Electronics, M.I.T. Cambridge, MA)w!
 */});
 
-  w.paper.Illustration = HERE(function() {/*
-Illustrated by
-<a href="http://jonathan.lettvin.com">Jonathan D. Lettvin</a>, 20160322^^^
+  for (var author in paper.who.authors) {
+    paper.Citation += '!w' + author + '|' + paper.who.authors[author] + 'w!\n';
+  }
+  paper.Citation += '^^^\n<a href="http://www.rle.mit.edu/">RLE</a>';
+
+  for (var facility in paper.where) {
+    paper.Citation += '!w' + facility + '|' + paper.where[facility] + 'w!\n';
+  }
+
+  //___________________________________________________________________________
+  paper.Illustration = HERE(function() {/*
+!wJonathan_Lettvin|Jonathan D. Lettvinw!
+(<a href="http://jonathan.lettvin.com">(home)</a>),
+comments 20160322^^^
 with images against a !:Neutral,Neutral Gray Background:!
 */});
   //___________________________________________________________________________
-  w.paper.PartI_title = HERE(function() {/*
+  paper.PartI_title = HERE(function() {/*
 === Part I (page 393) ===
 */})
 //___________________________________________________________________________
-  w.paper.PartI_body = HERE(function() {/*
+  paper.PartI_body = HERE(function() {/*
 ___The receptive field of a single !:Fiber,optic nerve fiber:!
 (plotted by the on and off responses to small fixed spots)
 is often divisible into !:Concentric,concentric zones:!
 This suggests that the response of the fiber to a moving spot
 may be !:Polar,polar:! with respect to a !:Point,reference point:!
 in the receptive field.
-Movement is indeed polarly encoded and there exists at least
+Movement is indeed polarly encoded and there exist at least
 the following four types of fibers whose rate of firing depends on
 the !:Centrifugal,centrifugal:! component of a movement
-with respect to !:Point,some point:! internal to the receptive field.
+with respect to !:Point,some point:! internal to the receptive field
 (!:Centripetal,centripetal:! and tangential movements never cause discharge):
 # Some fibers have wide receptive fields and low sensitivity.\
 Of these some prefer the moving object !:Darker,darker:! than background,\
@@ -171,11 +217,11 @@ the average intensity of !:Illumination,illumination:! in a region.
 Its maximum rate is in the dark.
 */});
   //___________________________________________________________________________
-  w.paper.PartII_title = HERE(function() {/*
+  paper.PartII_title = HERE(function() {/*
 === Part II (page 354) ===
 */});
   //___________________________________________________________________________
-  w.paper.PartII_body = HERE(function() {/*
+  paper.PartII_body = HERE(function() {/*
 ___The coding of movement described in Part I
 suggests that the frog's eye is designed
 (at least for land operation)
@@ -197,189 +243,191 @@ at any time are those that have the centers of their receptive fields
 at the !:Center,center:! of the circle described.
 */});
 
-  w.html.Paper = function() {
-    d.getElementById('Title')       .innerHTML = w.markdown(w.paper.Title);
-    d.getElementById('Citation')    .innerHTML = w.markdown(w.paper.Citation);
-    d.getElementById('PartI_title') .innerHTML = w.markdown(w.paper.PartI_title);
-    d.getElementById('PartI_body')  .innerHTML = w.markdown(w.paper.PartI_body);
-    d.getElementById('PartII_title').innerHTML = w.markdown(w.paper.PartII_title);
-    d.getElementById('PartII_body') .innerHTML = w.markdown(w.paper.PartII_body);
-    d.getElementById('Illustration').innerHTML = w.markdown(w.paper.Illustration);
+  html.Paper = function() {
+    var elements = [
+      'Title',
+      'Citation',
+      'Illustration',
+      'PartI_title',
+      'PartI_body',
+      'PartII_title',
+      'PartII_body'
+    ];
+    for (var element of elements) {
+      d.getElementById(element).innerHTML = w.markdown(paper[element]);
+    }
+  };
+
+  //###########################################################################
+  canvas.drawLine = function(xy1, xy2, color, width) {
+    var ctx = canvas.ctx;
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    ctx.moveTo(xy1[0], xy1[1]);
+    ctx.lineTo(xy2[0], xy2[1]);
+    ctx.stroke();
+  };
+
+  //###########################################################################
+  canvas.drawCircle = function(xycenter, radius, color, width) {
+    var ctx = canvas.ctx;
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    ctx.arc(xycenter[0], xycenter[1], radius, 0, 2*Math.PI);
+    ctx.stroke();
   };
 
   //###########################################################################
   // Neutral gray background
-  w.canvas.Neutral = function() {
-    var ctx = w.canvas.ctx;
-    var Z0 = w.canvas.Z0coefficient * w.canvas.Gap;
-    w.canvas.Z = [Z0];
-    for (var z = 1; z < w.canvas.Zeros; z++) {
-      w.canvas.Z.push(Z0 + z * w.canvas.Gap);
-    }
-    ctx.fillStyle = w.canvas.Color.gray;
+  canvas.Neutral = function() {
+    var ctx = canvas.ctx;
+    ctx.fillStyle = canvas.Color.gray;
     ctx.fillRect(0,0,255,255);
   };
 
   //###########################################################################
-  w.canvas.Center = function(radius) {
-    if (!radius) {
-      w.canvas.Center(5);
-    } else {
-      var ctx = w.canvas.ctx;
-      var radius = 10;
-      console.log('Center');
+  canvas.Center = function(radius) {
+    var ctx = canvas.ctx;
+    console.log('Center');
 
-      /*
-      ctx.beginPath();
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = w.canvas.Color.black;
-      ctx.fillStyle = w.canvas.Color.white;
-      ctx.fill();
-      ctx.arc(w.canvas.X0,w.canvas.Y0,radius+w.canvas.Epsilon,0,2*Math.PI);
-      ctx.stroke();
-      */
+    radius = radius || 5;
 
-      ctx.beginPath();
-      ctx.moveTo(0,0);
-      ctx.lineTo(255,255);
-      ctx.stroke();
-    }
+    canvas.drawLine([0,0], [254,254], '#ff0000', canvas.Line);
   };
 
   //###########################################################################
   // Concentric Rings
-  w.canvas.Ring = function(radius) {
+  canvas.Ring = function(radius) {
     if (!radius) {
-      for (var z of w.canvas.Z) w.canvas.Ring(z);
+      for (var z of canvas.Z) canvas.Ring(z);
     } else {
-      var ctx = w.canvas.ctx;
-      ctx.lineWidth = w.canvas.Line;
+      var ctx = canvas.ctx;
+      var center = [canvas.X0, canvas.Y0];
+      var epsilon = canvas.Epsilon;
+      var outer = radius+epsilon;
+      var inner = radius-epsilon;
 
-      // Outer ring
-      ctx.beginPath();
-      ctx.strokeStyle = w.canvas.Color.black;
-      ctx.arc(w.canvas.X0,w.canvas.Y0,radius+w.canvas.Epsilon,0,2*Math.PI);
-      ctx.stroke();
-
-      // Inner ring
-      ctx.beginPath();
-      ctx.strokeStyle = w.canvas.Color.white;
-      ctx.arc(w.canvas.X0,w.canvas.Y0,radius-w.canvas.Epsilon,0,2*Math.PI);
-      ctx.stroke();
+      // Outer adjacent ring
+      canvas.drawCircle(center, outer, canvas.Color.black, canvas.Line);
+      // Inner adjacent ring
+      canvas.drawCircle(center, inner, canvas.Color.white, canvas.Line);
     }
   };
 
   //###########################################################################
   // Polar axes
-  w.canvas.Polar = function() {
-    var ctx = w.canvas.ctx;
-    ctx.lineWidth = w.canvas.Line;
-    ctx.strokeStyle = w.canvas.Color.black;
-    var ctrl = w.canvas;
+  canvas.Polar = function() {
+    var ctx = canvas.ctx;
+    var color = canvas.Color.black;
+    var ctrl = canvas;
     var X0 = ctrl.X0, Y0 = ctrl.Y0;
     var Tick = ctrl.Tick, Edge = ctrl.Edge, Diag = ctrl.Diag;
     var Showing = ctrl.Showing;
 
-    var draw = function(xy1, xy2) {
-      ctx.beginPath();
-      ctx.moveTo(xy1[0], xy1[1]);
-      ctx.lineTo(xy2[0], xy2[1]);
-      ctx.stroke();
-    };
-
     // Cartesian axes
-    draw([X0, 0], [X0, Edge]);
-    draw([0, Y0], [Edge, Y0]);
+    canvas.drawLine([X0, 0], [X0, Edge], color, canvas.Line);
+    canvas.drawLine([0, Y0], [Edge, Y0], color, canvas.Line);
 
     // Cartesian tick marks
     var t = 1.7;
     for (var i=0; i < X0; i += Tick) {
       // Y axis ticks
-      draw([X0-t, Y0+i], [X0+t, Y0+i]);
-      draw([X0-t, Y0-i], [X0+t, Y0-i]);
+      canvas.drawLine([X0-t, Y0+i], [X0+t, Y0+i], color, canvas.Line);
+      canvas.drawLine([X0-t, Y0-i], [X0+t, Y0-i], color, canvas.Line);
 
       // X axis ticks
-      draw([X0+i, Y0-t], [X0+i, Y0+t]);
-      draw([X0-i, Y0-t], [X0-i, Y0+t]);
+      canvas.drawLine([X0+i, Y0-t], [X0+i, Y0+t], color, canvas.Line);
+      canvas.drawLine([X0-i, Y0-t], [X0-i, Y0+t], color, canvas.Line);
     }
 
     // Diagonal axes
-    draw([0,         0], [Edge, Edge]);
-    draw([0, Edge], [Edge,         0]);
+    canvas.drawLine([0,         0], [Edge, Edge], color, canvas.Line);
+    canvas.drawLine([0, Edge], [Edge,         0], color, canvas.Line);
 
     // Diagonal tick marks
     var t = 1.2;
     for (var i=0; i < X0; i += Diag) {
       // Down Right axis ticks
-      draw([X0+i-t, Y0+i+t], [X0+i+t, Y0+i-t]);
-      draw([X0-i-t, Y0-i+t], [X0-i+t, Y0-i-t]);
+      canvas.drawLine([X0+i-t, Y0+i+t], [X0+i+t, Y0+i-t], color, canvas.Line);
+      canvas.drawLine([X0-i-t, Y0-i+t], [X0-i+t, Y0-i-t], color, canvas.Line);
 
       // Down Left axis ticks
-      draw([X0+i-t, Y0-i-t], [X0+i+t, Y0-i+t]);
-      draw([X0-i-t, Y0+i-t], [X0-i+t, Y0+i+t]);
+      canvas.drawLine([X0+i-t, Y0-i-t], [X0+i+t, Y0-i+t], color, canvas.Line);
+      canvas.drawLine([X0-i-t, Y0+i-t], [X0-i+t, Y0+i+t], color, canvas.Line);
     }
   };
 
   // FILL FUNCTION ////////////////////////////////////////////////////////////
   //___________________________________________________________________________
-  w.canvas.fill = function() {
-    var canvas = document.getElementById("illustration");
-    var ctx = canvas.getContext("2d");
-    w.canvas.ctx = ctx;
+  canvas.fill = function() {
+    var ctx = document.getElementById("illustration").getContext("2d");
+    ctx.globalCompositeOperation="source-over";
+    canvas.ctx = ctx;
+
+    // Prepare the zeros array with the most recent coefficient.
+    var Z0 = canvas.Z0coefficient * canvas.Gap;
+    canvas.Z = [Z0];
+    for (var z = 1; z < canvas.Zeros; z++) canvas.Z.push(Z0 + z * canvas.Gap);
 
     // These are the image component functions in alphabetical order.
-    w.canvas.callable = {
-      Annular         :w.canvas.Annular,
-      Center          :w.canvas.Center,
-      Centrifugal     :w.canvas.Centrifugal,
-      Centripetal     :w.canvas.Centripetal,
-      Circular        :w.canvas.Circular,
-      Concentric      :w.canvas.Concentric,
-      Constricted     :w.canvas.Constricted,
-      Darker          :w.canvas.Darker,
-      Diameter        :w.canvas.Diameter,
-      Fiber           :w.canvas.Fiber,
-      Illumination    :w.canvas.Illumination,
-      Lighter         :w.canvas.Lighter,
-      Neutral         :w.canvas.Neutral,
-      Point           :w.canvas.Point,
-      Polar           :w.canvas.Polar,
-      PSF             :w.canvas.PSF,
-      Response        :w.canvas.Response,
-      Ring            :w.canvas.Ring,
-      Weighting       :w.canvas.Weighting,
+    canvas.callable = {
+      Annular         :canvas.Annular,
+      Center          :canvas.Center,
+      Centrifugal     :canvas.Centrifugal,
+      Centripetal     :canvas.Centripetal,
+      Circular        :canvas.Circular,
+      Concentric      :canvas.Concentric,
+      Constricted     :canvas.Constricted,
+      Darker          :canvas.Darker,
+      Diameter        :canvas.Diameter,
+      Fiber           :canvas.Fiber,
+      Illumination    :canvas.Illumination,
+      Lighter         :canvas.Lighter,
+      Neutral         :canvas.Neutral,
+      Point           :canvas.Point,
+      Polar           :canvas.Polar,
+      PSF             :canvas.PSF,
+      Response        :canvas.Response,
+      Ring            :canvas.Ring,
+      Weighting       :canvas.Weighting,
+
+      Humberto_Maturana :canvas.Humberto_Maturana,
+      Jerome_Lettvin    :canvas.Jerome_Lettvin,
+      Jonathan_Lettvin  :canvas.Jonathan_Lettvin,
+      Walter_Pitts      :canvas.Walter_Pitts,
+      Warren_McCulloch  :canvas.Warren_McCulloch,
+
+      RLE               :canvas.RLE,
     };
 
     // For each element of Showing, in order, add components to canvas.
-    for (var fun in w.canvas.callable) {
-      if (-1 != w.canvas.Showing.indexOf(fun)) w.canvas.callable[fun]();
+    for (var fun in canvas.callable) {
+      if (-1 != canvas.Showing.indexOf(fun)) {
+        //console.log(fun);
+        canvas.callable[fun]();
+      }
     }
 
-    // Finish up the image drawing sequence.
-    ctx.closePath();
-
-    w.html.Paper();
+    html.Paper();
   };
 
-  // COMMENTARY FUNCTIONS /////////////////////////////////////////////////////
+  // COMMENT SERVICE FUNCTION (Used by call-by-name paper.comment functions)
   //___________________________________________________________________________
-  w.html.ShowComment = function(text) {
-    d.getElementById('Commentary').innerHTML = text;
-  };
-
-  // COMMENT SERVICE FUNCTION /////////////////////////////////////////////////
-  //___________________________________________________________________________
-  w.html.Common = function(classname, caption, doc, visible) {
+  html.Comment = function(caption, doc, visible) {
     d.getElementById('Caption').innerHTML = caption;
-    w.html.ShowComment(w.markdown(doc));
-    w.canvas.Showing = [];
-    for (var i = 0; i < visible.length; i++) w.canvas.Showing.push(visible[i]);
-    w.canvas.fill();
+    d.getElementById('Commentary').innerHTML = w.markdown(doc);
+    canvas.Showing = [];
+    for (var i = 0; i < visible.length; i++) {
+      canvas.Showing.push(visible[i]);
+    }
+    canvas.fill();
   };
 
-  // COMMENT FUNCTIONS IN PAPER ORDER /////////////////////////////////////////
+  // Call-by-name comment fill functions //////////////////////////////////////
   //___________________________________________________________________________
-  w.comment.Neutral = function() { var doc = HERE(function() {/*
+  comment.Neutral = function() { var doc = HERE(function() {/*
 == Neutral Gray ==
 === Why is this needed? ===
 ___Photoreceptors respond to changes in photon flux.
@@ -392,10 +440,10 @@ objects both brighter and darker than the background.
 ___This has consequence in modeling retinal functions
 as described in additional papers.
     */});
-    w.html.Common('Neutral', 'Neutral Gray Background', doc, ['Neutral']);
+    html.Comment('Neutral Gray Background', doc, ['Neutral']);
   };
   //___________________________________________________________________________
-  w.comment.Concentric = function() { var doc = HERE(function() {/*
+  comment.Concentric = function() { var doc = HERE(function() {/*
 == Concentric Zones ==
 === When are signals generated? ===
 Responses accompany crossing from inside to outside an annulus.
@@ -404,151 +452,201 @@ the
 !:PSF,PSF:!
 (Point Spread Function) for a monochromatic point source.
     */});
-    w.html.Common('Concentric', 'Concentric Airy Zeros', doc, ['Neutral', 'Ring']);
+    html.Comment('Concentric Airy Zeros', doc, ['Neutral', 'Ring']);
   };
   //___________________________________________________________________________
-  w.comment.Polar = function() { var doc = HERE(function() {/*
+  comment.Polar = function() { var doc = HERE(function() {/*
 Polar axes illustrate equidistance from center of concentric zone boundaries.
     */});
-    w.html.Common('Polar', 'Polar axes', doc, ['Neutral', 'Polar', 'Ring']);
+    html.Comment('Polar axes', doc, ['Neutral', 'Polar', 'Ring']);
   };
   //___________________________________________________________________________
-  w.comment.Center = function() { var doc = HERE(function() {/*
+  comment.Center = function() { var doc = HERE(function() {/*
 Center 
     */});
-    w.html.Common('Center', 'center', doc, ['Neutral', 'Ring', 'Center']);
+    html.Comment('center', doc, ['Neutral', 'Ring', 'Center']);
   };
   //___________________________________________________________________________
-  w.comment.Centrifugal = function() { var doc = HERE(function() {/*
+  comment.Centrifugal = function() { var doc = HERE(function() {/*
 Centrifugal 
     */});
-    w.html.Common('Centrifugal', 'Centrifugal motion', doc, ['Neutral', 'Ring']);
+    html.Comment('Centrifugal motion', doc, ['Neutral', 'Ring']);
   };
   //___________________________________________________________________________
-  w.comment.PSF = function() { var doc = HERE(function() {/*
+  comment.PSF = function() { var doc = HERE(function() {/*
 Point Spread Function
     */});
-    w.html.Common('Point', 'Point Spread Function', doc, ['Neutral']);
+    html.Comment('Point Spread Function', doc, ['Neutral']);
   };
   //___________________________________________________________________________
-  w.comment.Point = function() { var doc = HERE(function() {/*
+  comment.Point = function() { var doc = HERE(function() {/*
 Point 
     */});
-    w.html.Common('Point', 'Point', doc, ['Neutral']);
+    html.Comment('Point', doc, ['Neutral']);
   };
   //___________________________________________________________________________
-  w.comment.Centripetal = function() { var doc = HERE(function() {/*
+  comment.Centripetal = function() { var doc = HERE(function() {/*
 Centripetal 
     */});
-    w.html.Common('Centripetal', 'Centripetal', doc, ['Neutral', 'Ring']);
+    html.Comment('Centripetal', doc, ['Neutral', 'Ring']);
   };
   //___________________________________________________________________________
-  w.comment.Darker = function() { var doc = HERE(function() {/*
+  comment.Darker = function() { var doc = HERE(function() {/*
 Darker 
     */});
-    w.html.Common('Darker', 'Dark object motion', doc, ['Neutral', 'Ring']);
+    html.Comment('Dark object motion', doc, ['Neutral', 'Ring']);
   };
   //___________________________________________________________________________
-  w.comment.Lighter = function() { var doc = HERE(function() {/*
+  comment.Lighter = function() { var doc = HERE(function() {/*
 Lighter 
     */});
-    w.html.Common('Lighter', 'Light object motion', doc, ['Neutral', 'Ring']);
+    html.Comment('Light object motion', doc, ['Neutral', 'Ring']);
   };
   //___________________________________________________________________________
-  w.comment.Constricted = function() { var doc = HERE(function() {/*
+  comment.Constricted = function() { var doc = HERE(function() {/*
 Constricted 
     */});
-    w.html.Common('Constricted', 'Constricted fields', doc, ['Neutral', 'Ring']);
+    html.Comment('Constricted fields', doc, ['Neutral', 'Ring']);
   };
   //___________________________________________________________________________
-  w.comment.Weighting = function() { var doc = HERE(function() {/*
+  comment.Weighting = function() { var doc = HERE(function() {/*
 Weighting 
     */});
-    w.html.Common('Weighting', 'Directional weighting', doc, ['Neutral', 'Ring']);
+    html.Comment('Directional weighting', doc, ['Neutral', 'Ring']);
   };
   //___________________________________________________________________________
-  w.comment.Annular = function() { var doc = HERE(function() {/*
+  comment.Annular = function() { var doc = HERE(function() {/*
 Annular 
     */});
-    w.html.Common('Annular', 'Annular fields', doc, ['Neutral', 'Ring']);
+    html.Comment('Annular fields', doc, ['Neutral', 'Ring']);
   };
   //___________________________________________________________________________
-  w.comment.Illumination = function() { var doc = HERE(function() {/*
+  comment.Illumination = function() { var doc = HERE(function() {/*
 Illumination 
     */});
-    w.html.Common('Illumination', 'Inverse average intensity', doc, ['Neutral', 'Ring']);
+    html.Comment('Inverse average intensity', doc, ['Neutral', 'Ring']);
   };
   //___________________________________________________________________________
-  w.comment.Circular = function() { var doc = HERE(function() {/*
+  comment.Circular = function() { var doc = HERE(function() {/*
 Circular 
     */});
-    w.html.Common('Circular', 'Circular motion', doc, ['Neutral', 'Ring']);
+    html.Comment('Circular motion', doc, ['Neutral', 'Ring']);
   };
   //___________________________________________________________________________
-  w.comment.Fiber = function() { var doc = HERE(function() {/*
+  comment.Fiber = function() { var doc = HERE(function() {/*
 Fiber 
     */});
-    w.html.Common('Fiber', 'Fiber: Ganglion cell axon', doc, ['Neutral', 'Ring']);
+    html.Comment('Fiber: Ganglion cell axon', doc, ['Neutral', 'Ring']);
   };
   //___________________________________________________________________________
-  w.comment.Diameter = function() { var doc = HERE(function() {/*
+  comment.Diameter = function() { var doc = HERE(function() {/*
 Diameter 
     */});
-    w.html.Common('Diameter', 'Invariant to diameter', doc, ['Neutral', 'Ring']);
+    html.Comment('Invariant to diameter', doc, ['Neutral', 'Ring']);
   };
   //___________________________________________________________________________
-  w.comment.Response = function() { var doc = HERE(function() {/*
+  comment.Response = function() { var doc = HERE(function() {/*
 Response 
     */});
-    w.html.Common('Response', 'No response at center', doc, ['Neutral', 'Ring']);
+    html.Comment('No response at center', doc, ['Neutral', 'Ring']);
   };
-
-  //###########################################################################
-  w.speaker.Resting = function() {
-
-    w.speaker.audible = false;
-
-    w.speaker.context = new window.AudioContext();
- 
-    w.speaker.osc = w.speaker.context.createOscillator();
-    w.speaker.osc.frequency.value = 3; //440;
-    w.speaker.osc.type = "square";
-    w.speaker.osc.connect(w.speaker.context.destination);
-    w.speaker.osc.start(0);
- 
-    w.speaker.gain = w.speaker.context.createGain();
-    w.speaker.volume = 0.50;
-    w.speaker.gain.gain.value = w.speaker.volume;
-    w.speaker.gain.connect(w.speaker.osc.frequency);
-
-    w.speaker.context.suspend(0);   // Begins muted.
+  //___________________________________________________________________________
+  comment.Humberto_Maturana  = function() { var doc = HERE(function() {/*
+Humberto Maturana 
+    */});
+    html.Comment('Maturana', doc, ['Neutral']);
+    var ctx = canvas.ctx;
+    ctx.drawImage(image['Humberto_Maturana'], 0, 0);
+  };
+  //___________________________________________________________________________
+  comment.Jerome_Lettvin  = function() { var doc = HERE(function() {/*
+Jerome Y. Lettvin
+    */});
+    html.Comment('Lettvin', doc, ['Neutral']);
+    var ctx = canvas.ctx;
+    ctx.drawImage(image['Jerome_Lettvin'], 0, 0);
+  };
+  //___________________________________________________________________________
+  comment.Walter_Pitts  = function() { var doc = HERE(function() {/*
+Walter Pitts
+    */});
+    html.Comment('Pitts', doc, ['Neutral']);
+    var ctx = canvas.ctx;
+    ctx.drawImage(image['Walter_Pitts'], 0, 0);
+  };
+  //___________________________________________________________________________
+  comment.Warren_McCulloch  = function() { var doc = HERE(function() {/*
+Warren McCulloch
+    */});
+    html.Comment('McCulloch', doc, ['Neutral']);
+    var ctx = canvas.ctx;
+    ctx.drawImage(image['Warren_McCulloch'], 0, 0);
+  };
+  //___________________________________________________________________________
+  comment.RLE  = function() { var doc = HERE(function() {/*
+Research Laboratory of Electronics
+    */});
+    html.Comment('RLE', doc, ['Neutral']);
+    var ctx = canvas.ctx;
+    ctx.drawImage(image['RLE'], 0, 0);
   };
 
   //___________________________________________________________________________
-  w.speaker.Hear = function() {
+  comment.Jonathan_Lettvin  = function() { var doc = HERE(function() {/*
+Jonathan D. Lettvin
+    */});
+    html.Comment('Jonathan_Lettvin', doc, ['Neutral']);
+    var ctx = canvas.ctx;
+    ctx.drawImage(image['Jonathan_Lettvin'], 0, 0);
+  };
+
+
+  //###########################################################################
+  speaker.Resting = function() {
+
+    speaker.audible = false;
+
+    speaker.context = new window.AudioContext();
+ 
+    speaker.osc = speaker.context.createOscillator();
+    speaker.osc.frequency.value = 3; //440;
+    speaker.osc.type = "square";
+    speaker.osc.connect(speaker.context.destination);
+    speaker.osc.start(0);
+ 
+    speaker.gain = speaker.context.createGain();
+    speaker.volume = 0.50;
+    speaker.gain.gain.value = speaker.volume;
+    speaker.gain.connect(speaker.osc.frequency);
+
+    speaker.context.suspend(0);   // Begins muted.
+  };
+
+  //___________________________________________________________________________
+  speaker.Hear = function() {
     var mute = d.getElementById("mute");
-    w.speaker.context.resume(0);
+    speaker.context.resume(0);
     mute.style.color = "red";
-    mute.innerHTML = "MUTE";
+    mute.innerHTML = "Click to MUTE";
   };
 
   //___________________________________________________________________________
-  w.speaker.Mute = function() {
+  speaker.Mute = function() {
     var mute = d.getElementById("mute");
-    w.speaker.context.suspend(0);
+    speaker.context.suspend(0);
     mute.style.color = "green";
-    mute.innerHTML = "HEAR";
+    mute.innerHTML = "Click to HEAR";
   };
 
   //___________________________________________________________________________
-  w.speaker.Toggle = function() {
-    w.speaker.audible ^= true;
-    w.speaker.audible ? w.speaker.Hear() : w.speaker.Mute();
+  speaker.Toggle = function() {
+    speaker.audible ^= true;
+    speaker.audible ? speaker.Hear() : speaker.Mute();
   };
 
   //###########################################################################
-  pushEvent(w.comment.Neutral);
-  pushEvent(w.speaker.Resting);
+  pushEvent(comment.Neutral);
+  pushEvent(speaker.Resting);
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 }).call(this, window, document);
@@ -582,15 +680,14 @@ Response
         </tr>
       </table>
     </td><td valign="top" width="50%">
+      <big id="Illustration"></big><br />
+        <button id="mute" type="button" onclick="window.html.speaker.Toggle()" >
+          Click to HEAR
+        </button>
+        simulated ganglion cell discharges.
       <table>
         <tr>
-          <big id="Illustration"></big><br />
-            Click to
-            <button id="mute" type="button" onclick="window.speaker.Toggle()" >
-              HEAR
-            </button>
-            simulated ganglion cell discharges.
-          <td height="255px" width="255px" align="center">
+          <td height="255px" width="255px" align="left">
             <canvas id="illustration" width="255" height="255"></canvas><br />
             <b id="Caption"></b>
           </td>
