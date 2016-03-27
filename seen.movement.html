@@ -33,7 +33,7 @@ ol {
   font-family     :monospace;
   font-size       :10px;
 }
-#Illustration {
+#button {
   text-align      :center;
 }
 #part {
@@ -181,6 +181,7 @@ ol {
   canvas.Showing  = [];
   canvas.Z0coefficient = 1.2196698912665045;
   canvas.X0 = canvas.Y0 = canvas.Edge / 2;
+  canvas.X1 = canvas.Y1 = canvas.Edge / 2;
 
   for (var author in paper.who.authors) {
     image[author]  = new Image();
@@ -333,16 +334,9 @@ at the !:Center,center:! of the circle described.
   };
 
   //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-  canvas.Center = function(radius) {
+  canvas.Center = function() {
     var ctx = canvas.ctx;
-    //console.log('Center init');
-
-    radius = radius || 5;
-
     canvas.drawCircle([canvas.X0, canvas.Y0], 1, '#fff', 1);
-    //canvas.Neutral();
-    //canvas.drawLine([0,0], [254,254], '#f00', canvas.Line);
-    //console.log('Center fini');
   };
 
   //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
@@ -413,7 +407,7 @@ at the !:Center,center:! of the circle described.
   // FILL FUNCTION ////////////////////////////////////////////////////////////
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   canvas.fill = function() {
-    var ctx = document.getElementById("illustration").getContext("2d");
+    var ctx = document.getElementById("Illustration").getContext("2d");
     ctx.globalCompositeOperation="source-over";
     canvas.ctx = ctx;
 
@@ -582,9 +576,14 @@ fibers corresponding to the center of the circle.
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Point = function() { var doc = HERE(function() {/*
-== Point  ==
+== Reference Point  ==
+=== Details of Figure ===
+A central point indicates the discharge recording point in the visual map.
+The rings (white/black/white) indicate the radii at which
+centrifugally vectored movement causes an increased discharge rate.
     */});
     html.Comment('Point', doc, ['Neutral']);
+    canvas.drawCircle([canvas.X0, canvas.Y0], 1, '#fff', 1);
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
@@ -879,9 +878,25 @@ The !wAiry_disk|Airy pattern|w! is well documented.
     Roger_Wolcott_Sperry  :canvas.Roger_Wolcott_Sperry,
   };
 
-  //###########################################################################
+  //MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+  canvas.handleMouseMove = function(e) {
+    if (e.toElement.id == "Illustration") {
+      var canvas = document.getElementById("Illustration");
+      var xy = {ex:e.layerX, ey:e.layerY};
+      d.getElementById('ex').innerHTML = xy.ex;
+      d.getElementById('ey').innerHTML = xy.ey;
+      var dx = xy.ex - canvas.X1;
+      var dy = xy.ey - canvas.Y1;
+      // TODO detect transitions.
+      canvas.X1 = xy.ex;
+      canvas.Y1 = xy.ey;
+    }
+  };
+
+  //EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
   pushEvent(comment.Neutral);
   pushEvent(speaker.Resting);
+  onmousemove = canvas.handleMouseMove;
 
 //JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ
 }).call(this, window, document);
@@ -911,7 +926,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
         </tr>
       </table>
     </td><td valign="top" width="50%">
-      <big id="Illustration"></big><br />
+      <big id="button"></big><br />
         <button
           id="mute"
           type="button"
@@ -924,7 +939,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
       <table>
         <tr>
           <td height="256px" width="256px" align="left">
-            <canvas id="illustration" width="256" height="256"></canvas><br />
+            <canvas id="Illustration" width="256" height="256"></canvas><br />
             <b id="Caption"></b>
           </td>
         </tr>
@@ -936,6 +951,9 @@ The !wAiry_disk|Airy pattern|w! is well documented.
       </table>
     </td>
   </tr>
+  <tr><td>
+      (<b id="ex"></b>,<b id="ey"></b>)
+  </td></tr>
 </table>
 <p id="Airy" style="visibility:hidden">
 \[I = I_0 \left(\frac{2 J_1(u)}{u}\right)^2\]
