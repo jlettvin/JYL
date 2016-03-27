@@ -140,7 +140,8 @@ ol {
       'Walter_Pitts':'W. H. Pitts',
       'Warren_McCulloch':'W. S. McCulloch'
     }, commenters:{
-      'Jonathan_Lettvin':'Jonathan D. Lettvin'
+      'Jonathan_Lettvin':'Jonathan D. Lettvin',
+      'Roger_Wolcott_Sperry':'Roger W. Sperry',
     }
   };
   paper.where = {
@@ -150,6 +151,7 @@ ol {
   paper.what = {
     'Discharge':'Action Potentials',
     'Airy':'Airy',
+    'Fiber':'Fiber',
   };
 
   // CONTROL DATA /////////////////////////////////////////////////////////////
@@ -186,7 +188,7 @@ ol {
   // PAPER CONTENT ////////////////////////////////////////////////////////////
   //___________________________________________________________________________
   paper.Title = HERE(function() {/*
-== HOW SEEN MOVEMENT APPEARS IN^^^THE FROG'S OPTIC NERVE ==
+== HOW SEEN MOVEMENT APPEARS^^^IN THE FROG'S OPTIC NERVE ==
 */});
   //___________________________________________________________________________
   paper.Caption = "Neutral Gray Background";
@@ -252,8 +254,7 @@ Because our evidence implies that there exists a coordinate system
 built into the retina and that the coding allows coordinates and velocity
 to arise from general operations on the whole output of the optic nerve,
 we propose some alternative guesses to account for
-<a href="https://en.wikipedia.org/wiki/Roger_Wolcott_Sperry">Sperry's</a>
-results on dislocated eyes.
+!wRoger_Wolcott_Sperry|Sperryw!'s results on dislocated eyes.
 We do not propose that his notion of specific reconnection is wrong
 but that it is not necessary.^^^
 ___We also present the law by which there is a point-to-point correspondence
@@ -444,12 +445,11 @@ as described in additional papers.
   comment.Concentric = function() { var doc = HERE(function() {/*
 == Concentric Zones ==
 === Details of Figure ===
-___Zones map to zeros of Airy patterns (speculation).
-Airy patterns result from monochromatic point sources
-being projected through a circular aperture onto a focal plane.
-This figure shows a calculated Airy pattern
-which is indistinguishable from an optical image with central saturation.
-Concentric zones may refer to either the annuli or the zeros.
+___Concentric zones may map to zeros of Airy patterns.
+Monochromatic point sources projected through an aperture
+produce Airy patterns.
+This is a calculated Airy pattern
+indistinguishable from a centrally saturated optical image.
 */});
     doc += d.getElementById("Airy").innerHTML;
     var tail = HERE(function() {/*
@@ -570,6 +570,9 @@ The !wAiry_disk|Airy pattern|w! is well documented.
   //___________________________________________________________________________
   comment.Fiber = function() { var doc = HERE(function() {/*
 == Fiber  ==
+=== Details of Figure ===
+___Wendell J. Krieg drew the above figure showing
+photoreceptors at the bottom and ganglion cell fibers exiting at the top.
 === Anatomically ===
 ___Frog optic nerve fibers are chiefly the axons of retinal ganglion cells.
 In addition, cells in the midbrain have axons to retinal amacrine cells
@@ -587,6 +590,7 @@ as classified by
 !nGasser_and_Erlanger|medicine/laureates/1944|Gasser and Erlangern!.
     */});
     html.Comment('Fiber: Ganglion cell axon', doc, ['Neutral', 'Ring']);
+    canvas.drawImage('Fiber');
   };
   //___________________________________________________________________________
   comment.Diameter = function() { var doc = HERE(function() {/*
@@ -652,6 +656,13 @@ to the experiments and post-experiment analysis.
     */});
     html.Comment('McCulloch', doc, ['Neutral']);
     canvas.drawImage('Warren_McCulloch');
+  };
+  //___________________________________________________________________________
+  comment.Roger_Wolcott_Sperry  = function() { var doc = HERE(function() {/*
+== Roger Wolcott Sperry ==
+    */});
+    html.Comment('Roger_Wolcott_Sperry', doc, ['Neutral']);
+    canvas.drawImage('Roger_Wolcott_Sperry');
   };
   //___________________________________________________________________________
   comment.RLE  = function() { var doc = HERE(function() {/*
@@ -812,17 +823,19 @@ to shorter when an object crosses a circle outbound.
     // what
     Discharge       :canvas.Discharge,
     Airy            :canvas.Airy,
-
-    // who
-    Humberto_Maturana :canvas.Humberto_Maturana,
-    Jerome_Lettvin    :canvas.Jerome_Lettvin,
-    Jonathan_Lettvin  :canvas.Jonathan_Lettvin,
-    Walter_Pitts      :canvas.Walter_Pitts,
-    Warren_McCulloch  :canvas.Warren_McCulloch,
+    Fiber           :canvas.Fiber,
 
     // where
-    RLE               :canvas.RLE,
-    Building_20       :canvas.Building_20,
+    RLE             :canvas.RLE,
+    Building_20     :canvas.Building_20,
+
+    // who
+    Jerome_Lettvin        :canvas.Jerome_Lettvin,
+    Jonathan_Lettvin      :canvas.Jonathan_Lettvin,
+    Humberto_Maturana     :canvas.Humberto_Maturana,
+    Warren_McCulloch      :canvas.Warren_McCulloch,
+    Walter_Pitts          :canvas.Walter_Pitts,
+    Roger_Wolcott_Sperry  :canvas.Roger_Wolcott_Sperry,
   };
 
   //###########################################################################
@@ -876,7 +889,6 @@ to shorter when an object crosses a circle outbound.
         </tr>
         <tr>
           <td rowspan="2" width="50%">
-            <big>Commentary</big><br />
             <p id="Commentary"></p>
           </td>
         </tr>
@@ -884,7 +896,7 @@ to shorter when an object crosses a circle outbound.
     </td>
   </tr>
 </table>
-<p id="Airy" style="visibility:hidden;">
+<p id="Airy" style="visibility:hidden">
 \[I = I_0 \left(\frac{2 J_1(u)}{u}\right)^2\]
 \[u = \frac{2 \pi a q}{\lambda R}\]<br />
 \(J_1\) = Bessel function of the first kind
