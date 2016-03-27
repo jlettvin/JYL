@@ -137,6 +137,9 @@ ol {
     'RLE':'(Research Laboratory of Electronics, M.I.T. Cambridge, MA)',
     'Building_20':'MIT Building 20'
   };
+  paper.what = {
+    'Discharge':'Action Potentials',
+  };
 
   // CONTROL DATA /////////////////////////////////////////////////////////////
   canvas.Edge     = 255;
@@ -160,6 +163,10 @@ ol {
     image[facility]  = new Image();
     image[facility].src = facility + '.jpg';
   }
+  for (var thing in paper.what) {
+    image[thing]  = new Image();
+    image[thing].src = thing + '.jpg';
+  }
   for (var commenter in paper.who.commenters) {
     image[commenter]  = new Image();
     image[commenter].src = commenter + '.jpg';
@@ -182,7 +189,7 @@ March 1959 Pages 393 and 354.^^^
     paper.Citation += '!w' + author + '|' + paper.who.authors[author] + 'w!\n';
   }
   paper.Citation += '^^^\n<a href="http://www.rle.mit.edu/">RLE</a>';
-  paper.Citation += '!w' + facility + '|' + paper.where['RLE'] + 'w!\n';
+  paper.Citation += '!w' + 'RLE' + '|' + paper.where['RLE'] + 'w!\n';
 
   //___________________________________________________________________________
   paper.Illustration = HERE(function() {/*
@@ -556,9 +563,9 @@ The !wAiry_disk|Airy pattern|w! is well documented.
   //___________________________________________________________________________
   comment.Humberto_Maturana  = function() { var doc = HERE(function() {/*
 == Humberto Maturana ==
+=== Histology and Anatomy ===
 Humberto did histological studies in Jerry Lettvin's lab.
 These included counting the members of individual axon species in optic nerve.
-
     */});
     html.Comment('Maturana', doc, ['Neutral']);
     var ctx = canvas.ctx;
@@ -576,10 +583,12 @@ pulses were also made audible over a loudspeaker.
 These audible indicators of activity are simulated on this page
 by clicking on the "Click to HEAR" toggle button above.
 === This experiment ===
-A frog is prepared and mounted with the experimental eye pointed into
+A frog is prepared with an electrode recording optic nerve discharges.
+The frog is mounted with the experimental eye pointed into
 the concave side of an aluminum hemisphere where
 objects both lighter and darker are moved within the hemisphere
 using a magnet on the convex surface, hiding all but the object from the frog.
+Discharge rates increase as objects cross circles as described.
     */});
     html.Comment('Lettvin', doc, ['Neutral']);
     var ctx = canvas.ctx;
@@ -588,6 +597,10 @@ using a magnet on the convex surface, hiding all but the object from the frog.
   //___________________________________________________________________________
   comment.Walter_Pitts  = function() { var doc = HERE(function() {/*
 == Walter Pitts ==
+=== Mathematical Analysis ===
+Walter provided important insight into the character and utility
+of neural discharges, both in terms of pulse-interval analysis
+and the geometric aspects of experiments.
     */});
     html.Comment('Pitts', doc, ['Neutral']);
     var ctx = canvas.ctx;
@@ -596,6 +609,9 @@ using a magnet on the convex surface, hiding all but the object from the frog.
   //___________________________________________________________________________
   comment.Warren_McCulloch  = function() { var doc = HERE(function() {/*
 == Warren McCulloch ==
+=== Philosophical Insights ===
+Warren provided both philosophical and historical context
+to the experiments and post-experiment analysis.
     */});
     html.Comment('McCulloch', doc, ['Neutral']);
     var ctx = canvas.ctx;
@@ -626,7 +642,7 @@ using a magnet on the convex surface, hiding all but the object from the frog.
     var ctx = canvas.ctx;
     ctx.drawImage(image['Jonathan_Lettvin'], 0, 0);
   };
-  comment.Sounds  = function() { var doc = HERE(function() {/*
+  comment.Discharge  = function() { var doc = HERE(function() {/*
 == Sounds of Neural Actiity ==
 === In the lab ===
 Recorded impulses are amplified over a loudspeaker.
@@ -638,7 +654,9 @@ This simulation uses a single pulse at regular intervals.
 In the future, this will be modified to change intervals
 to shorter when an object crosses a circle outbound.
     */});
-    html.Comment('Sounds', doc, ['Neutral']);
+    html.Comment('Discharge', doc, ['Neutral']);
+    var ctx = canvas.ctx;
+    ctx.drawImage(image['Discharge'], 0, 0);
   };
 
 
@@ -712,14 +730,17 @@ to shorter when an object crosses a circle outbound.
     Ring            :canvas.Ring,
     Weighting       :canvas.Weighting,
 
-    Sounds          :canvas.Sounds,
+    // what
+    Discharge       :canvas.Discharge,
 
+    // who
     Humberto_Maturana :canvas.Humberto_Maturana,
     Jerome_Lettvin    :canvas.Jerome_Lettvin,
     Jonathan_Lettvin  :canvas.Jonathan_Lettvin,
     Walter_Pitts      :canvas.Walter_Pitts,
     Warren_McCulloch  :canvas.Warren_McCulloch,
 
+    // where
     RLE               :canvas.RLE,
     Building_20       :canvas.Building_20,
   };
@@ -761,7 +782,7 @@ to shorter when an object crosses a circle outbound.
           id="mute"
           type="button"
           onclick="window.html.speaker.Toggle()"
-          onmouseover="window.paper.comment.Sounds()"
+          onmouseover="window.paper.comment.Discharge()"
         >
           Click to HEAR
         </button>
