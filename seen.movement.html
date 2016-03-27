@@ -258,6 +258,9 @@ at the !:Center,center:! of the circle described.
     }
   };
 
+  // These are the image component functions in alphabetical order.
+  canvas.callable = {};
+
   //###########################################################################
   canvas.drawLine = function(xy1, xy2, color, width) {
     var ctx = canvas.ctx;
@@ -290,14 +293,14 @@ at the !:Center,center:! of the circle described.
   //###########################################################################
   canvas.Center = function(radius) {
     var ctx = canvas.ctx;
-    console.log('Center init');
+    //console.log('Center init');
 
     radius = radius || 5;
 
-    canvas.drawCircle([30,30], 30, '#fff', 2);
-    canvas.Neutral();
+    canvas.drawCircle([canvas.X0, canvas.Y0], 1, '#fff', 1);
+    //canvas.Neutral();
     //canvas.drawLine([0,0], [254,254], '#f00', canvas.Line);
-    console.log('Center fini');
+    //console.log('Center fini');
   };
 
   //###########################################################################
@@ -374,44 +377,9 @@ at the !:Center,center:! of the circle described.
     canvas.Z = [Z0];
     for (var z = 1; z < canvas.Zeros; z++) canvas.Z.push(Z0 + z * canvas.Gap);
 
-    // These are the image component functions in alphabetical order.
-    canvas.callable = {
-      Annular         :canvas.Annular,
-      Center          :canvas.Center,
-      Centrifugal     :canvas.Centrifugal,
-      Centripetal     :canvas.Centripetal,
-      Circular        :canvas.Circular,
-      Concentric      :canvas.Concentric,
-      Constricted     :canvas.Constricted,
-      Darker          :canvas.Darker,
-      Diameter        :canvas.Diameter,
-      Fiber           :canvas.Fiber,
-      Illumination    :canvas.Illumination,
-      Lighter         :canvas.Lighter,
-      Neutral         :canvas.Neutral,
-      Point           :canvas.Point,
-      Polar           :canvas.Polar,
-      PSF             :canvas.PSF,
-      Response        :canvas.Response,
-      Ring            :canvas.Ring,
-      Weighting       :canvas.Weighting,
-
-      Humberto_Maturana :canvas.Humberto_Maturana,
-      Jerome_Lettvin    :canvas.Jerome_Lettvin,
-      Jonathan_Lettvin  :canvas.Jonathan_Lettvin,
-      Walter_Pitts      :canvas.Walter_Pitts,
-      Warren_McCulloch  :canvas.Warren_McCulloch,
-
-      RLE               :canvas.RLE,
-    };
 
     // For each element of Showing, in order, add components to canvas.
-    for (var fun in canvas.callable) {
-      if (-1 != canvas.Showing.indexOf(fun)) {
-        //console.log(fun);
-        canvas.callable[fun]();
-      }
-    }
+    for (var fun of canvas.Showing) canvas.callable[fun]();
 
     html.Paper();
   };
@@ -645,6 +613,37 @@ Jonathan D. Lettvin
   speaker.Toggle = function() {
     speaker.audible ^= true;
     speaker.audible ? speaker.Hear() : speaker.Mute();
+  };
+
+  //###########################################################################
+  canvas.callable = {
+    Annular         :canvas.Annular,
+    Center          :canvas.Center,
+    Centrifugal     :canvas.Centrifugal,
+    Centripetal     :canvas.Centripetal,
+    Circular        :canvas.Circular,
+    Concentric      :canvas.Concentric,
+    Constricted     :canvas.Constricted,
+    Darker          :canvas.Darker,
+    Diameter        :canvas.Diameter,
+    Fiber           :canvas.Fiber,
+    Illumination    :canvas.Illumination,
+    Lighter         :canvas.Lighter,
+    Neutral         :canvas.Neutral,
+    Point           :canvas.Point,
+    Polar           :canvas.Polar,
+    PSF             :canvas.PSF,
+    Response        :canvas.Response,
+    Ring            :canvas.Ring,
+    Weighting       :canvas.Weighting,
+
+    Humberto_Maturana :canvas.Humberto_Maturana,
+    Jerome_Lettvin    :canvas.Jerome_Lettvin,
+    Jonathan_Lettvin  :canvas.Jonathan_Lettvin,
+    Walter_Pitts      :canvas.Walter_Pitts,
+    Warren_McCulloch  :canvas.Warren_McCulloch,
+
+    RLE               :canvas.RLE,
   };
 
   //###########################################################################
