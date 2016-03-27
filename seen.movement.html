@@ -10,6 +10,7 @@ config=TeX-AMS-MML_HTMLorMML">
 <body>
   <style>
 table {
+  /* CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS */
   border-collapse :collapse;
   margin          :0px;
   text-align      :left;
@@ -58,25 +59,38 @@ ol {
 #header2 {
   font-size       :14px;
 }
+  /* CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS */
   </style>
   <script src="wiki.js"></script>
   <script type="text/javascript">
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ
 (function(w,d) {
 
   'use strict';
 
   // Include specializations
   // Both patterns need work because extra spaces appear in the output.
+  // $1 always refers to the internal function name provided here.
+  // $2 always refers to the text to be displayed inline.
+  // $3, when present, embodies or enhances a URL.
+  w.wikiappend([
+    'Arbitrary',
+    /\!a\s*(.*)\s*\|\s*(.*)\s*\|\s*(.*)\s*a\!/g,
+    '<a href="$3" '+
+    'onmouseover="window.paper.comment.$1()">$2</a>',
+    '!w a | b | c w!',
+    '<a href="c" '+
+    'onmouseover="window.paper.comment.a()">b</a>'
+    ]);
   w.wikiappend([
     'Nobel',
     /\!n\s*(.*)\s*\|\s*(.*)\s*\|\s*(.*)\s*n\!/g,
-    '<a href="http://www.nobelprize.org/nobel_prizes/$2" '+
-    'onmouseover="window.paper.comment.$1()">$3</a>',
+    '<a href="http://www.nobelprize.org/nobel_prizes/$3" '+
+    'onmouseover="window.paper.comment.$1()">$2</a>',
     '!w a | b | c w!',
-    '<a href="http://www.nobelprize.org/nobel_prizes/b" '+
-    'onmouseover="window.paper.comment.a()">c</a>'
+    '<a href="http://www.nobelprize.org/nobel_prizes/c" '+
+    'onmouseover="window.paper.comment.a()">b</a>'
     ]);
   w.wikiappend([
     'wikipedia',
@@ -161,7 +175,7 @@ ol {
   canvas.Z        = [];
   canvas.Zeros    = 3;
   canvas.Diag     = canvas.Tick / Math.sqrt(2.0);
-  canvas.Epsilon  = canvas.Line / 2;
+  canvas.Epsilon  = canvas.Line * 1.2;
   canvas.Gap      = 12; //canvas.Edge / 8;
   canvas.Color    = {black:"#000000", gray:"#777777", white:"#EEEEEE" };
   canvas.Showing  = [];
@@ -186,13 +200,13 @@ ol {
   }
 
   // PAPER CONTENT ////////////////////////////////////////////////////////////
-  //___________________________________________________________________________
+  //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
   paper.Title = HERE(function() {/*
 == HOW SEEN MOVEMENT APPEARS^^^IN THE FROG'S OPTIC NERVE ==
 */});
-  //___________________________________________________________________________
+  //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
   paper.Caption = "Neutral Gray Background";
-  //___________________________________________________________________________
+  //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
   paper.Citation  = HERE(function() {/*
 Federation Proceedings Volume 18 Number 1^^^
 March 1959 Pages 393 and 354.^^^
@@ -204,19 +218,17 @@ March 1959 Pages 393 and 354.^^^
   paper.Citation += '^^^\n<a href="http://www.rle.mit.edu/">RLE</a>';
   paper.Citation += '!w' + 'RLE' + '|' + paper.where['RLE'] + 'w!\n';
 
-  //___________________________________________________________________________
+  //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
   paper.Illustration = HERE(function() {/*
-<a href="http://jonathan.lettvin.com" onmouseover="paper.comment.Jonathan_Lettvin()">
-Jonathan D. Lettvin
-</a>,
+<a href="http://jonathan.lettvin.com" onmouseover="paper.comment.Jonathan_Lettvin()">Jonathan D. Lettvin</a>,
 20160322-20160327^^^
-with images against a !:Neutral,Neutral Gray Background:!
+with images on a !:Neutral,Neutral Gray Background:!
 */});
-  //___________________________________________________________________________
+  //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
   paper.PartI_title = HERE(function() {/*
 === Part I (page 393) ===
 */})
-//___________________________________________________________________________
+//PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
   paper.PartI_body = HERE(function() {/*
 ___The receptive field of a single !:Fiber,optic nerve fiber:!
 (plotted by the on and off responses to small fixed spots)
@@ -227,7 +239,7 @@ in the receptive field.
 Movement is indeed polarly encoded and there exist at least
 the following four types of fibers whose rate of firing depends on
 the !:Centrifugal,centrifugal:! component of a movement
-with respect to !:Point,some point:! internal to the receptive field
+with respect to some point internal to the receptive field
 (!:Centripetal,centripetal:! and tangential movements never cause discharge):
 # Some fibers have wide receptive fields and low sensitivity.\
 Of these some prefer the moving object !:Darker,darker:! than background,\
@@ -239,11 +251,11 @@ A fifth variety measures inversely
 the average intensity of !:Illumination,illumination:! in a region.
 Its maximum rate is in the dark.
 */});
-  //___________________________________________________________________________
+  //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
   paper.PartII_title = HERE(function() {/*
 === Part II (page 354) ===
 */});
-  //___________________________________________________________________________
+  //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
   paper.PartII_body = HERE(function() {/*
 ___The coding of movement described in Part I
 suggests that the frog's eye is designed
@@ -265,6 +277,7 @@ at any time are those that have the centers of their receptive fields
 at the !:Center,center:! of the circle described.
 */});
 
+  //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
   html.Paper = function() {
     var elements = [
       'Title',
@@ -280,10 +293,11 @@ at the !:Center,center:! of the circle described.
     }
   };
 
+  //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
   // These are the image component functions in alphabetical order.
   canvas.callable = {};
 
-  //###########################################################################
+  //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
   canvas.drawLine = function(xy1, xy2, color, width) {
     var ctx = canvas.ctx;
     ctx.beginPath();
@@ -294,7 +308,7 @@ at the !:Center,center:! of the circle described.
     ctx.stroke();
   };
 
-  //###########################################################################
+  //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
   canvas.drawCircle = function(xycenter, radius, color, width) {
     var ctx = canvas.ctx;
     ctx.beginPath();
@@ -304,13 +318,13 @@ at the !:Center,center:! of the circle described.
     ctx.stroke();
   };
 
-  //###########################################################################
+  //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
   canvas.drawImage = function(name) {
     var ctx = canvas.ctx;
     ctx.drawImage(image[name], 0, 0);
   };
 
-  //###########################################################################
+  //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
   // Neutral gray background
   canvas.Neutral = function() {
     var ctx = canvas.ctx;
@@ -318,7 +332,7 @@ at the !:Center,center:! of the circle described.
     ctx.fillRect(0,0,255,255);
   };
 
-  //###########################################################################
+  //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
   canvas.Center = function(radius) {
     var ctx = canvas.ctx;
     //console.log('Center init');
@@ -331,7 +345,7 @@ at the !:Center,center:! of the circle described.
     //console.log('Center fini');
   };
 
-  //###########################################################################
+  //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
   // Concentric Rings
   canvas.Ring = function(radius) {
     if (!radius) {
@@ -341,16 +355,19 @@ at the !:Center,center:! of the circle described.
       var center = [canvas.X0, canvas.Y0];
       var epsilon = canvas.Epsilon;
       var outer = radius+epsilon;
+      var twixt = radius;
       var inner = radius-epsilon;
 
       // Outer adjacent ring
-      canvas.drawCircle(center, outer, canvas.Color.black, canvas.Line);
+      canvas.drawCircle(center, outer, canvas.Color.white, canvas.Line);
+      // Zero ring
+      canvas.drawCircle(center, twixt, canvas.Color.black, canvas.Line);
       // Inner adjacent ring
       canvas.drawCircle(center, inner, canvas.Color.white, canvas.Line);
     }
   };
 
-  //###########################################################################
+  //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
   // Polar axes
   canvas.Polar = function() {
     var ctx = canvas.ctx;
@@ -394,7 +411,7 @@ at the !:Center,center:! of the circle described.
   };
 
   // FILL FUNCTION ////////////////////////////////////////////////////////////
-  //___________________________________________________________________________
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   canvas.fill = function() {
     var ctx = document.getElementById("illustration").getContext("2d");
     ctx.globalCompositeOperation="source-over";
@@ -413,7 +430,7 @@ at the !:Center,center:! of the circle described.
   };
 
   // COMMENT SERVICE FUNCTION (Used by call-by-name paper.comment functions)
-  //___________________________________________________________________________
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   html.Comment = function(caption, doc, visible) {
     d.getElementById('Caption').innerHTML = caption;
     d.getElementById('Commentary').innerHTML = w.markdown(doc);
@@ -425,186 +442,9 @@ at the !:Center,center:! of the circle described.
   };
 
   // Call-by-name comment fill functions //////////////////////////////////////
-  //___________________________________________________________________________
-  comment.Neutral = function() { var doc = HERE(function() {/*
-== Neutral Gray ==
-=== Why is this needed? ===
-___Photoreceptors respond to changes in photon flux.
-The change may be an increase or decrease of flux.
-Successful modeling of flux changes in this paper
-requires the ability to represent both types of flux change.
-A neutral gray background enables the display of
-objects both brighter and darker than the background.
-=== Future Modeling ===
-___This has consequence in modeling retinal functions
-as described in additional papers.
-    */});
-    html.Comment('Neutral Gray Background', doc, ['Neutral']);
-  };
-  //___________________________________________________________________________
-  comment.Concentric = function() { var doc = HERE(function() {/*
-== Concentric Zones ==
-=== Details of Figure ===
-___Concentric zones may map to zeros of Airy patterns.
-Monochromatic point sources projected through an aperture
-produce Airy patterns.
-This is a calculated Airy pattern
-indistinguishable from a centrally saturated optical image.
-*/});
-    doc += d.getElementById("Airy").innerHTML;
-    var tail = HERE(function() {/*
-=== When are signals generated? ===
-___Responses accompany crossing from inside to outside an annulus.
-Concentric zones are proposed here as bounded by Airy zeros of
-the
-!:PSF,PSF:!
-(Point Spread Function) for a monochromatic point source.
-    */});
-    html.Comment('Concentric Airy Zeros', doc, ['Neutral', 'Ring']);
-    canvas.drawImage('Airy');
-  };
-  //___________________________________________________________________________
-  comment.Polar = function() { var doc = HERE(function() {/*
-== Polar ==
-=== parameters ===
-___2D polar diagrams use two orthogonal parameters: r(radius) and &theta;(angle).
-See !wPolar_coordinate_system|Polar coordinate systemw!.
-=== Details of Figure ===
-___The figure shows the traditional (X,Y) axes but shows diagonals also, 
-where tick marks along the lines aid the viewer in identifying
-equidistance points, such as the circles.
-___Three circles are shown comprising a white/black pair at each circle
-with the black component being centrifugal to the white component.
-Radii of circles coincide with zeros of an Airy pattern (speculation)
-for a specified aperture/wavelength.
-=== Details of experimental observation ===
-___In this paper, as will be discussed later,
-objects that change &theta; without changing r
-do not cause changes in the discharge rate in
-fibers corresponding to the center of the circle.
-    */});
-    html.Comment('Polar axes', doc, ['Neutral', 'Polar', 'Ring']);
-  };
-  //___________________________________________________________________________
-  comment.Center = function() { var doc = HERE(function() {/*
-== Center  ==
-=== Details of Figure ===
-___Note the central white point.
-=== Details of experimental observation ===
-___This paper describes observations of discharge rate changes
-at this location.
-No other location in the diagram is considered.
-    */});
-    html.Comment('center', doc, ['Neutral', 'Ring', 'Center']);
-  };
-  //___________________________________________________________________________
-  comment.Centrifugal = function() { var doc = HERE(function() {/*
-== Centrifugal  ==
-    */});
-    html.Comment('Centrifugal motion', doc, ['Neutral', 'Ring']);
-  };
-  //___________________________________________________________________________
-  comment.PSF = function() { var doc = HERE(function() {/*
-== Point Spread Function ==
-___As discussed in Concentric, Airy pattern zeros are suspected to correlate
-with the locations that cause neuron discharges.
-The !wAiry_disk|Airy pattern|w! is well documented.
-    */});
-    doc += d.getElementById("Airy").innerHTML;
-    html.Comment('Point Spread Function', doc, ['Neutral']);
-  };
-  //___________________________________________________________________________
-  comment.Point = function() { var doc = HERE(function() {/*
-== Point  ==
-    */});
-    html.Comment('Point', doc, ['Neutral']);
-  };
-  //___________________________________________________________________________
-  comment.Centripetal = function() { var doc = HERE(function() {/*
-== Centripetal  ==
-    */});
-    html.Comment('Centripetal', doc, ['Neutral', 'Ring']);
-  };
-  //___________________________________________________________________________
-  comment.Darker = function() { var doc = HERE(function() {/*
-== Darker  ==
-    */});
-    html.Comment('Dark object motion', doc, ['Neutral', 'Ring']);
-  };
-  //___________________________________________________________________________
-  comment.Lighter = function() { var doc = HERE(function() {/*
-== Lighter  ==
-    */});
-    html.Comment('Light object motion', doc, ['Neutral', 'Ring']);
-  };
-  //___________________________________________________________________________
-  comment.Constricted = function() { var doc = HERE(function() {/*
-== Constricted  ==
-    */});
-    html.Comment('Constricted fields', doc, ['Neutral', 'Ring']);
-  };
-  //___________________________________________________________________________
-  comment.Weighting = function() { var doc = HERE(function() {/*
-== Weighting  ==
-    */});
-    html.Comment('Directional weighting', doc, ['Neutral', 'Ring']);
-  };
-  //___________________________________________________________________________
-  comment.Annular = function() { var doc = HERE(function() {/*
-== Annular  ==
-    */});
-    html.Comment('Annular fields', doc, ['Neutral', 'Ring']);
-  };
-  //___________________________________________________________________________
-  comment.Illumination = function() { var doc = HERE(function() {/*
-== Illumination  ==
-    */});
-    html.Comment('Inverse average intensity', doc, ['Neutral', 'Ring']);
-  };
-  //___________________________________________________________________________
-  comment.Circular = function() { var doc = HERE(function() {/*
-== Circular  ==
-    */});
-    html.Comment('Circular motion', doc, ['Neutral', 'Ring']);
-  };
-  //___________________________________________________________________________
-  comment.Fiber = function() { var doc = HERE(function() {/*
-== Fiber  ==
-=== Details of Figure ===
-___Wendell J. Krieg drew the above figure showing
-photoreceptors at the bottom and ganglion cell fibers exiting at the top.
-=== Anatomically ===
-___Frog optic nerve fibers are chiefly the axons of retinal ganglion cells.
-In addition, cells in the midbrain have axons to retinal amacrine cells
-(controversial).
-Typically, sized of axons are associated with signal types.
-Large 20&micro;m caliber axons are fast and associated with threat.
-Small 0.1&micro;m caliber axons are slow and associated with detail.
-Other axons have sizes between Large and Small.
-=== Signals ===
-___Five signal types are identified by a combination of
-their discharge patterns and when those patterns manifest
-(see Part I page 393).
-The terms Fast and Slow indicate the pulse propagation velocity
-as classified by
-!nGasser_and_Erlanger|medicine/laureates/1944|Gasser and Erlangern!.
-    */});
-    html.Comment('Fiber: Ganglion cell axon', doc, ['Neutral', 'Ring']);
-    canvas.drawImage('Fiber');
-  };
-  //___________________________________________________________________________
-  comment.Diameter = function() { var doc = HERE(function() {/*
-== Diameter  ==
-    */});
-    html.Comment('Invariant to diameter', doc, ['Neutral', 'Ring']);
-  };
-  //___________________________________________________________________________
-  comment.Response = function() { var doc = HERE(function() {/*
-== Response  ==
-    */});
-    html.Comment('No response at center', doc, ['Neutral', 'Ring']);
-  };
-  //___________________________________________________________________________
+  // These functions are given in the order of appearance in the paper text.
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Humberto_Maturana  = function() { var doc = HERE(function() {/*
 == Humberto Maturana ==
 === Histology and Anatomy ===
@@ -614,7 +454,8 @@ These included counting the members of individual axon species in optic nerve.
     html.Comment('Maturana', doc, ['Neutral']);
     canvas.drawImage('Humberto_Maturana');
   };
-  //___________________________________________________________________________
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Jerome_Lettvin  = function() { var doc = HERE(function() {/*
 == Jerome Y. Lettvin ==
 === The lab for "experimental epistemology" ===
@@ -636,7 +477,8 @@ Discharge rates increase as objects cross circles as described.
     html.Comment('Lettvin', doc, ['Neutral']);
     canvas.drawImage('Jerome_Lettvin');
   };
-  //___________________________________________________________________________
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Walter_Pitts  = function() { var doc = HERE(function() {/*
 == Walter Pitts ==
 === Mathematical Analysis ===
@@ -647,7 +489,8 @@ and the geometric aspects of experiments.
     html.Comment('Pitts', doc, ['Neutral']);
     canvas.drawImage('Walter_Pitts');
   };
-  //___________________________________________________________________________
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Warren_McCulloch  = function() { var doc = HERE(function() {/*
 == Warren McCulloch ==
 === Philosophical Insights ===
@@ -657,39 +500,222 @@ to the experiments and post-experiment analysis.
     html.Comment('McCulloch', doc, ['Neutral']);
     canvas.drawImage('Warren_McCulloch');
   };
-  //___________________________________________________________________________
-  comment.Roger_Wolcott_Sperry  = function() { var doc = HERE(function() {/*
-== Roger Wolcott Sperry ==
-    */});
-    html.Comment('Roger_Wolcott_Sperry', doc, ['Neutral']);
-    canvas.drawImage('Roger_Wolcott_Sperry');
-  };
-  //___________________________________________________________________________
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.RLE  = function() { var doc = HERE(function() {/*
 == Research Laboratory of Electronics ==
     */});
     html.Comment('RLE', doc, ['Neutral']);
     canvas.drawImage('RLE');
   };
-  //___________________________________________________________________________
-  comment.Building_20  = function() { var doc = HERE(function() {/*
-== MIT Building 20 ==
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Fiber = function() { var doc = HERE(function() {/*
+== Fiber  ==
+=== Details of Figure ===
+___Wendell J. Krieg drew the above figure showing
+photoreceptors at the bottom and ganglion cell fibers exiting at the top.
+=== Anatomically ===
+___Frog optic nerve fibers are chiefly the axons of retinal ganglion cells.
+In addition, cells in the midbrain have axons to retinal amacrine cells
+(controversial).
+Typically, sized of axons are associated with signal types.
+Large 20&micro;m caliber axons are fast and associated with threat.
+Small 0.1&micro;m caliber axons are slow and associated with detail.
+Other axons have sizes between Large and Small.
+=== Signals ===
+___Five signal types are identified by a combination of
+their discharge patterns and when those patterns manifest
+(see Part I page 393).
+The terms Fast and Slow indicate the pulse propagation velocity
+as classified by
+!nGasser_and_Erlanger|Gasser and Erlanger|medicine/laureates/1944n!.
     */});
-    html.Comment('Building_20', doc, ['Neutral']);
-    canvas.drawImage('Building_20');
+    html.Comment('Fiber: Ganglion cell axon', doc, ['Neutral', 'Ring']);
+    canvas.drawImage('Fiber');
   };
 
-  //___________________________________________________________________________
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Concentric = function() { var doc = HERE(function() {/*
+== Concentric Zones ==
+=== Details of Figure ===
+___Concentric zones may map to zeros of Airy patterns.
+Monochromatic point sources projected through an aperture
+produce Airy patterns.
+This is a calculated Airy pattern
+indistinguishable from a centrally saturated optical image.
+    */});
+    doc += d.getElementById("Airy").innerHTML;
+    var tail = HERE(function() {/*
+=== When are signals generated? ===
+___Responses accompany crossing from inside to outside an annulus.
+Concentric zones are proposed here as bounded by Airy zeros of
+the !:PSF,PSF:!
+(Point Spread Function) for a monochromatic point source.
+    */});
+    html.Comment('Concentric Airy Zeros', doc, ['Neutral', 'Ring']);
+    canvas.drawImage('Airy');
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Polar = function() { var doc = HERE(function() {/*
+== Polar ==
+=== parameters ===
+___2D polar diagrams use two orthogonal parameters: r(radius) and &theta;(angle).
+See !wPolar_coordinate_system|Polar coordinate systemw!.
+=== Details of Figure ===
+___The figure shows the traditional (X,Y) axes but shows diagonals also, 
+where tick marks along the lines aid the viewer in identifying
+equidistance points, such as the circles.
+___Three circles are shown comprising a white/black pair at each circle
+with the black component being centrifugal to the white component.
+Radii of circles coincide with zeros of an Airy pattern (speculation)
+for a specified aperture/wavelength.
+=== Details of experimental observation ===
+___In this paper, as will be discussed later,
+objects that change &theta; without changing r
+do not cause changes in the discharge rate in
+fibers corresponding to the center of the circle.
+    */});
+    html.Comment('Polar axes', doc, ['Neutral', 'Polar', 'Ring']);
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Point = function() { var doc = HERE(function() {/*
+== Point  ==
+    */});
+    html.Comment('Point', doc, ['Neutral']);
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Centrifugal = function() { var doc = HERE(function() {/*
+== Centrifugal  ==
+    */});
+    html.Comment('Centrifugal motion', doc, ['Neutral', 'Ring']);
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Centripetal = function() { var doc = HERE(function() {/*
+== Centripetal  ==
+    */});
+    html.Comment('Centripetal', doc, ['Neutral', 'Ring']);
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Darker = function() { var doc = HERE(function() {/*
+== Darker  ==
+    */});
+    html.Comment('Dark object motion', doc, ['Neutral', 'Ring']);
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Lighter = function() { var doc = HERE(function() {/*
+== Lighter  ==
+    */});
+    html.Comment('Light object motion', doc, ['Neutral', 'Ring']);
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Constricted = function() { var doc = HERE(function() {/*
+== Constricted  ==
+    */});
+    html.Comment('Constricted fields', doc, ['Neutral', 'Ring']);
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Weighting = function() { var doc = HERE(function() {/*
+== Weighting  ==
+    */});
+    html.Comment('Directional weighting', doc, ['Neutral', 'Ring']);
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Annular = function() { var doc = HERE(function() {/*
+== Annular  ==
+    */});
+    html.Comment('Annular fields', doc, ['Neutral', 'Ring']);
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Illumination = function() { var doc = HERE(function() {/*
+== Illumination  ==
+    */});
+    html.Comment('Inverse average intensity', doc, ['Neutral', 'Ring']);
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Roger_Wolcott_Sperry  = function() { var doc = HERE(function() {/*
+== Roger Wolcott Sperry ==
+    */});
+    html.Comment('Roger_Wolcott_Sperry', doc, ['Neutral']);
+    canvas.drawImage('Roger_Wolcott_Sperry');
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Circular = function() { var doc = HERE(function() {/*
+== Circular  ==
+    */});
+    html.Comment('Circular motion', doc, ['Neutral', 'Ring']);
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Diameter = function() { var doc = HERE(function() {/*
+== Diameter  ==
+    */});
+    html.Comment('Invariant to diameter', doc, ['Neutral', 'Ring']);
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Response = function() { var doc = HERE(function() {/*
+== Response  ==
+    */});
+    html.Comment('No response at center', doc, ['Neutral', 'Ring']);
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Center = function() { var doc = HERE(function() {/*
+== Center  ==
+=== Details of Figure ===
+___Note the central white point.
+=== Details of experimental observation ===
+___This paper describes observations of discharge rate changes
+at this location.
+No other location in the diagram is considered.
+    */});
+    html.Comment('center', doc, ['Neutral', 'Ring', 'Center']);
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Jonathan_Lettvin  = function() { var doc = HERE(function() {/*
 == Jonathan D. Lettvin ==
 === TODO ===
 @- Use setTimeout to control object movement
 @- Fill in more comment doc values
 @- Consolidate separate accessors into single objects
+@- Cause pulse interval shortening when object centrifugally crosses zero
     */});
     html.Comment('Jonathan_Lettvin', doc, ['Neutral']);
     canvas.drawImage('Jonathan_Lettvin');
   };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Neutral = function() { var doc = HERE(function() {/*
+== Neutral Gray ==
+=== Why is this needed? ===
+___Photoreceptors respond to changes in photon flux.
+The change may be an increase or decrease of flux.
+Successful modeling of flux changes in this paper
+requires the ability to represent both types of flux change.
+A neutral gray background enables the display of
+objects both brighter and darker than the background.
+=== Future Modeling ===
+___This has consequence in modeling retinal functions
+as described in additional papers.
+    */});
+    html.Comment('Neutral Gray Background', doc, ['Neutral']);
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Discharge  = function() { var doc = HERE(function() {/*
 == Sounds of Neural Actiity ==
 === In the lab ===
@@ -697,15 +723,31 @@ Recorded impulses are amplified over a loudspeaker.
 === Simulation ===
 Pulses are irregular, but generally follow the rule that
 pulse intervals group reliably into bands.
-=== TODO ===
-This simulation uses a single pulse at regular intervals.
-In the future, this will be modified to change intervals
-to shorter when an object crosses a circle outbound.
     */});
     html.Comment('Discharge', doc, ['Neutral']);
     canvas.drawImage('Discharge');
   };
-  //___________________________________________________________________________
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.PSF = function() { var doc = HERE(function() {/*
+== Point Spread Function ==
+___As discussed in Concentric, Airy pattern zeros are suspected to correlate
+with the locations that cause neuron discharges.
+The !wAiry_disk|Airy pattern|w! is well documented.
+    */});
+    doc += d.getElementById("Airy").innerHTML;
+    html.Comment('Point Spread Function', doc, ['Neutral']);
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Building_20  = function() { var doc = HERE(function() {/*
+== MIT Building 20 ==
+    */});
+    html.Comment('Building_20', doc, ['Neutral']);
+    canvas.drawImage('Building_20');
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Airy  = function() { var doc = HERE(function() {/*
 == Research Laboratory of Electronics ==
     */});
@@ -713,8 +755,7 @@ to shorter when an object crosses a circle outbound.
     canvas.drawImage('Airy');
   };
 
-
-  //###########################################################################
+  //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
   speaker.Resting = function() {
 
     speaker.audible = false;
@@ -740,13 +781,13 @@ to shorter when an object crosses a circle outbound.
     context.suspend(0);   // Begins muted.
   };
 
-  //___________________________________________________________________________
+  //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
   speaker.decay = function(frequency) {
     // Use this function to initiate a discharge rate increase.
     speaker.left = Math.floor(Math.abs(frequency));
   }
 
-  //___________________________________________________________________________
+  //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
   speaker.retime = function() {
     var osc = speaker.osc;
     osc.frequency.value = osc.frequency.base;
@@ -771,7 +812,7 @@ to shorter when an object crosses a circle outbound.
     setTimeout(function(){ speaker.retime() }, timeout);
   };
 
-  //___________________________________________________________________________
+  //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
   speaker.Hear = function() {
     var mute = d.getElementById("mute");
     speaker.context.resume(0);
@@ -782,7 +823,7 @@ to shorter when an object crosses a circle outbound.
     speaker.retime();
   };
 
-  //___________________________________________________________________________
+  //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
   speaker.Mute = function() {
     var mute = d.getElementById("mute");
     speaker.context.suspend(0);
@@ -792,7 +833,7 @@ to shorter when an object crosses a circle outbound.
     clearTimeout();
   };
 
-  //___________________________________________________________________________
+  //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
   speaker.Toggle = function() {
     speaker.audible ^= true;
     speaker.audible ? speaker.Hear() : speaker.Mute();
@@ -842,7 +883,7 @@ to shorter when an object crosses a circle outbound.
   pushEvent(comment.Neutral);
   pushEvent(speaker.Resting);
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ
 }).call(this, window, document);
   </script>
 <!-- HTML FRAMEWORK <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< -->
