@@ -724,21 +724,34 @@ to shorter when an object crosses a circle outbound.
     context.suspend(0);   // Begins muted.
   };
 
+  //___________________________________________________________________________
   speaker.decay = function(frequency) {
+    // Use this function to initiate a discharge rate increase.
     speaker.left = Math.floor(Math.abs(frequency));
   }
 
+  //___________________________________________________________________________
   speaker.retime = function() {
     var osc = speaker.osc;
     osc.frequency.value = osc.frequency.base;
+
     if (speaker.left) {
+      // If there is decay value left, apply the decay.
+      // Linear is an acceptable approximation of exponential here.
       osc.frequency.value += speaker.left;
       speaker.left -= 1.0;
     }
+    // Calculate the random variability of pulse intervals.
     var positive = Math.random(), negative = Math.random();
     var variance = osc.frequency.base / 2;
+
+    // Apply the variability to the decay-modified frequency.
     osc.frequency.value += variance * (positive-negative);
+
+    // Calculate the time needed before the next execution of this function.
     var timeout = 1000 / osc.frequency.value;
+
+    // Aply the timeout.
     setTimeout(function(){ speaker.retime() }, timeout);
   };
 
@@ -760,6 +773,7 @@ to shorter when an object crosses a circle outbound.
     mute.style.color = "white";
     mute.style.backgroundColor = "black";
     mute.innerHTML = "Click to HEAR";
+    clearTimeout();
   };
 
   //___________________________________________________________________________
