@@ -204,9 +204,10 @@ March 1959 Pages 393 and 354.^^^
 
   //___________________________________________________________________________
   paper.Illustration = HERE(function() {/*
-!wJonathan_Lettvin|Jonathan D. Lettvinw!
-<a href="http://jonathan.lettvin.com">(home)</a>,
-comments 20160322^^^
+<a href="http://jonathan.lettvin.com" onmouseover="paper.comment.Jonathan_Lettvin()">
+Jonathan D. Lettvin
+</a>,
+20160322-20160327^^^
 with images against a !:Neutral,Neutral Gray Background:!
 */});
   //___________________________________________________________________________
@@ -670,6 +671,10 @@ to the experiments and post-experiment analysis.
   //___________________________________________________________________________
   comment.Jonathan_Lettvin  = function() { var doc = HERE(function() {/*
 == Jonathan D. Lettvin ==
+=== TODO ===
+@- Use setTimeout to control object movement
+@- Fill in more comment doc values
+@- Consolidate separate accessors into single objects
     */});
     html.Comment('Jonathan_Lettvin', doc, ['Neutral']);
     canvas.drawImage('Jonathan_Lettvin');
