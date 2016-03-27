@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
   <style>
 table {
   border-collapse :collapse;
@@ -17,7 +22,8 @@ ol {
   padding-left    :30px;
 }
 #mute {
-  color           :green;
+  color           :white;
+  background-color:black;
 }
 #main {
   text-align      :center;
@@ -33,12 +39,10 @@ ol {
   border-collapse :collapse;
 }
 #Commentary {
-  border          :1px solid black;
-  border-collapse :collapse;
   text-align      :left;
   vertical-align  :top;
-  color           :white;
-  background-color:black;
+  color           :black;
+  background-color:white;
 }
 #header1 {
   font-size       :20px;
@@ -130,7 +134,8 @@ ol {
     }
   };
   paper.where = {
-    'RLE':'(Research Laboratory of Electronics, M.I.T. Cambridge, MA)'
+    'RLE':'(Research Laboratory of Electronics, M.I.T. Cambridge, MA)',
+    'Building_20':'MIT Building 20'
   };
 
   // CONTROL DATA /////////////////////////////////////////////////////////////
@@ -185,7 +190,7 @@ March 1959 Pages 393 and 354.^^^
   //___________________________________________________________________________
   paper.Illustration = HERE(function() {/*
 !wJonathan_Lettvin|Jonathan D. Lettvinw!
-(<a href="http://jonathan.lettvin.com">(home)</a>),
+<a href="http://jonathan.lettvin.com">(home)</a>,
 comments 20160322^^^
 with images against a !:Neutral,Neutral Gray Background:!
 */});
@@ -416,6 +421,14 @@ as described in additional papers.
   //___________________________________________________________________________
   comment.Concentric = function() { var doc = HERE(function() {/*
 == Concentric Zones ==
+=== Details of Figure ===
+Three circles are shown comprising a white/black pair at each circle
+with the black component being centrifugal to the white component.
+Radii of circles coincide with zeros of an Airy pattern (speculation)
+for a specified aperture/wavelength.
+*/});
+    doc += d.getElementById("Airy").innerHTML;
+    var tail = HERE(function() {/*
 === When are signals generated? ===
 Responses accompany crossing from inside to outside an annulus.
 Concentric zones are proposed here as bounded by Airy zeros of
@@ -427,7 +440,19 @@ the
   };
   //___________________________________________________________________________
   comment.Polar = function() { var doc = HERE(function() {/*
-Polar axes illustrate equidistance from center of concentric zone boundaries.
+== Polar ==
+=== parameters ===
+2D polar diagrams use two orthogonal parameters: r(radius) and &theta;(angle).
+See !wPolar_coordinate_system|Polar coordinate systemw!.
+=== Details of Figure ===
+The figure shows the traditional (X,Y) axes but shows diagonals also, 
+where tick marks along the lines aid the viewer in identifying
+equidistance points, such as the circles.
+=== Details of experimental observation ===
+In this paper, as will be discussed later,
+objects that change &theta; without changing r
+do not cause changes in the discharge rate in
+fibers corresponding to the center of the circle.
     */});
     html.Comment('Polar axes', doc, ['Neutral', 'Polar', 'Ring']);
   };
@@ -523,7 +548,10 @@ Response
   };
   //___________________________________________________________________________
   comment.Humberto_Maturana  = function() { var doc = HERE(function() {/*
-Humberto Maturana 
+== Humberto Maturana ==
+Humberto did histological studies in Jerry Lettvin's lab.
+These included counting the members of individual axon species in optic nerve.
+
     */});
     html.Comment('Maturana', doc, ['Neutral']);
     var ctx = canvas.ctx;
@@ -531,7 +559,20 @@ Humberto Maturana
   };
   //___________________________________________________________________________
   comment.Jerome_Lettvin  = function() { var doc = HERE(function() {/*
-Jerome Y. Lettvin
+== Jerome Y. Lettvin ==
+=== The lab for "experimental epistemology" ===
+Jerry kept his central lab in !wBuilding_20|MIT Building 20 wing Cw!.
+He performed pulse recordings on both myelinated and unmyelinated single axons
+on frog optic nerve in a Faraday cage using 1 micron Dowben and Rose
+metal filled electrodes through a high gain amplifier where
+pulses were also made audible over a loudspeaker.
+These audible indicators of activity are simulated on this page
+by clicking on the "Click to HEAR" toggle button above.
+=== This experiment ===
+A frog is prepared and mounted with the experimental eye pointed into
+the concave side of an aluminum hemisphere where
+objects both lighter and darker are moved within the hemisphere
+using a magnet on the convex surface, hiding all but the object from the frog.
     */});
     html.Comment('Lettvin', doc, ['Neutral']);
     var ctx = canvas.ctx;
@@ -561,6 +602,14 @@ Research Laboratory of Electronics
     var ctx = canvas.ctx;
     ctx.drawImage(image['RLE'], 0, 0);
   };
+  //___________________________________________________________________________
+  comment.Building_20  = function() { var doc = HERE(function() {/*
+MIT Building 20
+    */});
+    html.Comment('Building_20', doc, ['Neutral']);
+    var ctx = canvas.ctx;
+    ctx.drawImage(image['Building_20'], 0, 0);
+  };
 
   //___________________________________________________________________________
   comment.Jonathan_Lettvin  = function() { var doc = HERE(function() {/*
@@ -570,6 +619,20 @@ Jonathan D. Lettvin
     var ctx = canvas.ctx;
     ctx.drawImage(image['Jonathan_Lettvin'], 0, 0);
   };
+  comment.Sounds  = function() { var doc = HERE(function() {/*
+== Sounds of Neural Actiity ==
+=== In the lab ===
+Recorded impulses are amplified over a loudspeaker.
+=== Simulation ===
+Pulses are irregular, but generally follow the rule that
+pulse intervals group reliably into bands.
+=== TODO ===
+This simulation uses a single pulse at regular intervals.
+In the future, this will be modified to change intervals
+to shorter when an object crosses a circle outbound.
+    */});
+    html.Comment('Sounds', doc, ['Neutral']);
+  };
 
 
   //###########################################################################
@@ -578,26 +641,30 @@ Jonathan D. Lettvin
     speaker.audible = false;
 
     speaker.context = new window.AudioContext();
+    var context = speaker.context;
  
-    speaker.osc = speaker.context.createOscillator();
-    speaker.osc.frequency.value = 3; //440;
-    speaker.osc.type = "square";
-    speaker.osc.connect(speaker.context.destination);
-    speaker.osc.start(0);
+    speaker.osc = context.createOscillator();
+    var osc = speaker.osc;
+
+    osc.frequency.value = 1;  // Hertz
+    osc.type = "square";
+    osc.connect(context.destination);
+    osc.start(0);
  
-    speaker.gain = speaker.context.createGain();
+    speaker.gain = context.createGain();
     speaker.volume = 0.50;
     speaker.gain.gain.value = speaker.volume;
-    speaker.gain.connect(speaker.osc.frequency);
+    speaker.gain.connect(osc.frequency);
 
-    speaker.context.suspend(0);   // Begins muted.
+    context.suspend(0);   // Begins muted.
   };
 
   //___________________________________________________________________________
   speaker.Hear = function() {
     var mute = d.getElementById("mute");
     speaker.context.resume(0);
-    mute.style.color = "red";
+    mute.style.color = "black";
+    mute.style.backgroundColor = "white";
     mute.innerHTML = "Click to MUTE";
   };
 
@@ -605,7 +672,8 @@ Jonathan D. Lettvin
   speaker.Mute = function() {
     var mute = d.getElementById("mute");
     speaker.context.suspend(0);
-    mute.style.color = "green";
+    mute.style.color = "white";
+    mute.style.backgroundColor = "black";
     mute.innerHTML = "Click to HEAR";
   };
 
@@ -637,6 +705,8 @@ Jonathan D. Lettvin
     Ring            :canvas.Ring,
     Weighting       :canvas.Weighting,
 
+    Sounds          :canvas.Sounds,
+
     Humberto_Maturana :canvas.Humberto_Maturana,
     Jerome_Lettvin    :canvas.Jerome_Lettvin,
     Jonathan_Lettvin  :canvas.Jonathan_Lettvin,
@@ -644,6 +714,7 @@ Jonathan D. Lettvin
     Warren_McCulloch  :canvas.Warren_McCulloch,
 
     RLE               :canvas.RLE,
+    Building_20       :canvas.Building_20,
   };
 
   //###########################################################################
@@ -653,11 +724,8 @@ Jonathan D. Lettvin
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 }).call(this, window, document);
   </script>
-</head>
-<body>
 <!-- HTML FRAMEWORK <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< -->
 <table id="main">
-
   <tr>
     <td width="50%">
       <table>
@@ -672,7 +740,6 @@ Jonathan D. Lettvin
             <big id="PartI_title"></big>
             <p id="PartI_body"></p>
           </td>
-
         </tr>
         <tr>
           <td id="part" id="part" width="50%" valign="top">
@@ -683,7 +750,12 @@ Jonathan D. Lettvin
       </table>
     </td><td valign="top" width="50%">
       <big id="Illustration"></big><br />
-        <button id="mute" type="button" onclick="window.html.speaker.Toggle()" >
+        <button
+          id="mute"
+          type="button"
+          onclick="window.html.speaker.Toggle()"
+          onmouseover="window.paper.comment.Sounds()"
+        >
           Click to HEAR
         </button>
         simulated ganglion cell discharges.
@@ -703,9 +775,16 @@ Jonathan D. Lettvin
       </table>
     </td>
   </tr>
-
-
 </table>
+<p id="Airy" style="visibility:hidden;">
+\[I = I_0 \left(\frac{2 J_1(u)}{u}\right)^2\]
+\[u = \frac{2 \pi a q}{\lambda R}\]<br />
+J<sub>1</sub> = Bessel function of the first kind<br />
+a = aperture radius<br />
+q = focal plane offset<br />
+&lambda; = photon wavelength<br />
+R = distance from aperture to focal plane
+</p>
 <!-- HTML FRAMEWORK >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
 </body>
 </html>
