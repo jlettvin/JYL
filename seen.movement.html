@@ -182,10 +182,7 @@ March 1959 Pages 393 and 354.^^^
     paper.Citation += '!w' + author + '|' + paper.who.authors[author] + 'w!\n';
   }
   paper.Citation += '^^^\n<a href="http://www.rle.mit.edu/">RLE</a>';
-
-  for (var facility in paper.where) {
-    paper.Citation += '!w' + facility + '|' + paper.where[facility] + 'w!\n';
-  }
+  paper.Citation += '!w' + facility + '|' + paper.where['RLE'] + 'w!\n';
 
   //___________________________________________________________________________
   paper.Illustration = HERE(function() {/*
@@ -458,91 +455,101 @@ fibers corresponding to the center of the circle.
   };
   //___________________________________________________________________________
   comment.Center = function() { var doc = HERE(function() {/*
-Center 
+== Center  ==
+=== Details of Figure ===
+Note the central white point.
+=== Details of experimental observation ===
+This paper describes observations of discharge rate changes
+at this location.
+No other location in the diagram is considered.
     */});
     html.Comment('center', doc, ['Neutral', 'Ring', 'Center']);
   };
   //___________________________________________________________________________
   comment.Centrifugal = function() { var doc = HERE(function() {/*
-Centrifugal 
+== Centrifugal  ==
     */});
     html.Comment('Centrifugal motion', doc, ['Neutral', 'Ring']);
   };
   //___________________________________________________________________________
   comment.PSF = function() { var doc = HERE(function() {/*
-Point Spread Function
+== Point Spread Function ==
+As discussed in Concentric, Airy pattern zeros are suspected to correlate
+with the locations that cause neuron discharges.
+The !wAiry_disk|Airy pattern|w! is well documented.
     */});
+    doc += d.getElementById("Airy").innerHTML;
     html.Comment('Point Spread Function', doc, ['Neutral']);
   };
   //___________________________________________________________________________
   comment.Point = function() { var doc = HERE(function() {/*
-Point 
+== Point  ==
     */});
     html.Comment('Point', doc, ['Neutral']);
   };
   //___________________________________________________________________________
   comment.Centripetal = function() { var doc = HERE(function() {/*
-Centripetal 
+== Centripetal  ==
     */});
     html.Comment('Centripetal', doc, ['Neutral', 'Ring']);
   };
   //___________________________________________________________________________
   comment.Darker = function() { var doc = HERE(function() {/*
-Darker 
+== Darker  ==
     */});
     html.Comment('Dark object motion', doc, ['Neutral', 'Ring']);
   };
   //___________________________________________________________________________
   comment.Lighter = function() { var doc = HERE(function() {/*
-Lighter 
+== Lighter  ==
     */});
     html.Comment('Light object motion', doc, ['Neutral', 'Ring']);
   };
   //___________________________________________________________________________
   comment.Constricted = function() { var doc = HERE(function() {/*
-Constricted 
+== Constricted  ==
     */});
     html.Comment('Constricted fields', doc, ['Neutral', 'Ring']);
   };
   //___________________________________________________________________________
   comment.Weighting = function() { var doc = HERE(function() {/*
-Weighting 
+== Weighting  ==
     */});
     html.Comment('Directional weighting', doc, ['Neutral', 'Ring']);
   };
   //___________________________________________________________________________
   comment.Annular = function() { var doc = HERE(function() {/*
-Annular 
+== Annular  ==
     */});
     html.Comment('Annular fields', doc, ['Neutral', 'Ring']);
   };
   //___________________________________________________________________________
   comment.Illumination = function() { var doc = HERE(function() {/*
-Illumination 
+== Illumination  ==
     */});
     html.Comment('Inverse average intensity', doc, ['Neutral', 'Ring']);
   };
   //___________________________________________________________________________
   comment.Circular = function() { var doc = HERE(function() {/*
-Circular 
+== Circular  ==
     */});
     html.Comment('Circular motion', doc, ['Neutral', 'Ring']);
   };
   //___________________________________________________________________________
   comment.Fiber = function() { var doc = HERE(function() {/*
-Fiber 
+== Fiber  ==
     */});
     html.Comment('Fiber: Ganglion cell axon', doc, ['Neutral', 'Ring']);
   };
   //___________________________________________________________________________
   comment.Diameter = function() { var doc = HERE(function() {/*
-Diameter 
+== Diameter  ==
     */});
     html.Comment('Invariant to diameter', doc, ['Neutral', 'Ring']);
   };
   //___________________________________________________________________________
   comment.Response = function() { var doc = HERE(function() {/*
-Response 
+== Response  ==
     */});
     html.Comment('No response at center', doc, ['Neutral', 'Ring']);
   };
@@ -580,7 +587,7 @@ using a magnet on the convex surface, hiding all but the object from the frog.
   };
   //___________________________________________________________________________
   comment.Walter_Pitts  = function() { var doc = HERE(function() {/*
-Walter Pitts
+== Walter Pitts ==
     */});
     html.Comment('Pitts', doc, ['Neutral']);
     var ctx = canvas.ctx;
@@ -588,7 +595,7 @@ Walter Pitts
   };
   //___________________________________________________________________________
   comment.Warren_McCulloch  = function() { var doc = HERE(function() {/*
-Warren McCulloch
+== Warren McCulloch ==
     */});
     html.Comment('McCulloch', doc, ['Neutral']);
     var ctx = canvas.ctx;
@@ -596,7 +603,7 @@ Warren McCulloch
   };
   //___________________________________________________________________________
   comment.RLE  = function() { var doc = HERE(function() {/*
-Research Laboratory of Electronics
+== Research Laboratory of Electronics ==
     */});
     html.Comment('RLE', doc, ['Neutral']);
     var ctx = canvas.ctx;
@@ -604,7 +611,7 @@ Research Laboratory of Electronics
   };
   //___________________________________________________________________________
   comment.Building_20  = function() { var doc = HERE(function() {/*
-MIT Building 20
+== MIT Building 20 ==
     */});
     html.Comment('Building_20', doc, ['Neutral']);
     var ctx = canvas.ctx;
@@ -613,7 +620,7 @@ MIT Building 20
 
   //___________________________________________________________________________
   comment.Jonathan_Lettvin  = function() { var doc = HERE(function() {/*
-Jonathan D. Lettvin
+== Jonathan D. Lettvin ==
     */});
     html.Comment('Jonathan_Lettvin', doc, ['Neutral']);
     var ctx = canvas.ctx;
@@ -761,8 +768,8 @@ to shorter when an object crosses a circle outbound.
         simulated ganglion cell discharges.
       <table>
         <tr>
-          <td height="255px" width="255px" align="left">
-            <canvas id="illustration" width="255" height="255"></canvas><br />
+          <td height="256px" width="256px" align="left">
+            <canvas id="illustration" width="256" height="256"></canvas><br />
             <b id="Caption"></b>
           </td>
         </tr>
