@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script type="text/javascript"
-  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+<script
+  type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?
+config=TeX-AMS-MML_HTMLorMML">
 </script>
 </head>
 <body>
@@ -68,11 +70,22 @@ ol {
   // Include specializations
   // Both patterns need work because extra spaces appear in the output.
   w.wikiappend([
+    'Nobel',
+    /\!n\s*(.*)\s*\|\s*(.*)\s*\|\s*(.*)\s*n\!/g,
+    '<a href="http://www.nobelprize.org/nobel_prizes/$2" '+
+    'onmouseover="window.paper.comment.$1()">$3</a>',
+    '!w a | b | c w!',
+    '<a href="http://www.nobelprize.org/nobel_prizes/b" '+
+    'onmouseover="window.paper.comment.a()">c</a>'
+    ]);
+  w.wikiappend([
     'wikipedia',
     /\!w\s*(.*)\s*\|\s*(.*)\s*w\!/g,
-    '<a href="https://en.wikipedia.org/wiki/$1" onmouseover="window.paper.comment.$1()">$2</a>',
+    '<a href="https://en.wikipedia.org/wiki/$1" '+
+    'onmouseover="window.paper.comment.$1()">$2</a>',
     '!w a | b w!',
-    '<a href="https://en.wikipedia.org/wiki/a" onmouseover="window.paper.comment.a()">b</a>'
+    '<a href="https://en.wikipedia.org/wiki/a" '+
+    'onmouseover="window.paper.comment.a()">b</a>'
     ]);
   w.wikiappend([
     'mouseover',
@@ -88,13 +101,10 @@ ol {
   // Enable multiple chained onload handlers
   function pushEvent(func) {
     var oldonload = window.onload;
-    if (typeof window.onload != 'function') {
-      window.onload = func;
-    } else {
+    if (typeof window.onload != 'function') window.onload = func;
+    else {
       window.onload = function() {
-        if (oldonload) {
-          oldonload();
-        }
+        if (oldonload) oldonload();
         func();
       }
     }
@@ -139,6 +149,7 @@ ol {
   };
   paper.what = {
     'Discharge':'Action Potentials',
+    'Airy':'Airy',
   };
 
   // CONTROL DATA /////////////////////////////////////////////////////////////
@@ -149,7 +160,7 @@ ol {
   canvas.Zeros    = 3;
   canvas.Diag     = canvas.Tick / Math.sqrt(2.0);
   canvas.Epsilon  = canvas.Line / 2;
-  canvas.Gap      = canvas.Edge / 8;
+  canvas.Gap      = 12; //canvas.Edge / 8;
   canvas.Color    = {black:"#000000", gray:"#777777", white:"#EEEEEE" };
   canvas.Showing  = [];
   canvas.Z0coefficient = 1.2196698912665045;
@@ -292,6 +303,12 @@ at the !:Center,center:! of the circle described.
   };
 
   //###########################################################################
+  canvas.drawImage = function(name) {
+    var ctx = canvas.ctx;
+    ctx.drawImage(image[name], 0, 0);
+  };
+
+  //###########################################################################
   // Neutral gray background
   canvas.Neutral = function() {
     var ctx = canvas.ctx;
@@ -426,34 +443,41 @@ as described in additional papers.
   comment.Concentric = function() { var doc = HERE(function() {/*
 == Concentric Zones ==
 === Details of Figure ===
-Three circles are shown comprising a white/black pair at each circle
-with the black component being centrifugal to the white component.
-Radii of circles coincide with zeros of an Airy pattern (speculation)
-for a specified aperture/wavelength.
+___Zones map to zeros of Airy patterns (speculation).
+Airy patterns result from monochromatic point sources
+being projected through a circular aperture onto a focal plane.
+This figure shows a calculated Airy pattern
+which is indistinguishable from an optical image with central saturation.
+Concentric zones may refer to either the annuli or the zeros.
 */});
     doc += d.getElementById("Airy").innerHTML;
     var tail = HERE(function() {/*
 === When are signals generated? ===
-Responses accompany crossing from inside to outside an annulus.
+___Responses accompany crossing from inside to outside an annulus.
 Concentric zones are proposed here as bounded by Airy zeros of
 the
 !:PSF,PSF:!
 (Point Spread Function) for a monochromatic point source.
     */});
     html.Comment('Concentric Airy Zeros', doc, ['Neutral', 'Ring']);
+    canvas.drawImage('Airy');
   };
   //___________________________________________________________________________
   comment.Polar = function() { var doc = HERE(function() {/*
 == Polar ==
 === parameters ===
-2D polar diagrams use two orthogonal parameters: r(radius) and &theta;(angle).
+___2D polar diagrams use two orthogonal parameters: r(radius) and &theta;(angle).
 See !wPolar_coordinate_system|Polar coordinate systemw!.
 === Details of Figure ===
-The figure shows the traditional (X,Y) axes but shows diagonals also, 
+___The figure shows the traditional (X,Y) axes but shows diagonals also, 
 where tick marks along the lines aid the viewer in identifying
 equidistance points, such as the circles.
+___Three circles are shown comprising a white/black pair at each circle
+with the black component being centrifugal to the white component.
+Radii of circles coincide with zeros of an Airy pattern (speculation)
+for a specified aperture/wavelength.
 === Details of experimental observation ===
-In this paper, as will be discussed later,
+___In this paper, as will be discussed later,
 objects that change &theta; without changing r
 do not cause changes in the discharge rate in
 fibers corresponding to the center of the circle.
@@ -464,9 +488,9 @@ fibers corresponding to the center of the circle.
   comment.Center = function() { var doc = HERE(function() {/*
 == Center  ==
 === Details of Figure ===
-Note the central white point.
+___Note the central white point.
 === Details of experimental observation ===
-This paper describes observations of discharge rate changes
+___This paper describes observations of discharge rate changes
 at this location.
 No other location in the diagram is considered.
     */});
@@ -481,7 +505,7 @@ No other location in the diagram is considered.
   //___________________________________________________________________________
   comment.PSF = function() { var doc = HERE(function() {/*
 == Point Spread Function ==
-As discussed in Concentric, Airy pattern zeros are suspected to correlate
+___As discussed in Concentric, Airy pattern zeros are suspected to correlate
 with the locations that cause neuron discharges.
 The !wAiry_disk|Airy pattern|w! is well documented.
     */});
@@ -545,6 +569,21 @@ The !wAiry_disk|Airy pattern|w! is well documented.
   //___________________________________________________________________________
   comment.Fiber = function() { var doc = HERE(function() {/*
 == Fiber  ==
+=== Anatomically ===
+___Frog optic nerve fibers are chiefly the axons of retinal ganglion cells.
+In addition, cells in the midbrain have axons to retinal amacrine cells
+(controversial).
+Typically, sized of axons are associated with signal types.
+Large 20&micro;m caliber axons are fast and associated with threat.
+Small 0.1&micro;m caliber axons are slow and associated with detail.
+Other axons have sizes between Large and Small.
+=== Signals ===
+___Five signal types are identified by a combination of
+their discharge patterns and when those patterns manifest
+(see Part I page 393).
+The terms Fast and Slow indicate the pulse propagation velocity
+as classified by
+!nGasser_and_Erlanger|medicine/laureates/1944|Gasser and Erlangern!.
     */});
     html.Comment('Fiber: Ganglion cell axon', doc, ['Neutral', 'Ring']);
   };
@@ -564,18 +603,17 @@ The !wAiry_disk|Airy pattern|w! is well documented.
   comment.Humberto_Maturana  = function() { var doc = HERE(function() {/*
 == Humberto Maturana ==
 === Histology and Anatomy ===
-Humberto did histological studies in Jerry Lettvin's lab.
+___Humberto did histological studies in Jerry Lettvin's lab.
 These included counting the members of individual axon species in optic nerve.
     */});
     html.Comment('Maturana', doc, ['Neutral']);
-    var ctx = canvas.ctx;
-    ctx.drawImage(image['Humberto_Maturana'], 0, 0);
+    canvas.drawImage('Humberto_Maturana');
   };
   //___________________________________________________________________________
   comment.Jerome_Lettvin  = function() { var doc = HERE(function() {/*
 == Jerome Y. Lettvin ==
 === The lab for "experimental epistemology" ===
-Jerry kept his central lab in !wBuilding_20|MIT Building 20 wing Cw!.
+___Jerry kept his central lab in !wBuilding_20|MIT Building 20 wing Cw!.
 He performed pulse recordings on both myelinated and unmyelinated single axons
 on frog optic nerve in a Faraday cage using 1 micron Dowben and Rose
 metal filled electrodes through a high gain amplifier where
@@ -583,7 +621,7 @@ pulses were also made audible over a loudspeaker.
 These audible indicators of activity are simulated on this page
 by clicking on the "Click to HEAR" toggle button above.
 === This experiment ===
-A frog is prepared with an electrode recording optic nerve discharges.
+___A frog is prepared with an electrode recording optic nerve discharges.
 The frog is mounted with the experimental eye pointed into
 the concave side of an aluminum hemisphere where
 objects both lighter and darker are moved within the hemisphere
@@ -591,8 +629,7 @@ using a magnet on the convex surface, hiding all but the object from the frog.
 Discharge rates increase as objects cross circles as described.
     */});
     html.Comment('Lettvin', doc, ['Neutral']);
-    var ctx = canvas.ctx;
-    ctx.drawImage(image['Jerome_Lettvin'], 0, 0);
+    canvas.drawImage('Jerome_Lettvin');
   };
   //___________________________________________________________________________
   comment.Walter_Pitts  = function() { var doc = HERE(function() {/*
@@ -603,8 +640,7 @@ of neural discharges, both in terms of pulse-interval analysis
 and the geometric aspects of experiments.
     */});
     html.Comment('Pitts', doc, ['Neutral']);
-    var ctx = canvas.ctx;
-    ctx.drawImage(image['Walter_Pitts'], 0, 0);
+    canvas.drawImage('Walter_Pitts');
   };
   //___________________________________________________________________________
   comment.Warren_McCulloch  = function() { var doc = HERE(function() {/*
@@ -614,24 +650,21 @@ Warren provided both philosophical and historical context
 to the experiments and post-experiment analysis.
     */});
     html.Comment('McCulloch', doc, ['Neutral']);
-    var ctx = canvas.ctx;
-    ctx.drawImage(image['Warren_McCulloch'], 0, 0);
+    canvas.drawImage('Warren_McCulloch');
   };
   //___________________________________________________________________________
   comment.RLE  = function() { var doc = HERE(function() {/*
 == Research Laboratory of Electronics ==
     */});
     html.Comment('RLE', doc, ['Neutral']);
-    var ctx = canvas.ctx;
-    ctx.drawImage(image['RLE'], 0, 0);
+    canvas.drawImage('RLE');
   };
   //___________________________________________________________________________
   comment.Building_20  = function() { var doc = HERE(function() {/*
 == MIT Building 20 ==
     */});
     html.Comment('Building_20', doc, ['Neutral']);
-    var ctx = canvas.ctx;
-    ctx.drawImage(image['Building_20'], 0, 0);
+    canvas.drawImage('Building_20');
   };
 
   //___________________________________________________________________________
@@ -639,8 +672,7 @@ to the experiments and post-experiment analysis.
 == Jonathan D. Lettvin ==
     */});
     html.Comment('Jonathan_Lettvin', doc, ['Neutral']);
-    var ctx = canvas.ctx;
-    ctx.drawImage(image['Jonathan_Lettvin'], 0, 0);
+    canvas.drawImage('Jonathan_Lettvin');
   };
   comment.Discharge  = function() { var doc = HERE(function() {/*
 == Sounds of Neural Actiity ==
@@ -655,8 +687,14 @@ In the future, this will be modified to change intervals
 to shorter when an object crosses a circle outbound.
     */});
     html.Comment('Discharge', doc, ['Neutral']);
-    var ctx = canvas.ctx;
-    ctx.drawImage(image['Discharge'], 0, 0);
+    canvas.drawImage('Discharge');
+  };
+  //___________________________________________________________________________
+  comment.Airy  = function() { var doc = HERE(function() {/*
+== Research Laboratory of Electronics ==
+    */});
+    html.Comment('Airy', doc, ['Neutral']);
+    canvas.drawImage('Airy');
   };
 
 
@@ -671,7 +709,8 @@ to shorter when an object crosses a circle outbound.
     speaker.osc = context.createOscillator();
     var osc = speaker.osc;
 
-    osc.frequency.value = 1;  // Hertz
+    osc.frequency.base  = 1;  // Hertz
+    osc.frequency.value = osc.frequency.base;
     osc.type = "square";
     osc.connect(context.destination);
     osc.start(0);
@@ -680,8 +719,27 @@ to shorter when an object crosses a circle outbound.
     speaker.volume = 0.50;
     speaker.gain.gain.value = speaker.volume;
     speaker.gain.connect(osc.frequency);
+    speaker.left = 0;
 
     context.suspend(0);   // Begins muted.
+  };
+
+  speaker.decay = function(frequency) {
+    speaker.left = Math.floor(Math.abs(frequency));
+  }
+
+  speaker.retime = function() {
+    var osc = speaker.osc;
+    osc.frequency.value = osc.frequency.base;
+    if (speaker.left) {
+      osc.frequency.value += speaker.left;
+      speaker.left -= 1.0;
+    }
+    var positive = Math.random(), negative = Math.random();
+    var variance = osc.frequency.base / 2;
+    osc.frequency.value += variance * (positive-negative);
+    var timeout = 1000 / osc.frequency.value;
+    setTimeout(function(){ speaker.retime() }, timeout);
   };
 
   //___________________________________________________________________________
@@ -691,6 +749,8 @@ to shorter when an object crosses a circle outbound.
     mute.style.color = "black";
     mute.style.backgroundColor = "white";
     mute.innerHTML = "Click to MUTE";
+    speaker.decay(20);
+    speaker.retime();
   };
 
   //___________________________________________________________________________
@@ -732,6 +792,7 @@ to shorter when an object crosses a circle outbound.
 
     // what
     Discharge       :canvas.Discharge,
+    Airy            :canvas.Airy,
 
     // who
     Humberto_Maturana :canvas.Humberto_Maturana,
@@ -807,11 +868,11 @@ to shorter when an object crosses a circle outbound.
 <p id="Airy" style="visibility:hidden;">
 \[I = I_0 \left(\frac{2 J_1(u)}{u}\right)^2\]
 \[u = \frac{2 \pi a q}{\lambda R}\]<br />
-J<sub>1</sub> = Bessel function of the first kind<br />
-a = aperture radius<br />
-q = focal plane offset<br />
-&lambda; = photon wavelength<br />
-R = distance from aperture to focal plane
+\(J_1\) = Bessel function of the first kind
+\(a\) = aperture radius<br />
+\(q\) = focal plane offset<br />
+\(&lambda;\) = photon wavelength<br />
+\(R\) = distance from aperture to focal plane
 </p>
 <!-- HTML FRAMEWORK >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
 </body>
