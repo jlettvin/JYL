@@ -165,6 +165,8 @@ ol {
   paper.what = {
     'Discharge':'Action Potentials',
     'Airy':'Airy',
+    'Airy_3mm_BonW':'Airy_3mm_BonW',
+    'Airy_3mm_WonB':'Airy_3mm_WonB',
     'Fiber':'Fiber',
   };
 
@@ -176,7 +178,7 @@ ol {
   canvas.Zeros    = 3;
   canvas.Diag     = canvas.Tick / Math.sqrt(2.0);
   canvas.Epsilon  = canvas.Line * 1.2;
-  canvas.Gap      = 12; //canvas.Edge / 8;
+  canvas.Gap      = 33; //canvas.Edge / 8;
   canvas.Color    = {black:"#000000", gray:"#777777", white:"#EEEEEE" };
   canvas.Showing  = [];
   canvas.Z0coefficient = 1.2196698912665045;
@@ -194,6 +196,8 @@ ol {
   }
   for (var thing in paper.what) {
     image[thing]  = new Image();
+    image[thing].src = thing + '.jpg';
+    image[thing].src = thing + '.jpg';
     image[thing].src = thing + '.jpg';
   }
   for (var commenter in paper.who.commenters) {
@@ -371,6 +375,18 @@ at the !:Center,center:! of the circle described.
   canvas.Background = function() {
     var doc = HERE(function() {/*
 == Active Illustration ==
+=== Sound Toggle ===
+Use the !_Click to HEAR_! button to turn the loudspeaker on.
+To turn off the sound, click the same button again.
+=== Centrifugal ===
+Mouse motion away from the center above a minimum velocity
+will trigger a decaying burst volley of discharges.
+This is the behavior described in the paper.
+=== Centripetal ===
+Mouse motion towards the center fails to trigger activity.
+=== Circular ===
+Mouse motion within the annuli and along any circle
+also fails to trigger activity.
   */});
     canvas.Neutral();
     canvas.Ring();
@@ -605,6 +621,9 @@ centrifugally vectored movement causes an increased discharge rate.
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Centrifugal = function() { var doc = HERE(function() {/*
 == Centrifugal  ==
+In the !_Active Illustration_! move the mouse from the center
+over the rings towards the outside.
+This causes a sudden burst of discharges which decays back to the resting rate.
     */});
     html.Comment('Centrifugal motion', doc, ['Neutral', 'Ring']);
   };
@@ -612,6 +631,10 @@ centrifugally vectored movement causes an increased discharge rate.
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Centripetal = function() { var doc = HERE(function() {/*
 == Centripetal  ==
+In the !_Active Illustration_! move the mouse from the outside
+over the rings towards the center.
+This causes a sudden burst of discharges
+which decays back to the resting rate.
     */});
     html.Comment('Centripetal', doc, ['Neutral', 'Ring']);
   };
@@ -620,14 +643,16 @@ centrifugally vectored movement causes an increased discharge rate.
   comment.Darker = function() { var doc = HERE(function() {/*
 == Darker  ==
     */});
-    html.Comment('Dark object motion', doc, ['Neutral', 'Ring']);
+    html.Comment('Dark object motion', doc, ['Neutral']);
+    canvas.drawImage('Airy_3mm_BonW');
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Lighter = function() { var doc = HERE(function() {/*
 == Lighter  ==
     */});
-    html.Comment('Light object motion', doc, ['Neutral', 'Ring']);
+    html.Comment('Light object motion', doc, ['Neutral']);
+    canvas.drawImage('Airy_3mm_WonB');
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
@@ -799,7 +824,13 @@ The !wAiry_disk|Airy pattern|w! is well documented.
   //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
   speaker.decay = function(frequency) {
     // Use this function to initiate a discharge rate increase.
+    clearTimeout();
+    var osc = speaker.osc;
+    osc.frequency.value = osc.frequency.base;
     speaker.left = Math.floor(Math.abs(frequency));
+    osc.frequency.value += speaker.left;
+    speaker.retime();
+    //setTimeout(function(){ speaker.retime() }, timeout);
   }
 
   //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
@@ -834,7 +865,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
     mute.style.color = "black";
     mute.style.backgroundColor = "white";
     mute.innerHTML = "Click to MUTE";
-    speaker.decay(20);
+    speaker.decay(50);
     speaker.retime();
   };
 
@@ -902,7 +933,10 @@ The !wAiry_disk|Airy pattern|w! is well documented.
       var XY2 = [e.layerX, e.layerY];
       if (canvas.inside > 1) {
 
-        var across = function(z,r1,r2) { return (r1 < z && z < r2); };
+        var across = function(z, r1, r2, threshold) {
+          var dr = Math.abs(r2 - r1);
+          return (r1 < z && z < r2 && dr >= threshold);
+        };
         var radius = function(a, b) {
           var dx = a[0] - b[0], dy = a[1] - b[1];
           return Math.sqrt(dx*dx + dy*dy);
@@ -913,7 +947,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
         var R2 = radius(XY2, XY0);
         var R1 = radius(XY1, XY0);
         var Z = window.html.canvas.Z;
-        for (var z of Z) if (across(z, R1, R2)) speaker.decay(20);
+        for (var z of Z) if (across(z, R1, R2, 1)) speaker.decay(50);
       }
       canvas.XY1 = XY2;
     } else {
