@@ -180,8 +180,9 @@ ol {
   canvas.Color    = {black:"#000000", gray:"#777777", white:"#EEEEEE" };
   canvas.Showing  = [];
   canvas.Z0coefficient = 1.2196698912665045;
-  canvas.X0 = canvas.Y0 = canvas.Edge / 2;
-  canvas.X1 = canvas.Y1 = canvas.Edge / 2;
+  canvas.R = Math.floor(canvas.Edge / 2);
+  canvas.X0 = canvas.Y0 = canvas.R;
+  canvas.XY1 = [canvas.R, canvas.R];
 
   for (var author in paper.who.authors) {
     image[author]  = new Image();
@@ -880,16 +881,38 @@ The !wAiry_disk|Airy pattern|w! is well documented.
 
   //MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
   canvas.handleMouseMove = function(e) {
+    var canvas = document.getElementById("Illustration");
     if (e.toElement.id == "Illustration") {
-      var canvas = document.getElementById("Illustration");
-      var xy = {ex:e.layerX, ey:e.layerY};
-      d.getElementById('ex').innerHTML = xy.ex;
-      d.getElementById('ey').innerHTML = xy.ey;
-      var dx = xy.ex - canvas.X1;
-      var dy = xy.ey - canvas.Y1;
+      canvas.inside += 1;
+      var XY2 = [e.layerX, e.layerY];
       // TODO detect transitions.
-      canvas.X1 = xy.ex;
-      canvas.Y1 = xy.ey;
+      if (canvas.inside > 1) {
+
+        var radius = function(a, b) {
+          var dx = a[0] - b[0];
+          var dy = a[1] - b[1];
+          return Math.sqrt(dx*dx + dy*dy);
+        };
+
+        var across = function(z,r1,r2) {
+          return (r1 < z && z < r2);  // centrifugal only
+          //return ((r1 < z && z < r2) || (r1 > z && z > r2));
+        };
+
+        var XY0 = [127,127]; //[canvas.X0, canvas.Y0]; // TODO fix this
+        var XY1 = canvas.XY1;
+        var R2 = radius(XY2, XY0);
+        var R1 = radius(XY1, XY0);
+
+        var Z = [12, 22, 32]; // canvas.Z; // TODO fix this
+        for (var z of Z) if (across(z, R1, R2)) speaker.decay(20);
+
+        //document.getElementById('r1').innerHTML = R1;
+        //document.getElementById('r2').innerHTML = R2;
+      }
+      canvas.XY1 = XY2;
+    } else {
+      canvas.inside = 0;
     }
   };
 
@@ -952,7 +975,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
     </td>
   </tr>
   <tr><td>
-      (<b id="ex"></b>,<b id="ey"></b>)
+      (<b id="r1"></b>,<b id="r2"></b>)
   </td></tr>
 </table>
 <p id="Airy" style="visibility:hidden">
