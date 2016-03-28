@@ -221,10 +221,14 @@ March 1959 Pages 393 and 354.^^^
   paper.Citation += '!w' + 'RLE' + '|' + paper.where['RLE'] + 'w!\n';
 
   //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-  paper.Illustration = HERE(function() {/*
-<a href="http://jonathan.lettvin.com" onmouseover="paper.comment.Jonathan_Lettvin()">Jonathan D. Lettvin</a>,
+  paper.Margin = HERE(function() {/*
+!aJonathan_Lettvin|Jonathan D. Lettvin|http://jonathan.lettvin.coma!
 20160322-20160327^^^
 with images on a !:Neutral,Neutral Gray Background:!
+*/});
+
+  //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+  paper.Canvas = HERE(function() {/*
 */});
   //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
   paper.PartI_title = HERE(function() {/*
@@ -284,7 +288,8 @@ at the !:Center,center:! of the circle described.
     var elements = [
       'Title',
       'Citation',
-      'Illustration',
+      'Canvas',
+      'Margin',
       'PartI_title',
       'PartI_body',
       'PartII_title',
@@ -363,6 +368,12 @@ at the !:Center,center:! of the circle described.
   };
 
   //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+  canvas.Background = function() {
+    canvas.Neutral();
+    canvas.Ring();
+  };
+
+  //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
   // Polar axes
   canvas.Polar = function() {
     var ctx = canvas.ctx;
@@ -408,7 +419,7 @@ at the !:Center,center:! of the circle described.
   // FILL FUNCTION ////////////////////////////////////////////////////////////
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   canvas.fill = function() {
-    var ctx = document.getElementById("Illustration").getContext("2d");
+    var ctx = document.getElementById("Canvas").getContext("2d");
     ctx.globalCompositeOperation="source-over";
     canvas.ctx = ctx;
 
@@ -881,34 +892,24 @@ The !wAiry_disk|Airy pattern|w! is well documented.
 
   //MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
   canvas.handleMouseMove = function(e) {
-    var canvas = document.getElementById("Illustration");
-    if (e.toElement.id == "Illustration") {
+    var canvas = document.getElementById("Canvas");
+    if (e.toElement.id == "Canvas") {
       canvas.inside += 1;
       var XY2 = [e.layerX, e.layerY];
-      // TODO detect transitions.
       if (canvas.inside > 1) {
 
+        var across = function(z,r1,r2) { return (r1 < z && z < r2); };
         var radius = function(a, b) {
-          var dx = a[0] - b[0];
-          var dy = a[1] - b[1];
+          var dx = a[0] - b[0], dy = a[1] - b[1];
           return Math.sqrt(dx*dx + dy*dy);
         };
 
-        var across = function(z,r1,r2) {
-          return (r1 < z && z < r2);  // centrifugal only
-          //return ((r1 < z && z < r2) || (r1 > z && z > r2));
-        };
-
-        var XY0 = [127,127]; //[canvas.X0, canvas.Y0]; // TODO fix this
+        var XY0 = [window.html.canvas.X0, window.html.canvas.Y0];
         var XY1 = canvas.XY1;
         var R2 = radius(XY2, XY0);
         var R1 = radius(XY1, XY0);
-
-        var Z = [12, 22, 32]; // canvas.Z; // TODO fix this
+        var Z = window.html.canvas.Z;
         for (var z of Z) if (across(z, R1, R2)) speaker.decay(20);
-
-        //document.getElementById('r1').innerHTML = R1;
-        //document.getElementById('r2').innerHTML = R2;
       }
       canvas.XY1 = XY2;
     } else {
@@ -949,6 +950,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
         </tr>
       </table>
     </td><td valign="top" width="50%">
+      <b id="Margin"></b><br />
       <big id="button"></big><br />
         <button
           id="mute"
@@ -961,8 +963,15 @@ The !wAiry_disk|Airy pattern|w! is well documented.
         simulated ganglion cell discharges.
       <table>
         <tr>
-          <td height="256px" width="256px" align="left">
-            <canvas id="Illustration" width="256" height="256"></canvas><br />
+          <td height="256px" width="256px" align="left"
+              onmouseover="window.html.canvas.Background()"
+            >
+            <canvas
+              id="Canvas"
+              width="256"
+              height="256"
+              >
+            </canvas><br />
             <b id="Caption"></b>
           </td>
         </tr>
