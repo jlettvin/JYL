@@ -171,6 +171,8 @@ ol {
   };
 
   // CONTROL DATA /////////////////////////////////////////////////////////////
+  canvas.Z0coefficient = 1.2196698912665045;
+
   canvas.Edge     = 255;
   canvas.Line     = 1;
   canvas.Tick     = 10;
@@ -181,10 +183,11 @@ ol {
   canvas.Gap      = 33; //canvas.Edge / 8;
   canvas.Color    = {black:"#000000", gray:"#777777", white:"#EEEEEE" };
   canvas.Showing  = [];
-  canvas.Z0coefficient = 1.2196698912665045;
-  canvas.R = Math.floor(canvas.Edge / 2);
-  canvas.X0 = canvas.Y0 = canvas.R;
-  canvas.XY1 = [canvas.R, canvas.R];
+  canvas.R        = Math.floor(canvas.Edge / 2);
+  canvas.X0       = canvas.Y0 = canvas.R;
+  canvas.XY1      = [canvas.R, canvas.R];
+  //canvas.Every    = 2;
+  //canvas.Ignore   = canvas.Every;
 
   for (var author in paper.who.authors) {
     image[author]  = new Image();
@@ -258,9 +261,12 @@ others prefer it !:Lighter,lighter:!.
 # A third set shows a directional !:Weighting,heavy weighting:! of the response.
 # A fourth kind has !:Annular,annular fields:!.
 A fifth variety measures inversely
-the average intensity of !:Illumination,illumination:! in a region.
+the average intensity of
+illumination
+in a region.
 Its maximum rate is in the dark.
 */});
+// !:Illumination,illumination:!
 // the !:Centrifugal,centrifugal:! component of a movement
 //(!:Centripetal,centripetal:! and tangential movements never cause discharge):
   //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
@@ -283,11 +289,19 @@ We do not propose that his notion of specific reconnection is wrong
 but that it is not necessary.^^^
 ___We also present the law by which there is a point-to-point correspondence
 from receptors to optic nerve, vis.,
-if an object is moved within the visual field in a !:Circular,circular:! path
-of any !:Diameter,diameter:! the only fibers that show !:Response,no response:!
+if an object is moved within the visual field in a
+circular
+path
+of any
+diameter
+the only fibers that show
+no response
 at any time are those that have the centers of their receptive fields
 at the !:Center,center:! of the circle described.
 */});
+// !:Circular,circular:!
+// !:Diameter,diameter:!
+// !:Response,no response:!
 
   //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
   html.Paper = function() {
@@ -932,6 +946,15 @@ The !wAiry_disk|Airy pattern|w! is well documented.
     var canvas = document.getElementById("Canvas");
     if (e.toElement.id == "Canvas") {
       canvas.inside += 1;
+
+      // This chunk of code causes the mouse event to be ignored
+      // (canvas.Every-1)/canvas.Every time it is triggered.
+      // This has the effect of increasing the distances between
+      // coordinates held in the event data.
+      //canvas.Ignore -= 1;
+      //if (canvas.ignore != 0) return;
+      //canvas.Ignore  = canvas.Every;
+
       var XY2 = [e.layerX, e.layerY];
       if (canvas.inside > 1) {
 
