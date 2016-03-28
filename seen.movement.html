@@ -369,8 +369,12 @@ at the !:Center,center:! of the circle described.
 
   //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
   canvas.Background = function() {
+    var doc = HERE(function() {/*
+== Active Illustration ==
+  */});
     canvas.Neutral();
     canvas.Ring();
+    html.Comment('Active area', doc, ['Neutral', 'Ring']);
   };
 
   //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
@@ -952,25 +956,17 @@ The !wAiry_disk|Airy pattern|w! is well documented.
     </td><td valign="top" width="50%">
       <b id="Margin"></b><br />
       <big id="button"></big><br />
-        <button
-          id="mute"
-          type="button"
+        <button id="mute" type="button"
           onclick="window.html.speaker.Toggle()"
-          onmouseover="window.paper.comment.Discharge()"
-        >
+          onmouseover="window.paper.comment.Discharge()">
           Click to HEAR
         </button>
         simulated ganglion cell discharges.
       <table>
         <tr>
           <td height="256px" width="256px" align="left"
-              onmouseover="window.html.canvas.Background()"
-            >
-            <canvas
-              id="Canvas"
-              width="256"
-              height="256"
-              >
+              onmouseover="window.html.canvas.Background()">
+            <canvas id="Canvas" width="256" height="256">
             </canvas><br />
             <b id="Caption"></b>
           </td>
