@@ -475,7 +475,7 @@ also fails to trigger activity.
 
   // COMMENT SERVICE FUNCTION (Used by call-by-name paper.comment functions)
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-  html.Comment = function(caption, doc, visible) {
+  html.Comment = function(caption, doc, visible, img) {
     d.getElementById('Caption').innerHTML = caption;
     d.getElementById('Commentary').innerHTML = w.markdown(doc);
     canvas.Showing = [];
@@ -483,6 +483,7 @@ also fails to trigger activity.
       canvas.Showing.push(visible[i]);
     }
     canvas.fill();
+    if (img) canvas.drawImage(img);
   };
 
   // Call-by-name comment fill functions //////////////////////////////////////
@@ -495,8 +496,7 @@ also fails to trigger activity.
 ___Humberto did histological studies in Jerry Lettvin's lab.
 These included counting the members of individual axon species in optic nerve.
     */});
-    html.Comment('Maturana', doc, ['Neutral']);
-    canvas.drawImage('Humberto_Maturana');
+    html.Comment('Maturana', doc, [], 'Humberto_Maturana');
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
@@ -518,8 +518,7 @@ objects both lighter and darker are moved within the hemisphere
 using a magnet on the convex surface, hiding all but the object from the frog.
 Discharge rates increase as objects cross circles as described.
     */});
-    html.Comment('Lettvin', doc, ['Neutral']);
-    canvas.drawImage('Jerome_Lettvin');
+    html.Comment('Lettvin', doc, [], 'Jerome_Lettvin');
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
@@ -530,8 +529,7 @@ Walter provided important insight into the character and utility
 of neural discharges, both in terms of pulse-interval analysis
 and the geometric aspects of experiments.
     */});
-    html.Comment('Pitts', doc, ['Neutral']);
-    canvas.drawImage('Walter_Pitts');
+    html.Comment('Pitts', doc, [], 'Walter_Pitts');
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
@@ -541,16 +539,14 @@ and the geometric aspects of experiments.
 Warren provided both philosophical and historical context
 to the experiments and post-experiment analysis.
     */});
-    html.Comment('McCulloch', doc, ['Neutral']);
-    canvas.drawImage('Warren_McCulloch');
+    html.Comment('McCulloch', doc, [], 'Warren_McCulloch');
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.RLE  = function() { var doc = HERE(function() {/*
 == Research Laboratory of Electronics ==
     */});
-    html.Comment('RLE', doc, ['Neutral']);
-    canvas.drawImage('RLE');
+    html.Comment('RLE', doc, [], 'RLE');
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
@@ -575,8 +571,7 @@ The terms Fast and Slow indicate the pulse propagation velocity
 as classified by
 !nGasser_and_Erlanger|Gasser and Erlanger|medicine/laureates/1944n!.
     */});
-    html.Comment('Fiber: Ganglion cell axon', doc, ['Neutral', 'Ring']);
-    canvas.drawImage('Fiber');
+    html.Comment('Fiber: Ganglion cell axon', doc, [], 'Fiber');
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
@@ -597,8 +592,7 @@ Concentric zones are proposed here as bounded by Airy zeros of
 the !:PSF,PSF:!
 (Point Spread Function) for a monochromatic point source.
     */});
-    html.Comment('Concentric Airy Zeros', doc, ['Neutral', 'Ring']);
-    canvas.drawImage('Airy');
+    html.Comment('Concentric Airy Zeros', doc, [], 'Airy');
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
@@ -660,22 +654,31 @@ which decays back to the resting rate.
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Darker = function() { var doc = HERE(function() {/*
 == Darker  ==
+=== Airy pattern ===
+This is a diffraction pattern for
+a monochromatic point source
+darker than its background.
     */});
-    html.Comment('Dark object motion', doc, ['Neutral']);
-    canvas.drawImage('Airy_3mm_BonW');
+    html.Comment('Dark point source', doc, [], 'Airy_3mm_BonW');
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Lighter = function() { var doc = HERE(function() {/*
 == Lighter  ==
+=== Airy pattern ===
+This is a diffraction pattern for
+a monochromatic point source
+brighter than its background.
     */});
-    html.Comment('Light object motion', doc, ['Neutral']);
-    canvas.drawImage('Airy_3mm_WonB');
+    html.Comment('Light point source', doc, [], 'Airy_3mm_WonB');
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Constricted = function() { var doc = HERE(function() {/*
 == Constricted  ==
+The !_Active Illustration_! simulates
+the high sensitivity constricted field.
+Mouse over the image to begin.
     */});
     html.Comment('Constricted fields', doc, ['Neutral', 'Ring']);
   };
@@ -705,8 +708,7 @@ which decays back to the resting rate.
   comment.Roger_Wolcott_Sperry  = function() { var doc = HERE(function() {/*
 == Roger Wolcott Sperry ==
     */});
-    html.Comment('Roger_Wolcott_Sperry', doc, ['Neutral']);
-    canvas.drawImage('Roger_Wolcott_Sperry');
+    html.Comment('Roger_Wolcott_Sperry', doc, [], 'Roger_Wolcott_Sperry');
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
@@ -754,8 +756,7 @@ No other location in the diagram is considered.
 @+ Use setTimeout to control object movement
 @+ Cause pulse interval shortening when object centrifugally crosses zero
     */});
-    html.Comment('Jonathan_Lettvin', doc, ['Neutral']);
-    canvas.drawImage('Jonathan_Lettvin');
+    html.Comment('Jonathan_Lettvin', doc, [], 'Jonathan_Lettvin');
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
@@ -784,8 +785,7 @@ Recorded impulses are amplified over a loudspeaker.
 Pulses are irregular, but generally follow the rule that
 pulse intervals group reliably into bands.
     */});
-    html.Comment('Discharge', doc, ['Neutral']);
-    canvas.drawImage('Discharge');
+    html.Comment('Discharge', doc, [], 'Discharge');
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
@@ -803,16 +803,14 @@ The !wAiry_disk|Airy pattern|w! is well documented.
   comment.Building_20  = function() { var doc = HERE(function() {/*
 == MIT Building 20 ==
     */});
-    html.Comment('Building_20', doc, ['Neutral']);
-    canvas.drawImage('Building_20');
+    html.Comment('Building_20', doc, [], 'Building_20');
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Airy  = function() { var doc = HERE(function() {/*
 == Research Laboratory of Electronics ==
     */});
-    html.Comment('Airy', doc, ['Neutral']);
-    canvas.drawImage('Airy');
+    html.Comment('Airy', doc, [], 'Airy');
   };
 
   //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
@@ -820,7 +818,12 @@ The !wAiry_disk|Airy pattern|w! is well documented.
 
     speaker.audible = false;
 
-    speaker.context = new window.AudioContext();
+    speaker.context = false;
+    if ('webkitAudioContext' in window) {
+      speaker.context = new window.webkitAudioContext();
+    } else {
+      speaker.context = new window.AudioContext();
+    }
     var context = speaker.context;
  
     speaker.osc = context.createOscillator();
