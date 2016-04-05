@@ -3,6 +3,7 @@
 
   w.jdl = w.jdl || {};
   w.jdl.Discharge = w.jdl.Discharge || {};
+  var jdl = w.jdl;
 
   // Button appearance adjustment code
   var button = $("#hear"), hear = false;
@@ -19,7 +20,7 @@
 
   // session variables
   var N = 1e3, X = 5, audible = true;  // Samples, duration, toggle value
-  var thi = 5e3, dt = thi, tlo = 3, step = 20, flap = 0;  // timeout/bandwidth
+  var thi = 5e3, dt = thi, tlo = 3, step = 20, flap = 10;  // timeout/bandwidth
   var a1 = 1.035, b1 =   8e-3, c1 = 1e-3;  // depolarize bell curve parameters
   var a2 =  2e-1, b2 = 1.3e-4, c2 = 3e-3;  // repolarize bell curve parameters
   var min = Math.min, floor = Math.floor;  // local renames
