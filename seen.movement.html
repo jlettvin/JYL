@@ -878,7 +878,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
         var R2 = radius(XY2, XY0);
         var R1 = radius(XY1, XY0);
         var Z = window.html.canvas.Z;
-        for (var z of Z) if (across(z, R1, R2, 1)) w.jdl.Discharge.excited();
+        for (var z of Z) if (across(z, R1, R2, 2)) w.jdl.Discharge.excited();
       }
       canvas.XY1 = XY2;
     } else {
