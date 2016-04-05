@@ -13,14 +13,10 @@
     button.css("background-color", face.color[+!parity]);
     button.text('Click to ' + face.text[+!hear] + ' discharge emulator.');
   }
-  // initialize button and attach events
-  reButton(false);
-  button.hover(function(){ reButton(true); }, function(){ reButton(false); });
-  button.click(function(){ hear = !hear; reButton(true); doButton(); });
 
   // session variables
   var N = 1e3, X = 5, audible = true;  // Samples, duration, toggle value
-  var thi = 5e3, dt = thi, tlo = 3, step = 20, flap = 10;  // timeout/bandwidth
+  var thi = 5e3, dt = thi, tlo = 3, step = 50, flap = 10;  // timeout/bandwidth
   var a1 = 1.035, b1 =   8e-3, c1 = 1e-3;  // depolarize bell curve parameters
   var a2 =  2e-1, b2 = 1.3e-4, c2 = 3e-3;  // repolarize bell curve parameters
   var min = Math.min, floor = Math.floor;  // local renames
@@ -70,14 +66,21 @@
     volume = (volume == 0.0) ? 1.0 : 0.0;
     if (volume == 0.0) context.suspend();
     else context.resume();
+    console.log('clicked');
   };
 
-  w.jdl.Discharge.onload = function() {};
+  w.jdl.Discharge.onload = function() {
+    // initialize button and attach events
+    reButton(false);
+    button.hover(function(){ reButton(true); }, function(){ reButton(false); });
+    button.click(function(){ hear = !hear; reButton(true); doButton(); });
+    console.log('loaded');
+  };
   w.jdl.Discharge.excited = excited;
   w.jdl.Discharge.doButton = doButton;
 
   // Initialize and start discharge mechanism.
-  var gain, osc, volume  = 1.0;
+  var gain, osc, volume  = hear ? 1.0 : 0.0;
   soundResource();
   excited();
 })(window, document);
