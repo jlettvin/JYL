@@ -2,13 +2,21 @@
 <!-- Implement a notes-in-the-margin review of one JYL paper. -->
 <html>
 <head>
-<script
+  <script type="text/javascript" language="Javascript" src=
+"https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"
+  ></script>
+  <script type="text/javascript" language="Javascript" src=
+"https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"
+  ></script>
+  <script src="wiki.js"></script>
+  <script src="pulse5.js"></script>
+  <script
   type="text/javascript"
   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?
 config=TeX-AMS-MML_HTMLorMML">
-</script>
+  </script>
 </head>
-<body>
+<body onload="jdl.Discharge.onload()">
   <style>
 table {
   /* CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS */
@@ -62,7 +70,6 @@ ol {
 }
   /* CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS */
   </style>
-  <script src="wiki.js"></script>
   <script type="text/javascript">
 
 //JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ
@@ -397,7 +404,7 @@ This image represents the second group with constricted fields.
 Use the !_Click to HEAR_! button to turn the loudspeaker on.
 To turn off the sound, click the same button again.
 === Centrifugal ===
-Mouse motion away from the center above a minimum velocity
+Mouse motion crossing a circle away from the center above a minimum velocity
 will trigger a decaying burst volley of discharges.
 This is the behavior described in the paper.
 === Centripetal ===
@@ -812,101 +819,6 @@ The !wAiry_disk|Airy pattern|w! is well documented.
     */});
     html.Comment('Airy', doc, [], 'Airy');
   };
-
-  //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-  speaker.Resting = function() {
-
-    speaker.audible = false;
-
-    speaker.context = false;
-    if ('webkitAudioContext' in window) {
-      speaker.context = new window.webkitAudioContext();
-    } else {
-      speaker.context = new window.AudioContext();
-    }
-    var context = speaker.context;
- 
-    speaker.osc = context.createOscillator();
-    var osc = speaker.osc;
-
-    osc.frequency.base  = 1;  // Hertz
-    osc.frequency.value = osc.frequency.base;
-    osc.type = "square";
-    osc.connect(context.destination);
-    osc.start(0);
- 
-    speaker.gain = context.createGain();
-    speaker.volume = 0.50;
-    speaker.gain.gain.value = speaker.volume;
-    speaker.gain.connect(osc.frequency);
-    speaker.left = 0;
-
-    context.suspend(0);   // Begins muted.
-  };
-
-  //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-  speaker.decay = function(frequency) {
-    // Use this function to initiate a discharge rate increase.
-    clearTimeout();
-    var osc = speaker.osc;
-    osc.frequency.value = osc.frequency.base;
-    speaker.left = Math.floor(Math.abs(frequency));
-    osc.frequency.value += speaker.left;
-    speaker.retime();
-  }
-
-  //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-  speaker.retime = function() {
-    var osc = speaker.osc;
-    osc.frequency.value = osc.frequency.base;
-
-    if (speaker.left) {
-      // If there is decay value left, apply the decay.
-      // Linear is an acceptable approximation of exponential here.
-      osc.frequency.value += speaker.left;
-      speaker.left -= 1.0;
-    }
-    // Calculate the random variability of pulse intervals.
-    var positive = Math.random(), negative = Math.random();
-    var variance = osc.frequency.base / 2;
-
-    // Apply the variability to the decay-modified frequency.
-    osc.frequency.value += variance * (positive-negative);
-
-    // Calculate the time needed before the next execution of this function.
-    var timeout = 1000 / osc.frequency.value;
-
-    // Aply the timeout.
-    setTimeout(function(){ speaker.retime() }, timeout);
-  };
-
-  //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-  speaker.Hear = function() {
-    var mute = d.getElementById("mute");
-    speaker.context.resume(0);
-    mute.style.color = "black";
-    mute.style.backgroundColor = "white";
-    mute.innerHTML = "Click to MUTE";
-    speaker.decay(50);
-    speaker.retime();
-  };
-
-  //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-  speaker.Mute = function() {
-    var mute = d.getElementById("mute");
-    speaker.context.suspend(0);
-    mute.style.color = "white";
-    mute.style.backgroundColor = "black";
-    mute.innerHTML = "Click to HEAR";
-    clearTimeout();
-  };
-
-  //SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-  speaker.Toggle = function() {
-    speaker.audible ^= true;
-    speaker.audible ? speaker.Hear() : speaker.Mute();
-  };
-
   //###########################################################################
   canvas.callable = {
     Annular         :canvas.Annular,
@@ -978,7 +890,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
         var R2 = radius(XY2, XY0);
         var R1 = radius(XY1, XY0);
         var Z = window.html.canvas.Z;
-        for (var z of Z) if (across(z, R1, R2, 1)) speaker.decay(50);
+        for (var z of Z) if (across(z, R1, R2, 1)) w.jdl.Discharge.excited();
       }
       canvas.XY1 = XY2;
     } else {
@@ -988,7 +900,6 @@ The !wAiry_disk|Airy pattern|w! is well documented.
 
   //EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
   pushEvent(comment.Neutral);
-  pushEvent(speaker.Resting);
   onmousemove = canvas.handleMouseMove;
 
 //JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ
@@ -1021,11 +932,17 @@ The !wAiry_disk|Airy pattern|w! is well documented.
     </td><td valign="top" width="50%">
       <b id="Margin"></b><br />
       <big id="button"></big><br />
+      <button id="button"
+        onclick="jdl.Discharge.doButton()">
+        Hear
+      </button>
+      <!--
         <button id="mute" type="button"
           onclick="window.html.speaker.Toggle()"
           onmouseover="window.paper.comment.Discharge()">
           Click to HEAR
         </button>
+        -->
         simulated ganglion cell discharges.
       <table>
         <tr>
@@ -1061,3 +978,4 @@ The !wAiry_disk|Airy pattern|w! is well documented.
 <!-- HTML FRAMEWORK >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
 </body>
 </html>
+
