@@ -14,59 +14,68 @@
     button.text('Click to ' + face.text[+!hear] + ' discharge emulator.');
   }
 
-  // session variables
-  var N = 1e3, X = 5, audible = true;  // Samples, duration, toggle value
-  var thi = 5e3, dt = thi, tlo = 3, step = 50, flap = 7;  // timeout/bandwidth
-  var a1 = 1.035, b1 =   8e-3, c1 = 1e-3;  // depolarize bell curve parameters
-  var a2 =  2e-1, b2 = 1.3e-4, c2 = 3e-3;  // repolarize bell curve parameters
-  var min = Math.min, floor = Math.floor;  // local renames
-  var pow = Math.pow, exp = Math.exp, rand = Math.random, abs = Math.abs;
-  var rwave = new Float32Array(N), iwave = new Float32Array(N); // Waveforms
+  // Interval timing and rate variables, gain volume, and active timeout array
+  var dtRest = 2e3, dtThis = dtRest, dtFast = 20, rate = 5e-2, delta = 7;
+  var volume  = hear ? 1.0 : 0.0;
+  var timeouts = [];
+
+  // Local renames
+  var floor = Math.floor, ceil = Math.ceil, rand = Math.random;
+
   // webaudio
   var context = w.AudioContext?new w.AudioContext():new w.webkitAudioContext();
-  // service functions
-  function plus(dt)         { return context.currentTime + dt;             };
-  function bell(a, b, c, x) { return a * exp(-pow((x-b) / (2*c), 2));      };
-  function spike(x)         { return bell(a1,b1,c1,x) - bell(a2,b2,c2,x);  };
-  function band()           { return floor(dt + flap * (rand() - rand())); };
-
-  // Fill the real portion of the waveform (depends on service function spike)
-  for (var n = 0; n < N; n++) rwave[n] = spike(n * X / N);
-
-  // This function creates, initializes, and connects sound resources.
-  function soundResource() {
-    gain = context.createGain();
-    gain.gain.value = volume;
-    osc  = context.createOscillator();
-    osc.setPeriodicWave(context.createPeriodicWave(rwave, iwave));
-    osc.connect(gain);
-    gain.connect(context.destination);
+  // Setup single-shot waveform
+  var samples = context.sampleRate;
+  var frames  = samples * 5e-3, frame2 = frames / 2, frame3 = frames / 3;
+  var buffer  = context.createBuffer(1, frames, samples);
+  var data    = buffer.getChannelData(0);
+  // Make a triphasic waveform, as taught by JYL
+  for (var i=0, f0=0, f1=frame3, f2=2*f1; i<f1; i++) {
+      data[f0 + i] = -0.5; data[f1 + i] = +1.0; data[f2 + i] = -0.5;
   }
 
-  // This function produces the sound for a single discharge
+  // service functions
+  function now()   { return context.currentTime; }
+  function plus(t) { return now() + t;           };
+  function band()  { return floor(dtThis + delta * (rand() - rand())); };
+  function clear() { for (var timeout of timeouts) clearTimeout(timeout); }
+
+  // Fire and forget single-shot
   function sound() {
-    osc.disconnect();
-    gain.disconnect();
-    soundResource();
-    osc.start();
-    osc.stop(plus(2e-3));
-  };
+      clear();  // Discard prior timeouts.
+      if (volume != 0.0) {
+        var source = context.createBufferSource();
+        source.buffer = buffer;
+        source.connect(context.destination);
+        source.start(now(), 0, plus(5e-3));
+      }
+  }
 
   // Provide timing for pulse interval minimizing and decay to max
-  var resting = function() { sound(); setTimeout(resting, band()); };
-  var excited = function() { dt = tlo; setTimeout(decay, band()); };
-  var decay = function() {
-    sound();
-    dt = min(dt + step, thi);
-    setTimeout((dt < thi ? decay : resting), band());
-  };
+  function interval(t, f) {
+      dtThis = t;
+      sound();
+      timeouts.push(setTimeout(f, band()));
+  }
+  function resting() {
+      interval( dtThis, resting);
+  }
+  function decay() {
+      dtThis = ceil(dtThis + (dtRest - dtThis) * rate);
+      var f = (dtThis >= dtRest) ? resting : decay;
+      interval(dtThis, f);
+  }
 
   // This function mutes and unmutes sound production
-  function doButton() {
+  var doButton = w.jdl.Discharge.doButton = function() {
     volume = (volume == 0.0) ? 1.0 : 0.0;
     if (volume == 0.0) context.suspend();
     else context.resume();
-    console.log('clicked');
+  };
+
+  // Functions visible to other scripts through the jdl namespace
+  w.jdl.Discharge.excited = function() {
+      interval(dtFast, decay);
   };
 
   w.jdl.Discharge.onload = function() {
@@ -74,13 +83,9 @@
     reButton(false);
     button.hover(function(){ reButton(true); }, function(){ reButton(false); });
     button.click(function(){ hear = !hear; reButton(true); doButton(); });
-    console.log('loaded');
   };
-  w.jdl.Discharge.excited = excited;
-  w.jdl.Discharge.doButton = doButton;
 
-  // Initialize and start discharge mechanism.
-  var gain, osc, volume  = hear ? 1.0 : 0.0;
-  soundResource();
-  excited();
+  // Initialize execution
+  resting();
+
 })(window, document);
