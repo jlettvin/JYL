@@ -15,7 +15,7 @@
   }
 
   // Interval timing and rate variables, gain volume, and active timeout array
-  var dtRest = 2e3, dtThis = dtRest, dtFast = 20, rate = 5e-2, delta = 7;
+  var dtRest = 2e3, dtThis = dtRest, dtFast = 20, rate = 5e-2, delta = 20;
   var volume  = hear ? 1.0 : 0.0;
   var timeouts = [];
 

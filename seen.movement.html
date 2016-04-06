@@ -10,6 +10,7 @@ table {
   /* CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS */
   border-collapse :collapse;
   margin          :0px;
+  padding         :0px;
   text-align      :left;
   vertical-align  :top;
   color           :black;
@@ -559,22 +560,19 @@ to the experiments and post-experiment analysis.
   comment.Fiber = function() { var doc = HERE(function() {/*
 == Fiber  ==
 === Details of Figure ===
-___Wendell J. Krieg drew the above figure showing
-photoreceptors at the bottom and ganglion cell fibers exiting at the top.
+___Wendell J. Krieg drew this figure.
+Photoreceptors are at the bottom and ganglion cell fibers exit at the top.
 === Anatomically ===
-___Frog optic nerve fibers are chiefly the axons of retinal ganglion cells.
-In addition, cells in the midbrain have axons to retinal amacrine cells
+___Frog optic nerve fibers are mostly retinal ganglion cell axons.
+Retinal amacrine cells receive efferents from the midbrain
 (controversial).
-Typically, sized of axons are associated with signal types.
-Large 20&micro;m caliber axons are fast and associated with threat.
-Small 0.1&micro;m caliber axons are slow and associated with detail.
-Other axons have sizes between Large and Small.
+Axon sizes are associated with signal properties.
+Large 20&micro;m caliber axons are fast (threat perception).
+Small 0.1&micro;m caliber axons are slow (detail perception).
+Other sizes are in between.
 === Signals ===
-___Five signal types are identified by a combination of
-their discharge patterns and when those patterns manifest
-(see Part I page 393).
-The terms Fast and Slow indicate the pulse propagation velocity
-as classified by
+___Discharge patterns identify five signal types (see Part I page 393).
+"Fast" and "Slow" indicate pulse propagation velocity classified by
 !nGasser_and_Erlanger|Gasser and Erlanger|medicine/laureates/1944n!.
     */});
     html.Comment('Fiber: Ganglion cell axon', doc, [], 'Fiber');
@@ -584,13 +582,17 @@ as classified by
   comment.Concentric = function() { var doc = HERE(function() {/*
 == Concentric Zones ==
 === Details of Figure ===
-___Concentric zones may map to zeros of Airy patterns.
-Monochromatic point sources projected through an aperture
-produce Airy patterns.
-This is a calculated Airy pattern
-indistinguishable from a centrally saturated optical image.
+___A monochromatic point source through the pupil produces an Airy pattern.
+A calculated over-saturated Airy pattern is shown.
+Concentric zones described may map to Airy pattern zeros.
     */});
-    doc += d.getElementById("Airy").innerHTML;
+    var Airy = d.getElementById("Airy").innerHTML;
+    var Parm = d.getElementById("Parameter").innerHTML;
+    var Comp = d.getElementById("Components").innerHTML;
+    doc += "<table>" +
+      "<tr><td>" + Airy + "</td><td>" + Parm + "</td></tr>" +
+      "<tr><td>" + Comp + "</td></tr></table>";
+      //d.getElementById("Airy").innerHTML;
     var tail = HERE(function() {/*
 === When are signals generated? ===
 ___Responses accompany crossing from inside to outside an annulus.
@@ -942,7 +944,6 @@ The !wAiry_disk|Airy pattern|w! is well documented.
       </table>
     </td><td id="maincell">
       <b id="margin"></b><br />
-      <button id="hear">HEAR</button>
       <table>
         <tr>
           <td height="256px" width="256px" align="left"
@@ -950,7 +951,11 @@ The !wAiry_disk|Airy pattern|w! is well documented.
             <canvas id="canvas" width="256" height="256">
             </canvas>
             <br /><b id="caption"></b>
-          </td><td id="menu">
+          </td><td>
+            <div align="center"><button id="hear">HEAR</button><br /></div>
+            <div align="center"><big><b><u>MENU</u></b></big></div>
+            <div id="menu">
+            </div>
           </td>
         </tr>
         <tr>
@@ -969,7 +974,9 @@ The !wAiry_disk|Airy pattern|w! is well documented.
 </table>
 <p id="Airy" style="visibility:hidden">
 \[I = I_0 \left(\frac{2 J_1(u)}{u}\right)^2\]
+</p><p id="Parameter" style="visibility:hidden">
 \[u = \frac{2 \pi a q}{\lambda R}\]<br />
+</p><p id="Components" style="visibility:hidden">
 \(J_1\) = Bessel function of the first kind
 \(a\) = aperture radius<br />
 \(q\) = focal plane offset<br />
