@@ -15,46 +15,43 @@ table {
   color           :black;
   background-color:white;
 }
+td {
+  vertical-align  :top;
+}
 ol {
   padding-top     :0px;
   margin-top      :0px;
   margin-bottom   :0px;
   padding-left    :30px;
 }
-#mute {
-  color           :white;
-  background-color:black;
+#button {
+  text-align      :center;
+}
+#commentary {
+  text-align      :left;
+  vertical-align  :top;
+  color           :black;
+  background-color:white;
 }
 #main {
   text-align      :center;
   font-family     :monospace;
   font-size       :10px;
 }
-#button {
-  text-align      :center;
+#maincell {
+  width           :50%;
+}
+#menu {
+  vertical-align  :top;
+}
+#mute {
+  color           :white;
+  background-color:black;
 }
 #part {
   vertical-align  :top;
   border          :1px solid black;
   border-collapse :collapse;
-}
-#Commentary {
-  text-align      :left;
-  vertical-align  :top;
-  color           :black;
-  background-color:white;
-}
-#header1 {
-  font-size       :20px;
-}
-#header2 {
-  font-size       :18px;
-}
-#header2 {
-  font-size       :16px;
-}
-#header2 {
-  font-size       :14px;
 }
   /* CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS CSS */
   </style>
@@ -182,6 +179,7 @@ ol {
   canvas.R        = Math.floor(canvas.Edge / 2);
   canvas.X0       = canvas.Y0 = canvas.R;
   canvas.XY1      = [canvas.R, canvas.R];
+  canvas.threshold= 2;  // ring-crossing vector magnitude needed to discharge.
   //canvas.Every    = 2;
   //canvas.Ignore   = canvas.Every;
 
@@ -206,39 +204,44 @@ ol {
 
   // PAPER CONTENT ////////////////////////////////////////////////////////////
   //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-  paper.Title = HERE(function() {/*
+  paper.title = HERE(function() {/*
 == HOW SEEN MOVEMENT APPEARS^^^IN THE FROG'S OPTIC NERVE ==
 */});
   //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-  paper.Caption = "Neutral Gray Background";
+  paper.caption = "Neutral Gray Background";
   //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-  paper.Citation  = HERE(function() {/*
+  paper.citation  = HERE(function() {/*
 Federation Proceedings Volume 18 Number 1^^^
 March 1959 Pages 393 and 354.^^^
 */});
 
   for (var author in paper.who.authors) {
-    paper.Citation += '!w' + author + '|' + paper.who.authors[author] + 'w!\n';
+    paper.citation += '!w' + author + '|' + paper.who.authors[author] + 'w!\n';
   }
-  paper.Citation += '^^^\n<a href="http://www.rle.mit.edu/">RLE</a>';
-  paper.Citation += '!w' + 'RLE' + '|' + paper.where['RLE'] + 'w!\n';
+  paper.citation += '^^^\n<a href="http://www.rle.mit.edu/">RLE</a>';
+  paper.citation += '!w' + 'RLE' + '|' + paper.where['RLE'] + 'w!\n';
+
+  paper.menu = HERE(function() {/*
+!aJonathan_Lettvin|Jonathan D. Lettvin|http://jonathan.lettvin.coma!^^^
+*/});
 
   //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-  paper.Margin = HERE(function() {/*
+  paper.margin = HERE(function() {/*
+Commentary by
 !aJonathan_Lettvin|Jonathan D. Lettvin|http://jonathan.lettvin.coma!
-20160322-20160327^^^
-with images on a !:Neutral,Neutral Gray Background:!
+20160322-20160406^^^
+with experiment emulation on a !:Neutral,Neutral Gray Background:!
 */});
 
   //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-  paper.Canvas = HERE(function() {/*
+  paper.canvas = HERE(function() {/*
 */});
   //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-  paper.PartI_title = HERE(function() {/*
+  paper.partI_title = HERE(function() {/*
 === Part I (page 393) ===
 */})
 //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-  paper.PartI_body = HERE(function() {/*
+  paper.partI_body = HERE(function() {/*
 ___The receptive field of a single !:Fiber,optic nerve fiber:!
 (plotted by the on and off responses to small fixed spots)
 is often divisible into !:Concentric,concentric zones:!
@@ -266,11 +269,11 @@ Its maximum rate is in the dark.
 // the !:Centrifugal,centrifugal:! component of a movement
 //(!:Centripetal,centripetal:! and tangential movements never cause discharge):
   //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-  paper.PartII_title = HERE(function() {/*
+  paper.partII_title = HERE(function() {/*
 === Part II (page 354) ===
 */});
   //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-  paper.PartII_body = HERE(function() {/*
+  paper.partII_body = HERE(function() {/*
 ___The coding of movement described in Part I
 suggests that the frog's eye is designed
 (at least for land operation)
@@ -302,14 +305,15 @@ at the !:Center,center:! of the circle described.
   //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
   html.Paper = function() {
     var elements = [
-      'Title',
-      'Citation',
-      'Canvas',
-      'Margin',
-      'PartI_title',
-      'PartI_body',
-      'PartII_title',
-      'PartII_body'
+      'title',
+      'citation',
+      'canvas',
+      'margin',
+      'menu',
+      'partI_title',
+      'partI_body',
+      'partII_title',
+      'partII_body'
     ];
     for (var element of elements) {
       d.getElementById(element).innerHTML = w.markdown(paper[element]);
@@ -453,7 +457,7 @@ also fails to trigger activity.
   // FILL FUNCTION ////////////////////////////////////////////////////////////
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   canvas.fill = function() {
-    var ctx = document.getElementById("Canvas").getContext("2d");
+    var ctx = document.getElementById("canvas").getContext("2d");
     ctx.globalCompositeOperation="source-over";
     canvas.ctx = ctx;
 
@@ -472,8 +476,8 @@ also fails to trigger activity.
   // COMMENT SERVICE FUNCTION (Used by call-by-name paper.comment functions)
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   html.Comment = function(caption, doc, visible, img) {
-    d.getElementById('Caption').innerHTML = caption;
-    d.getElementById('Commentary').innerHTML = w.markdown(doc);
+    d.getElementById('caption').innerHTML = caption;
+    d.getElementById('commentary').innerHTML = w.markdown(doc);
     canvas.Showing = [];
     for (var i = 0; i < visible.length; i++) {
       canvas.Showing.push(visible[i]);
@@ -850,8 +854,8 @@ The !wAiry_disk|Airy pattern|w! is well documented.
 
   //MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
   canvas.handleMouseMove = function(e) {
-    var canvas = document.getElementById("Canvas");
-    if (e.toElement.id == "Canvas") {
+    var canvas = document.getElementById("canvas");
+    if (e.toElement.id == "canvas") {
       canvas.inside += 1;
 
       // This chunk of code causes the mouse event to be ignored
@@ -862,25 +866,37 @@ The !wAiry_disk|Airy pattern|w! is well documented.
       //if (canvas.ignore != 0) return;
       //canvas.Ignore  = canvas.Every;
 
+      // Generate current mouse location coordinates
       var XY2 = [e.layerX, e.layerY];
+
+      // canvas.inside > 1 protects against invalid references off canvas
       if (canvas.inside > 1) {
 
-        var across = function(z, r1, r2, threshold) {
+        // This function detects centrifugal ring crossings
+        function across(z, r1, r2) {
           var dr = Math.abs(r2 - r1);
-          return (r1 < z && z < r2 && dr >= threshold);
+          return (r1 < z && z < r2 && dr >= window.html.canvas.threshold);
         };
-        var radius = function(a, b) {
+
+        // This function calculates distance between points a(head) and b(tail)
+        function radius(a, b) {
           var dx = a[0] - b[0], dy = a[1] - b[1];
           return Math.sqrt(dx*dx + dy*dy);
         };
 
+        // Make coordinate pair for canvas center
         var XY0 = [window.html.canvas.X0, window.html.canvas.Y0];
+        // Make local reference to previous mouse location
         var XY1 = canvas.XY1;
+        // Calculate distances from center.
         var R2 = radius(XY2, XY0);
         var R1 = radius(XY1, XY0);
-        var Z = window.html.canvas.Z;
-        for (var z of Z) if (across(z, R1, R2, 2)) w.jdl.Discharge.excited();
+        // Iterate through rings, detect ring-crossing, begin excitation.
+        for (var z of window.html.canvas.Z) {
+          if (across(z, R1, R2)) w.jdl.Discharge.excited();
+        }
       }
+      // Store current mouse location for next call to handleMouseMove
       canvas.XY1 = XY2;
     } else {
       canvas.inside = 0;
@@ -897,49 +913,52 @@ The !wAiry_disk|Airy pattern|w! is well documented.
 <!-- HTML FRAMEWORK <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< -->
 <table id="main">
   <tr>
-    <td width="50%" valign="top">
+    <td id="maincell">
       <table>
         <tr>
           <td id="part">
-            <u><big><big id="Title"></big></big></u><br />
-            <code id="Citation"></code>
+            <u><big><big id="title"></big></big></u><br />
+            <code id="citation"></code>
           </td>
         </tr>
         <tr>
           <td id="part" width="50%">
-            <big id="PartI_title"></big>
-            <p id="PartI_body"></p>
+            <big id="partI_title"></big>
+            <p id="partI_body"></p>
           </td>
         </tr>
         <tr>
           <td id="part" id="part" width="50%" valign="top">
-            <big id="PartII_title"></big>
-            <p id="PartII_body"></p>
+            <big id="partII_title"></big>
+            <p id="partII_body"></p>
           </td>
         </tr>
       </table>
-    </td><td valign="top" width="50%">
-      <b id="Margin"></b><br />
+    </td><td id="maincell">
+      <b id="margin"></b><br />
       <button id="hear">HEAR</button>
       <table>
         <tr>
           <td height="256px" width="256px" align="left"
               onmouseover="window.html.canvas.Background()">
-            <canvas id="Canvas" width="256" height="256">
-            </canvas><br />
-            <b id="Caption"></b>
+            <canvas id="canvas" width="256" height="256">
+            </canvas>
+            <br /><b id="caption"></b>
+          </td><td id="menu">
           </td>
         </tr>
         <tr>
-          <td rowspan="2" width="50%">
-            <p id="Commentary"></p>
+          <td colspan="2" rowspan="2" width="50%">
+            <p id="commentary"></p>
           </td>
         </tr>
       </table>
     </td>
   </tr>
-  <tr><td align="center" colspan="2">
+  <tr><td colspan="2">
       Page works with "chrome" and "safari" browser.</br>
+  <tr><td colspan="2">
+      Copyright&copy;2016 Jonathan D. Lettvin, All Rights Reserved
   </td></tr>
 </table>
 <p id="Airy" style="visibility:hidden">
