@@ -49,7 +49,7 @@
     gain.disconnect();
     soundResource();
     osc.start();
-    osc.stop(plus(5e-3));
+    osc.stop(plus(2e-3));
   };
 
   // Provide timing for pulse interval minimizing and decay to max
@@ -58,7 +58,7 @@
   var decay = function() {
     sound();
     dt = min(dt + step, thi);
-    setTimeout(dt < thi ? decay : resting, band());
+    setTimeout((dt < thi ? decay : resting), band());
   };
 
   // This function mutes and unmutes sound production
