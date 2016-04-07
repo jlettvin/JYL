@@ -14,8 +14,9 @@ var wiki = (function(w,d) {
    *    expect:         a sample output to test functionality
    */
   var basic_patterns = {
+    // Forbid index 0 and use only counting numbers
     // 0: is used to hold titles for fields in remaining entries.
-    0 : ['name', 'regexp', 'replacement', 'test', 'expect'],
+    //0 : ['name', 'regexp', 'replacement', 'test', 'expect'],
     // More than one empty lines become paragraph separators
     1 : ['paragraphs',
          /\n{2,}/,
@@ -127,13 +128,16 @@ var wiki = (function(w,d) {
           'TODO']
 
   };
+  var added_patterns = {
+      // TODO make unit tests for added_patterns
+  };
 
   //___________________________________________________________________________
   function append(pattern) {
     var me = 'window.wiki.append[FAIL]: TODO ';
     if (pattern.length != 5) console.log(me + 'name, re, to, input, output');
 
-    basic_patterns[Object.keys(basic_patterns).length] = pattern;
+    added_patterns[Object.keys(added_patterns).length] = pattern;
 
     var input = pattern[3], expect = pattern[4];
     var output = markdown(input);
@@ -353,16 +357,17 @@ var wiki = (function(w,d) {
     /* special case */
     //target.replace('\n{2,}', '\n<p />\n');
 
-    for (var key in basic_patterns) {
-        if (key == 0) continue;
-        var triple = basic_patterns[key];
-        var name = triple[0], re = triple[1], to = triple[2];
-        if (!found) {
-            target = target.replace(re, to);
-        } else {
-            before = target;
-            target = target.replace(re, to);
-            if (before != target) found.push(name);
+    for (patterns of [basic_patterns, added_patterns]) {
+        for (var key in patterns) {
+            var triple = patterns[key];
+            var name = triple[0], re = triple[1], to = triple[2];
+            if (!found) {
+                target = target.replace(re, to);
+            } else {
+                before = target;
+                target = target.replace(re, to);
+                if (before != target) found.push(name);
+            }
         }
     }
     target = listpre(target, found);
