@@ -184,7 +184,7 @@ ol {
   canvas.X0       = canvas.Y0 = canvas.R;
   canvas.XY1      = [canvas.R, canvas.R];
   canvas.threshold= 2;  // ring-crossing vector magnitude needed to discharge.
-  canvas.kind     = 4;
+  canvas.kind     = 3;  // Make links to choose this number.
   //canvas.Every    = 2;
   //canvas.Ignore   = canvas.Every;
 
@@ -231,6 +231,12 @@ This field will contain a menu in the future.
 The menu will enable execution of emulators
 for all five feature detections described in
 the original paper to the left.
+# !:Kind1Black,Neuron Kind 1 with a black object:!
+# !:Kind1White,Neuron Kind 1 with a white object:!
+# !:Kind2,Neuron Kind 2:!
+# !:Kind3,Neuron Kind 3:!
+# !:Kind4,Neuron Kind 4:!
+# !:Kind5,Neuron Kind 5:!
 */});
 
   //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
@@ -374,11 +380,79 @@ at the !:Center,center:! of the circle described.
   };
 
   //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+  canvas.Kind1Black = function(radius) {
+  };
+
+  //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+  canvas.Kind1White = function(radius) {
+  };
+
+  //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+  canvas.Kind2 = function(radius) {
+  };
+
+  //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+  canvas.Kind3 = function(radius) {
+    radius = radius || 2.5 * canvas.X0;
+    // Only Kind4 works
+    var center = [-canvas.X0,+canvas.Y0];
+    //var radius = 2.5 * canvas.X0;
+    var epsilon = canvas.Epsilon;
+    var inner  = radius - epsilon;
+    var twixt  = radius;
+    var outer  = radius + epsilon;
+    window.html.canvas.XY0 = center;
+    window.html.canvas.R0 = radius;
+
+    //console.log('canvas.Kind3');
+
+    canvas.Neutral();
+    // Outer adjacent ring
+    canvas.drawCircle(center, outer, canvas.Color.white, canvas.Line);
+    // Zero ring
+    canvas.drawCircle(center, twixt, canvas.Color.black, canvas.Line);
+    // Inner adjacent ring
+    canvas.drawCircle(center, inner, canvas.Color.white, canvas.Line);
+  };
+
+  //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+  canvas.Kind4 = function(radius) {
+    if (!radius) {
+      canvas.Neutral();
+      for (var z of canvas.Z) canvas.Kind4(z);
+    } else {
+      radius = radius || 10;
+      //console.log('canvas.Kind4 ' + radius);
+      var ctx = canvas.ctx;
+      var center = [canvas.X0, canvas.Y0];
+      var epsilon = canvas.Epsilon;
+      var outer = radius+epsilon;
+      var twixt = radius;
+      var inner = radius-epsilon;
+      window.html.canvas.XY0 = [window.html.canvas.X0, window.html.canvas.Y0];
+
+      // Outer adjacent ring
+      canvas.drawCircle(center, outer, canvas.Color.white, canvas.Line);
+      // Zero ring
+      canvas.drawCircle(center, twixt, canvas.Color.black, canvas.Line);
+      // Inner adjacent ring
+      canvas.drawCircle(center, inner, canvas.Color.white, canvas.Line);
+    }
+  };
+
+  //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+  canvas.Kind5 = function(radius) {
+  };
+
+  //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
   // Concentric Rings
   canvas.Ring = function(radius) {
     if (!radius) {
-      for (var z of canvas.Z) canvas.Ring(z);
+      for (var z of canvas.Z) canvas.Kind4(z);
     } else {
+      console.log('badness');
+      canvas.Kind4();
+      /*
       var ctx = canvas.ctx;
       var center = [canvas.X0, canvas.Y0];
       var epsilon = canvas.Epsilon;
@@ -392,48 +466,21 @@ at the !:Center,center:! of the circle described.
       canvas.drawCircle(center, twixt, canvas.Color.black, canvas.Line);
       // Inner adjacent ring
       canvas.drawCircle(center, inner, canvas.Color.white, canvas.Line);
+      */
     }
   };
 
   //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-  canvas.Kind1 = function() {
-  };
-
-  //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-  canvas.Kind2 = function() {
-  };
-
-  //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-  canvas.Kind3 = function() {
-    // Only Kind4 works
-    var center = [-canvas.X0,+canvas.Y0];
-    var radius = 1.212 * canvas.X0;
-    var inner  = radius - epsilon;
-    var twixt  = radius;
-    var outer  = radius + epsilon;
-
-    // Outer adjacent ring
-    canvas.drawCircle(center, outer, canvas.Color.white, canvas.Line);
-    // Zero ring
-    canvas.drawCircle(center, twixt, canvas.Color.black, canvas.Line);
-    // Inner adjacent ring
-    canvas.drawCircle(center, inner, canvas.Color.white, canvas.Line);
-  };
-
-  //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-  canvas.Kind4 = function() {
-    canvas.Ring();
-  };
-
-  //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-  canvas.Kind5 = function() {
-  };
-
-  //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
   canvas.Background = function() {
+
+// This image represents the fourth kind with annular fields.
+// === Sound Toggle ===
+
     var doc = HERE(function() {/*
-== Active Illustration ==
-This image represents the fourth kind with annular fields.
+=== Choice of Neuron Kind ===
+Hover over a menu item to the right
+to choose the kind being emulated here
+and to read about its properties.
 === Sound Toggle ===
 Use the !_Click to hear/mute discharge emulator_! button
 to turn the loudspeaker on.
@@ -448,9 +495,20 @@ Mouse motion towards the center fails to trigger activity.
 Mouse motion within the annuli and along any circle
 also fails to trigger activity.
   */});
-    canvas.Neutral();
-    canvas.Ring();
-    html.Comment('Active area', doc, ['Neutral', 'Ring']);
+    //canvas.Neutral();
+    //canvas.Ring();
+    var show = {
+      //0: ['Neutral', 'Ring'],
+      0: ['Neutral', 'Kind1Black'],
+      1: ['Neutral', 'Kind1White'],
+      2: ['Neutral', 'Kind2'],
+      3: ['Neutral', 'Kind3'],
+      4: ['Neutral', 'Kind4'],
+      5: ['Neutral', 'Kind5'],
+    };
+    var kind = window.html.canvas.kind;
+    var which = '== !_Emulator for neuron of kind ' + kind + '_! ==\n';
+    html.Comment('Active area', which + doc, show[kind]);
   };
 
   //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
@@ -508,7 +566,6 @@ also fails to trigger activity.
     canvas.Z = [Z0];
     for (var z = 1; z < canvas.Zeros; z++) canvas.Z.push(Z0 + z * canvas.Gap);
 
-
     // For each element of Showing, in order, add components to canvas.
     for (var fun of canvas.Showing) canvas.callable[fun]();
 
@@ -524,6 +581,7 @@ also fails to trigger activity.
     for (var i = 0; i < visible.length; i++) {
       canvas.Showing.push(visible[i]);
     }
+    //console.log(canvas.Showing);
     canvas.fill();
     if (img) canvas.drawImage(img);
   };
@@ -803,6 +861,67 @@ No other location in the diagram is considered.
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Kind1Black = function() { var doc = HERE(function() {/*
+== Neuron Kind 1 with a black object ==
+To be implemented.
+    */});
+  window.html.canvas.kind = 1;
+  html.Comment('Kind1Black', doc, ['Kind1Black']);
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Kind1White = function() { var doc = HERE(function() {/*
+== Neuron Kind 1 with a white object ==
+To be implemented.
+    */});
+  window.html.canvas.kind = 1;
+  html.Comment('Kind1White', doc, ['Kind1White']);
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Kind2 = function() { var doc = HERE(function() {/*
+== Neuron Kind 2 ==
+To be implemented.
+    */});
+  window.html.canvas.kind = 2;
+  html.Comment('Kind 2', doc, ['Kind2']);
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Kind3 = function() { var doc = HERE(function() {/*
+== Neuron Kind 3 ==
+___This image represents the third kind with directional heavy weighting.
+When the object crosses the boundary from the concave to convex side
+the discharge rate increases then decays back to its resting rate.
+___This interpretation assumes this is a boundary detection fiber.
+The center of curvature is off-screen to the left.
+    */});
+  window.html.canvas.kind = 3;
+  html.Comment('Kind 3', doc, ['Kind3']);
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Kind4 = function() { var doc = HERE(function() {/*
+== Neuron Kind 4 ==
+___This image represents the fourth kind with annular fields.
+When the object crosses any of the rings away from the center
+the discharge rate increases then decays back to its resting rate.
+___This interpretation assumes this is a fine detail detection fiber.
+    */});
+  window.html.canvas.kind = 4;
+  html.Comment('Kind 4', doc, ['Kind4']);
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Kind5 = function() { var doc = HERE(function() {/*
+== Neuron Kind 5 ==
+To be implemented.
+    */});
+  window.html.canvas.kind = 5;
+  html.Comment('Kind 5', doc, ['Kind5']);
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Neutral = function() { var doc = HERE(function() {/*
 == Neutral Gray ==
 === Why is this needed? ===
@@ -878,7 +997,8 @@ The !wAiry_disk|Airy pattern|w! is well documented.
     Weighting       :canvas.Weighting,
 
     // which
-    Kind1           :canvas.Kind1,
+    Kind1Black      :canvas.Kind1Black,
+    Kind1White      :canvas.Kind1White,
     Kind2           :canvas.Kind2,
     Kind3           :canvas.Kind3,
     Kind4           :canvas.Kind4,
@@ -924,6 +1044,18 @@ The !wAiry_disk|Airy pattern|w! is well documented.
         var html = window.html;
         var kind = html.canvas.kind;
 
+        // Detect whether a movement crossed a ring
+        function across(r0, r1, r2) {
+          var dr = Math.abs(r2 - r1);
+          return (r1 < r0 && r0 < r2 && dr >= html.canvas.threshold);
+        };
+
+        // This function computes distance between points a(head) and b(tail)
+        function radius(a, b) {
+          var dx = a[0] - b[0], dy = a[1] - b[1];
+          return Math.sqrt(dx*dx + dy*dy);
+        };
+
         if        (kind == 1) {
           //1111111111111111111111111111111111111111111111111111111111111111111
           // Some fibers have wide receptive fields and low sensitivity.
@@ -937,36 +1069,38 @@ The !wAiry_disk|Airy pattern|w! is well documented.
         } else if (kind == 3) {
           //3333333333333333333333333333333333333333333333333333333333333333333
           // A third set shows a directional heavy weighting of the response.
-          console.log("TODO: Implement kind == 3");
+          //console.log("TODO: Implement kind == 3");
           var visible = ['Neutral', 'Kind3'];
           for (var i = 0; i < visible.length; i++) {
+            //console.log(visible[i]);
             html.canvas.Showing.push(visible[i]);
           }
+
+          // Make coordinate pair for canvas center
+          var XY0 = window.html.canvas.XY0;
+          //console.log('center: ' + XY0);
+          // Make local reference to previous mouse location
+          var XY1 = canvas.XY1;
+          // Calculate distances from center.
+          var R0 = window.html.canvas.R0;
+          var R2 = radius(XY2, XY0);
+          var R1 = radius(XY1, XY0);
+          // Iterate through rings, detect ring-crossing, begin excitation.
+          if (across(R0, R1, R2)) w.jdl.Discharge.excited();
         } else if (kind == 4) {
           //4444444444444444444444444444444444444444444444444444444444444444444
           // A fourth kind has annular fields.
           // This branch detects centrifugal annular ring crossings
 
           // Cause background image to be produced from code
-          var visible = ['Neutral', 'Ring'];
+          var visible = ['Neutral', 'Kind4'];
           for (var i = 0; i < visible.length; i++) {
             html.canvas.Showing.push(visible[i]);
           }
 
-          // Detect whether a movement crossed a ring
-          function across(z, r1, r2) {
-            var dr = Math.abs(r2 - r1);
-            return (r1 < z && z < r2 && dr >= html.canvas.threshold);
-          };
-
-          // This function computes distance between points a(head) and b(tail)
-          function radius(a, b) {
-            var dx = a[0] - b[0], dy = a[1] - b[1];
-            return Math.sqrt(dx*dx + dy*dy);
-          };
-
           // Make coordinate pair for canvas center
-          var XY0 = [html.canvas.X0, html.canvas.Y0];
+          var XY0 = window.html.canvas.XY0;
+          //console.log('center: ' + XY0);
           // Make local reference to previous mouse location
           var XY1 = canvas.XY1;
           // Calculate distances from center.
