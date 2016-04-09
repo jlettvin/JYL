@@ -492,6 +492,7 @@ at the !:Center,center:! of the circle described.
 
   //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
   canvas.Kind5 = function(radius) {
+    canvas.Neutral();
   };
 
   //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
@@ -911,10 +912,21 @@ No other location in the diagram is considered.
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-  comment.Kind1Black = function() { var doc = HERE(function() {/*
-== Neuron Kind 1 with a black object ==
-___Kind 1 having a wide receptive field with a black object.
+  comment.Shared = function(kind, info, more) { var doc = HERE(function() {/*
+___Use the "Click to Hear" button above to model neuron discharges.^^^
+___As the cursor moves in the image listen for changes in pulse intervals.^^^
+___When the object crosses a ring
+the discharge rate bursts then decays back to its resting rate.
+This behavior can be heard as a ring is crossed centrifugally.^^^
     */});
+    return '== Neuron Kind ' + kind + ': ' + info + ' ==\n' + doc + '\n' + more;
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Kind1Black = function() {
+    var doc = comment.Shared(1, 'wide field low sensitivity darker objects',
+        HERE(function() {/*
+    */}));
   window.html.canvas.kind = 1;
   window.html.canvas.cursor = 'url(dot.black.gif), default';
   //console.log(window.html.canvas.cursor);
@@ -922,10 +934,10 @@ ___Kind 1 having a wide receptive field with a black object.
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-  comment.Kind1White = function() { var doc = HERE(function() {/*
-== Neuron Kind 1 with a white object ==
-___Kind 1 having a wide receptive field with a white object.
-    */});
+  comment.Kind1White = function() {
+    var doc = comment.Shared(1, 'wide field low sensitivity lighter objects',
+        HERE(function() {/*
+    */}));
   window.html.canvas.kind = 1;
   window.html.canvas.cursor = 'url(dot.white.gif), default';
   //console.log(window.html.canvas.cursor);
@@ -933,10 +945,11 @@ ___Kind 1 having a wide receptive field with a white object.
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-  comment.Kind2 = function() { var doc = HERE(function() {/*
-== Neuron Kind 2 ==
-___This image represents the second kind with a constricted field.
-    */});
+  comment.Kind2 = function() {
+    var doc = comment.Shared(2, 'high sensitivity constricted',
+        HERE(function() {/*
+___This fiber responds to very slight movements crossing a ring.
+    */}));
   window.html.canvas.kind = 2;
   window.html.canvas.cursor = 'url(dot.black.gif), default';
   //console.log(window.html.canvas.cursor);
@@ -944,14 +957,13 @@ ___This image represents the second kind with a constricted field.
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-  comment.Kind3 = function() { var doc = HERE(function() {/*
-== Neuron Kind 3 ==
-___This image represents the third kind with directional heavy weighting.
-When the object crosses the boundary from the concave to convex side
-the discharge rate increases then decays back to its resting rate.
+  comment.Kind3 = function() {
+    var doc = comment.Shared(3, 'directional heavy weighting',
+        HERE(function() {/*
+___This neuron responds to motion heavily weighted in one direction.
 ___This interpretation assumes this is a boundary detection fiber.
 The center of curvature is off-screen to the left.
-    */});
+    */}));
   window.html.canvas.kind = 3;
   window.html.canvas.cursor = 'url(dot.black.gif), default';
   //console.log(window.html.canvas.cursor);
@@ -959,13 +971,10 @@ The center of curvature is off-screen to the left.
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-  comment.Kind4 = function() { var doc = HERE(function() {/*
-== Neuron Kind 4 ==
-___This image represents the fourth kind with annular fields.
-When the object crosses any of the rings away from the center
-the discharge rate increases then decays back to its resting rate.
-___This interpretation assumes this is a fine detail detection fiber.
-    */});
+  comment.Kind4 = function() {
+    var doc = comment.Shared(4, 'annular fields',
+        HERE(function() {/*
+    */}));
   window.html.canvas.kind = 4;
   window.html.canvas.cursor = 'url(dot.black.gif), default';
   //console.log(window.html.canvas.cursor);
@@ -974,8 +983,10 @@ ___This interpretation assumes this is a fine detail detection fiber.
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Kind5 = function() { var doc = HERE(function() {/*
-== Neuron Kind 5 ==
-___Move the cursor down to darken and up to lighten the background.
+== Neuron Kind 5: average intensity ==
+___Use the "Click to Hear" button above to listen to model neuron discharges.
+___Move the cursor into the image and then
+move it down to darken and up to lighten the background.
 The discharge rate is highest when the background is darkest.
     */});
   window.html.canvas.kind = 5;
