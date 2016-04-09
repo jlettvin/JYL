@@ -2,7 +2,7 @@
   //'use strict';
 
   w.jdl = w.jdl || {};
-  w.jdl.Discharge = w.jdl.Discharge || {};
+  w.jdl.Discharge = w.jdl.Discharge || {fixed:false};
   var jdl = w.jdl;
 
   // Button appearance adjustment code
@@ -53,7 +53,7 @@
 
   // Provide timing for pulse interval minimizing and decay to max
   function interval(t, f) {
-      dtThis = t;
+      dtThis = w.jdl.Discharge.fixed || t;
       sound();
       timeouts.push(setTimeout(f, band()));
   }

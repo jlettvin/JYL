@@ -29,7 +29,7 @@ ol {
   text-align      :center;
 }
 #canvas {
-  cursor: url(dot.black.gif),auto;
+  /* cursor: url(dot.black.gif),auto; */
 }
 #commentary {
   text-align      :left;
@@ -185,6 +185,9 @@ ol {
   canvas.XY1      = [canvas.R, canvas.R];
   canvas.threshold= 2;  // ring-crossing vector magnitude needed to discharge.
   canvas.kind     = 3;  // Make links to choose this number.
+  canvas.cursor   = 'crosshair';
+
+  speaker.fixed   = false;
   //canvas.Every    = 2;
   //canvas.Ignore   = canvas.Every;
 
@@ -389,6 +392,24 @@ at the !:Center,center:! of the circle described.
 
   //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
   canvas.Kind2 = function(radius) {
+    radius = 20;
+    // Only Kind4 works
+    var center = [canvas.X0,canvas.Y0];
+    //var radius = 2.5 * canvas.X0;
+    var epsilon = canvas.Epsilon;
+    var inner  = radius - epsilon;
+    var twixt  = radius;
+    var outer  = radius + epsilon;
+    window.html.canvas.XY0 = center;
+    window.html.canvas.R0 = radius;
+
+    canvas.Neutral();
+    // Outer adjacent ring
+    canvas.drawCircle(center, outer, canvas.Color.white, canvas.Line);
+    // Zero ring
+    canvas.drawCircle(center, twixt, canvas.Color.black, canvas.Line);
+    // Inner adjacent ring
+    canvas.drawCircle(center, inner, canvas.Color.white, canvas.Line);
   };
 
   //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
@@ -403,8 +424,6 @@ at the !:Center,center:! of the circle described.
     var outer  = radius + epsilon;
     window.html.canvas.XY0 = center;
     window.html.canvas.R0 = radius;
-
-    //console.log('canvas.Kind3');
 
     canvas.Neutral();
     // Outer adjacent ring
@@ -866,6 +885,8 @@ No other location in the diagram is considered.
 To be implemented.
     */});
   window.html.canvas.kind = 1;
+  window.html.canvas.cursor = 'url(dot.black.gif), default';
+  console.log(window.html.canvas.cursor);
   html.Comment('Kind1Black', doc, ['Kind1Black']);
   };
 
@@ -875,15 +896,19 @@ To be implemented.
 To be implemented.
     */});
   window.html.canvas.kind = 1;
+  window.html.canvas.cursor = 'url(dot.white.gif), default';
+  console.log(window.html.canvas.cursor);
   html.Comment('Kind1White', doc, ['Kind1White']);
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Kind2 = function() { var doc = HERE(function() {/*
 == Neuron Kind 2 ==
-To be implemented.
+___This image represents the second kind with a constricted field.
     */});
   window.html.canvas.kind = 2;
+  window.html.canvas.cursor = 'url(dot.black.gif), default';
+  console.log(window.html.canvas.cursor);
   html.Comment('Kind 2', doc, ['Kind2']);
   };
 
@@ -897,6 +922,8 @@ ___This interpretation assumes this is a boundary detection fiber.
 The center of curvature is off-screen to the left.
     */});
   window.html.canvas.kind = 3;
+  window.html.canvas.cursor = 'url(dot.black.gif), default';
+  console.log(window.html.canvas.cursor);
   html.Comment('Kind 3', doc, ['Kind3']);
   };
 
@@ -909,15 +936,20 @@ the discharge rate increases then decays back to its resting rate.
 ___This interpretation assumes this is a fine detail detection fiber.
     */});
   window.html.canvas.kind = 4;
+  window.html.canvas.cursor = 'url(dot.black.gif), default';
+  console.log(window.html.canvas.cursor);
   html.Comment('Kind 4', doc, ['Kind4']);
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Kind5 = function() { var doc = HERE(function() {/*
 == Neuron Kind 5 ==
-To be implemented.
+___Move the cursor down to darken and up to lighten the background.
+The discharge rate is highest when the background is darkest.
     */});
   window.html.canvas.kind = 5;
+  window.html.canvas.cursor = 'crosshair';
+  console.log(window.html.canvas.cursor);
   html.Comment('Kind 5', doc, ['Kind5']);
   };
 
@@ -1027,6 +1059,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
     var canvas = document.getElementById("canvas");
     if (e.toElement.id == "canvas") {
       canvas.inside += 1;
+      $('#canvas').css('cursor', window.html.canvas.cursor);
 
       // This chunk of code causes the mouse event to be ignored
       // (canvas.Every-1)/canvas.Every time it is triggered.
@@ -1062,23 +1095,18 @@ The !wAiry_disk|Airy pattern|w! is well documented.
           // Of these some prefer the moving object darker than background,
           // others prefer it lighter.
           console.log("TODO: Implement kind == 1");
+          window.jdl.Discharge.fixed = false;
         } else if (kind == 2) {
           //2222222222222222222222222222222222222222222222222222222222222222222
           // A second group has constricted fields and high sensitivity.
           console.log("TODO: Implement kind == 2");
-        } else if (kind == 3) {
-          //3333333333333333333333333333333333333333333333333333333333333333333
-          // A third set shows a directional heavy weighting of the response.
-          //console.log("TODO: Implement kind == 3");
-          var visible = ['Neutral', 'Kind3'];
+          var visible = ['Neutral', 'Kind2'];
           for (var i = 0; i < visible.length; i++) {
-            //console.log(visible[i]);
             html.canvas.Showing.push(visible[i]);
           }
 
           // Make coordinate pair for canvas center
           var XY0 = window.html.canvas.XY0;
-          //console.log('center: ' + XY0);
           // Make local reference to previous mouse location
           var XY1 = canvas.XY1;
           // Calculate distances from center.
@@ -1087,6 +1115,26 @@ The !wAiry_disk|Airy pattern|w! is well documented.
           var R1 = radius(XY1, XY0);
           // Iterate through rings, detect ring-crossing, begin excitation.
           if (across(R0, R1, R2)) w.jdl.Discharge.excited();
+          window.jdl.Discharge.fixed = false;
+        } else if (kind == 3) {
+          //3333333333333333333333333333333333333333333333333333333333333333333
+          // A third set shows a directional heavy weighting of the response.
+          var visible = ['Neutral', 'Kind3'];
+          for (var i = 0; i < visible.length; i++) {
+            html.canvas.Showing.push(visible[i]);
+          }
+
+          // Make coordinate pair for canvas center
+          var XY0 = window.html.canvas.XY0;
+          // Make local reference to previous mouse location
+          var XY1 = canvas.XY1;
+          // Calculate distances from center.
+          var R0 = window.html.canvas.R0;
+          var R2 = radius(XY2, XY0);
+          var R1 = radius(XY1, XY0);
+          // Iterate through rings, detect ring-crossing, begin excitation.
+          if (across(R0, R1, R2)) w.jdl.Discharge.excited();
+          window.jdl.Discharge.fixed = false;
         } else if (kind == 4) {
           //4444444444444444444444444444444444444444444444444444444444444444444
           // A fourth kind has annular fields.
@@ -1110,11 +1158,22 @@ The !wAiry_disk|Airy pattern|w! is well documented.
           for (var z of html.canvas.Z) {
             if (across(z, R1, R2)) w.jdl.Discharge.excited();
           }
+          window.jdl.Discharge.fixed = false;
         } else if (kind == 5) {
           //5555555555555555555555555555555555555555555555555555555555555555555
           // A fifth variety measures inversely the average intensity of
           // illumination in a region.  Its maximum rate is in the dark.
+          var XY1 = canvas.XY1;
+          var y = Math.min(255, Math.max(0, 255 - XY1[1]));
+          var twixt = 20 + (1e3 * y / 255);
+          var level = y.toString(0x10);
+          if (level.length < 2) level = '0' + level;
+          var color = '#' + level + level + level;
+          var ctx = document.getElementById("canvas").getContext("2d");
+          ctx.fillStyle = color;
+          ctx.fillRect(0,0,255,255);
           console.log("TODO: Implement kind == 5");
+          window.jdl.Discharge.fixed = twixt;
         } else {
           //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
           console.log("canvas.kind has a bad value");
