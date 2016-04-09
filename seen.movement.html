@@ -230,10 +230,14 @@ March 1959 Pages 393 and 354.^^^
   paper.citation += '!w' + 'RLE' + '|' + paper.where['RLE'] + 'w!\n';
 
   paper.menu = HERE(function() {/*
-This field will contain a menu in the future.
-The menu will enable execution of emulators
+___This menu enables execution of emulators
 for all five feature detections described in
 the original paper to the left.
+___Turn on the sound using the above button.
+___Hover over a menu item to choose,
+then mouse over to canvas and move the cursor
+to either cross the shown boundary centrifugally
+or up/down for brighter/darker.
 # !:Kind1Black,Neuron Kind 1 with a black object:!
 # !:Kind1White,Neuron Kind 1 with a white object:!
 # !:Kind2,Neuron Kind 2:!
@@ -384,18 +388,48 @@ at the !:Center,center:! of the circle described.
 
   //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
   canvas.Kind1Black = function(radius) {
+    radius = 120;
+    var center = [canvas.X0,canvas.Y0];
+    var epsilon = canvas.Epsilon;
+    var inner  = radius - epsilon;
+    var twixt  = radius;
+    var outer  = radius + epsilon;
+    window.html.canvas.XY0 = center;
+    window.html.canvas.R0 = radius;
+
+    canvas.Neutral();
+    // Outer adjacent ring
+    canvas.drawCircle(center, outer, canvas.Color.white, canvas.Line);
+    // Zero ring
+    canvas.drawCircle(center, twixt, canvas.Color.black, canvas.Line);
+    // Inner adjacent ring
+    canvas.drawCircle(center, inner, canvas.Color.white, canvas.Line);
   };
 
   //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
   canvas.Kind1White = function(radius) {
+    radius = 120;
+    var center = [canvas.X0,canvas.Y0];
+    var epsilon = canvas.Epsilon;
+    var inner  = radius - epsilon;
+    var twixt  = radius;
+    var outer  = radius + epsilon;
+    window.html.canvas.XY0 = center;
+    window.html.canvas.R0 = radius;
+
+    canvas.Neutral();
+    // Outer adjacent ring
+    canvas.drawCircle(center, outer, canvas.Color.white, canvas.Line);
+    // Zero ring
+    canvas.drawCircle(center, twixt, canvas.Color.black, canvas.Line);
+    // Inner adjacent ring
+    canvas.drawCircle(center, inner, canvas.Color.white, canvas.Line);
   };
 
   //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
   canvas.Kind2 = function(radius) {
     radius = 20;
-    // Only Kind4 works
     var center = [canvas.X0,canvas.Y0];
-    //var radius = 2.5 * canvas.X0;
     var epsilon = canvas.Epsilon;
     var inner  = radius - epsilon;
     var twixt  = radius;
@@ -415,9 +449,7 @@ at the !:Center,center:! of the circle described.
   //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
   canvas.Kind3 = function(radius) {
     radius = radius || 2.5 * canvas.X0;
-    // Only Kind4 works
     var center = [-canvas.X0,+canvas.Y0];
-    //var radius = 2.5 * canvas.X0;
     var epsilon = canvas.Epsilon;
     var inner  = radius - epsilon;
     var twixt  = radius;
@@ -441,7 +473,6 @@ at the !:Center,center:! of the circle described.
       for (var z of canvas.Z) canvas.Kind4(z);
     } else {
       radius = radius || 10;
-      //console.log('canvas.Kind4 ' + radius);
       var ctx = canvas.ctx;
       var center = [canvas.X0, canvas.Y0];
       var epsilon = canvas.Epsilon;
@@ -469,7 +500,7 @@ at the !:Center,center:! of the circle described.
     if (!radius) {
       for (var z of canvas.Z) canvas.Kind4(z);
     } else {
-      console.log('badness');
+      //console.log('badness');
       canvas.Kind4();
       /*
       var ctx = canvas.ctx;
@@ -886,7 +917,7 @@ To be implemented.
     */});
   window.html.canvas.kind = 1;
   window.html.canvas.cursor = 'url(dot.black.gif), default';
-  console.log(window.html.canvas.cursor);
+  //console.log(window.html.canvas.cursor);
   html.Comment('Kind1Black', doc, ['Kind1Black']);
   };
 
@@ -897,7 +928,7 @@ To be implemented.
     */});
   window.html.canvas.kind = 1;
   window.html.canvas.cursor = 'url(dot.white.gif), default';
-  console.log(window.html.canvas.cursor);
+  //console.log(window.html.canvas.cursor);
   html.Comment('Kind1White', doc, ['Kind1White']);
   };
 
@@ -908,7 +939,7 @@ ___This image represents the second kind with a constricted field.
     */});
   window.html.canvas.kind = 2;
   window.html.canvas.cursor = 'url(dot.black.gif), default';
-  console.log(window.html.canvas.cursor);
+  //console.log(window.html.canvas.cursor);
   html.Comment('Kind 2', doc, ['Kind2']);
   };
 
@@ -923,7 +954,7 @@ The center of curvature is off-screen to the left.
     */});
   window.html.canvas.kind = 3;
   window.html.canvas.cursor = 'url(dot.black.gif), default';
-  console.log(window.html.canvas.cursor);
+  //console.log(window.html.canvas.cursor);
   html.Comment('Kind 3', doc, ['Kind3']);
   };
 
@@ -937,7 +968,7 @@ ___This interpretation assumes this is a fine detail detection fiber.
     */});
   window.html.canvas.kind = 4;
   window.html.canvas.cursor = 'url(dot.black.gif), default';
-  console.log(window.html.canvas.cursor);
+  //console.log(window.html.canvas.cursor);
   html.Comment('Kind 4', doc, ['Kind4']);
   };
 
@@ -949,7 +980,7 @@ The discharge rate is highest when the background is darkest.
     */});
   window.html.canvas.kind = 5;
   window.html.canvas.cursor = 'crosshair';
-  console.log(window.html.canvas.cursor);
+  //console.log(window.html.canvas.cursor);
   html.Comment('Kind 5', doc, ['Kind5']);
   };
 
@@ -1094,16 +1125,33 @@ The !wAiry_disk|Airy pattern|w! is well documented.
           // Some fibers have wide receptive fields and low sensitivity.
           // Of these some prefer the moving object darker than background,
           // others prefer it lighter.
-          console.log("TODO: Implement kind == 1");
+          //console.log("TODO: Implement kind == 1");
+          var visible = ['Neutral', 'Kind1'];
+          for (var i = 0; i < visible.length; i++) {
+            html.canvas.Showing.push(visible[i]);
+          }
+          html.canvas.threshold = 2;
+
+          // Make coordinate pair for canvas center
+          var XY0 = window.html.canvas.XY0;
+          // Make local reference to previous mouse location
+          var XY1 = canvas.XY1;
+          // Calculate distances from center.
+          var R0 = window.html.canvas.R0;
+          var R2 = radius(XY2, XY0);
+          var R1 = radius(XY1, XY0);
+          // Iterate through rings, detect ring-crossing, begin excitation.
+          if (across(R0, R1, R2)) w.jdl.Discharge.excited();
           window.jdl.Discharge.fixed = false;
         } else if (kind == 2) {
           //2222222222222222222222222222222222222222222222222222222222222222222
           // A second group has constricted fields and high sensitivity.
-          console.log("TODO: Implement kind == 2");
+          //console.log("TODO: Implement kind == 2");
           var visible = ['Neutral', 'Kind2'];
           for (var i = 0; i < visible.length; i++) {
             html.canvas.Showing.push(visible[i]);
           }
+          html.canvas.threshold = 1;
 
           // Make coordinate pair for canvas center
           var XY0 = window.html.canvas.XY0;
@@ -1123,6 +1171,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
           for (var i = 0; i < visible.length; i++) {
             html.canvas.Showing.push(visible[i]);
           }
+          html.canvas.threshold = 2;
 
           // Make coordinate pair for canvas center
           var XY0 = window.html.canvas.XY0;
@@ -1145,6 +1194,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
           for (var i = 0; i < visible.length; i++) {
             html.canvas.Showing.push(visible[i]);
           }
+          html.canvas.threshold = 2;
 
           // Make coordinate pair for canvas center
           var XY0 = window.html.canvas.XY0;
@@ -1172,7 +1222,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
           var ctx = document.getElementById("canvas").getContext("2d");
           ctx.fillStyle = color;
           ctx.fillRect(0,0,255,255);
-          console.log("TODO: Implement kind == 5");
+          //console.log("TODO: Implement kind == 5");
           window.jdl.Discharge.fixed = twixt;
         } else {
           //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
