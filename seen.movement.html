@@ -183,7 +183,7 @@ ol {
   canvas.R        = Math.floor(canvas.Edge / 2);
   canvas.X0       = canvas.Y0 = canvas.R;
   canvas.XY1      = [canvas.R, canvas.R];
-  canvas.threshold= 2;  // ring-crossing vector magnitude needed to discharge.
+  canvas.threshold= 1.5; // ring-crossing vector magnitude needed to discharge.
   canvas.kind     = 3;  // Make links to choose this number.
   canvas.cursor   = 'crosshair';
 
@@ -533,7 +533,7 @@ Hover over a menu item to the right
 to choose the kind being emulated here
 and to read about its properties.
 === Sound Toggle ===
-Use the !_Click to hear/mute discharge emulator_! button
+Use the "Click to hear/mute discharge emulator" button
 to turn the loudspeaker on.
 To turn off the sound, click the same button again.
 === Centrifugal ===
@@ -930,7 +930,7 @@ This behavior can be heard as a ring is crossed centrifugally.^^^
   window.html.canvas.kind = 1;
   window.html.canvas.cursor = 'url(dot.black.gif), default';
   //console.log(window.html.canvas.cursor);
-  html.Comment('Kind1Black', doc, ['Kind1Black']);
+  html.Comment('Kind 1: black object', doc, ['Kind1Black']);
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
@@ -941,7 +941,7 @@ This behavior can be heard as a ring is crossed centrifugally.^^^
   window.html.canvas.kind = 1;
   window.html.canvas.cursor = 'url(dot.white.gif), default';
   //console.log(window.html.canvas.cursor);
-  html.Comment('Kind1White', doc, ['Kind1White']);
+  html.Comment('Kind 1: white object', doc, ['Kind1White']);
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
@@ -953,7 +953,7 @@ ___This fiber responds to very slight movements crossing a ring.
   window.html.canvas.kind = 2;
   window.html.canvas.cursor = 'url(dot.black.gif), default';
   //console.log(window.html.canvas.cursor);
-  html.Comment('Kind 2', doc, ['Kind2']);
+  html.Comment('Kind 2: constricted/sensitive', doc, ['Kind2']);
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
@@ -967,7 +967,7 @@ The center of curvature is off-screen to the left.
   window.html.canvas.kind = 3;
   window.html.canvas.cursor = 'url(dot.black.gif), default';
   //console.log(window.html.canvas.cursor);
-  html.Comment('Kind 3', doc, ['Kind3']);
+  html.Comment('Kind 3: directional weighting', doc, ['Kind3']);
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
@@ -978,7 +978,7 @@ The center of curvature is off-screen to the left.
   window.html.canvas.kind = 4;
   window.html.canvas.cursor = 'url(dot.black.gif), default';
   //console.log(window.html.canvas.cursor);
-  html.Comment('Kind 4', doc, ['Kind4']);
+  html.Comment('Kind 4: annular fields', doc, ['Kind4']);
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
@@ -992,7 +992,7 @@ The discharge rate is highest when the background is darkest.
   window.html.canvas.kind = 5;
   window.html.canvas.cursor = 'crosshair';
   //console.log(window.html.canvas.cursor);
-  html.Comment('Kind 5', doc, ['Kind5']);
+  html.Comment('Kind 5: background average', doc, ['Kind5']);
   };
 
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
@@ -1141,7 +1141,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
           for (var i = 0; i < visible.length; i++) {
             html.canvas.Showing.push(visible[i]);
           }
-          html.canvas.threshold = 2;
+          html.canvas.threshold = 1.5;
 
           // Make coordinate pair for canvas center
           var XY0 = window.html.canvas.XY0;
@@ -1182,7 +1182,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
           for (var i = 0; i < visible.length; i++) {
             html.canvas.Showing.push(visible[i]);
           }
-          html.canvas.threshold = 2;
+          html.canvas.threshold = 1.5;
 
           // Make coordinate pair for canvas center
           var XY0 = window.html.canvas.XY0;
@@ -1205,7 +1205,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
           for (var i = 0; i < visible.length; i++) {
             html.canvas.Showing.push(visible[i]);
           }
-          html.canvas.threshold = 2;
+          html.canvas.threshold = 1.5;
 
           // Make coordinate pair for canvas center
           var XY0 = window.html.canvas.XY0;
