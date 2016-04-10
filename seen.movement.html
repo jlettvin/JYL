@@ -238,12 +238,11 @@ ___Hover over a menu item to choose,
 then mouse over to canvas and move the cursor
 to either cross the shown boundary centrifugally
 or up/down for brighter/darker.
-# !:Kind1Black,Neuron Kind 1 with a black object:!
-# !:Kind1White,Neuron Kind 1 with a white object:!
-# !:Kind2,Neuron Kind 2:!
-# !:Kind3,Neuron Kind 3:!
-# !:Kind4,Neuron Kind 4:!
-# !:Kind5,Neuron Kind 5:!
+# Kind 1: !:Kind1Black,black:! or !:Kind1White,white:!
+# !:Kind2,Kind 2:!
+# !:Kind3,Kind 3:!
+# !:Kind4,Kind 4:!
+# !:Kind5,Kind 5:!
 */});
 
   //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
@@ -280,7 +279,7 @@ others prefer it !:Lighter,lighter:!.
 # A second group has !:Constricted,constricted:! fields and high sensitivity.
 # A third set shows a directional !:Weighting,heavy weighting:! of the response.
 # A fourth kind has !:Annular,annular fields:!.
-A fifth variety measures inversely
+A fifth variety measures !:Illumination,inversely:!
 the average intensity of
 illumination
 in a region.
@@ -709,7 +708,8 @@ Photoreceptors are at the bottom and ganglion cell fibers exit at the top.
 === Anatomically ===
 ___Frog optic nerve fibers are mostly retinal ganglion cell axons.
 Retinal amacrine cells receive efferents from the midbrain
-(controversial).
+(widely recognized feature of vertebrates (Cajal, Shkolnik-Yarros, ...),
+but disputed by one investigator in frogs).
 Axon sizes are associated with signal properties.
 Large 20&micro;m caliber axons are fast (threat perception).
 Small 0.1&micro;m caliber axons are slow (detail perception).
@@ -807,9 +807,14 @@ which decays back to the resting rate.
   comment.Darker = function() { var doc = HERE(function() {/*
 == Darker  ==
 === Airy pattern ===
-This is a diffraction pattern for
+___This is a diffraction pattern for
 a monochromatic point source
 darker than its background.
+___Some interpretation is needed to work out that
+discharges accompany ring crossings.
+This is likely true for at least neuron kinds 2 and 4.
+Neuron kinds 1 and 3 may respond to any centrifugal motion
+rather than only on ring crossings.
     */});
     html.Comment('Dark point source', doc, [], 'Airy_3mm_BonW');
   };
@@ -818,9 +823,14 @@ darker than its background.
   comment.Lighter = function() { var doc = HERE(function() {/*
 == Lighter  ==
 === Airy pattern ===
-This is a diffraction pattern for
+___This is a diffraction pattern for
 a monochromatic point source
 brighter than its background.
+___Some interpretation is needed to work out that
+discharges accompany ring crossings.
+This is likely true for at least neuron kinds 2 and 4.
+Neuron kinds 1 and 3 may respond to any centrifugal motion
+rather than only on ring crossings.
     */});
     html.Comment('Light point source', doc, [], 'Airy_3mm_WonB');
   };
@@ -828,9 +838,14 @@ brighter than its background.
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Constricted = function() { var doc = HERE(function() {/*
 == Constricted  ==
-The !_Active Illustration_! simulates
+___The !_Active Illustration_! simulates
 the high sensitivity constricted field.
 Mouse over the image to begin.
+___Some interpretation is needed to work out that
+discharges accompany ring crossings.
+This is likely true for at least neuron kinds 2 and 4.
+Neuron kinds 1 and 3 may respond to any centrifugal motion
+rather than only on ring crossings.
     */});
     html.Comment('Constricted fields', doc, ['Neutral', 'Kind2']);
   };
@@ -838,6 +853,11 @@ Mouse over the image to begin.
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Weighting = function() { var doc = HERE(function() {/*
 == Weighting  ==
+___Some interpretation is needed to work out that
+discharges accompany ring crossings.
+This is likely true for at least neuron kinds 2 and 4.
+Neuron kinds 1 and 3 may respond to any centrifugal motion
+rather than only on ring crossings.
     */});
     html.Comment('Directional weighting', doc, ['Neutral', 'Kind3']);
   };
@@ -845,6 +865,11 @@ Mouse over the image to begin.
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Annular = function() { var doc = HERE(function() {/*
 == Annular  ==
+___Some interpretation is needed to work out that
+discharges accompany ring crossings.
+This is likely true for at least neuron kinds 2 and 4.
+Neuron kinds 1 and 3 may respond to any centrifugal motion
+rather than only on ring crossings.
     */});
     html.Comment('Annular fields', doc, ['Neutral', 'Kind4']);
   };
@@ -852,6 +877,8 @@ Mouse over the image to begin.
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Illumination = function() { var doc = HERE(function() {/*
 == Illumination  ==
+___This kind of neuron has a discharge rate
+which increases as flux decreases.
     */});
     html.Comment('Inverse average intensity', doc, ['Neutral', 'Kind5']);
   };
@@ -984,7 +1011,7 @@ The center of curvature is off-screen to the left.
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   comment.Kind5 = function() { var doc = HERE(function() {/*
 == Neuron Kind 5: average intensity ==
-___Use the "Click to Hear" button above to listen to model neuron discharges.
+___Use the "Click to Hear" button above to hear model neuron discharges.^^^
 ___Move the cursor into the image and then
 move it down to darken and up to lighten the background.
 The discharge rate is highest when the background is darkest.
@@ -1302,8 +1329,12 @@ The !wAiry_disk|Airy pattern|w! is well documented.
       </table>
     </td>
   </tr>
-  <tr><td colspan="2">
-      Page works with "chrome" and "safari" browser at zoom:100%.</br>
+  <tr><td colspan="2" bgcolor="#cccccc">
+      This page is best viewed with "chrome" or "safari" browser at zoom:100%,
+      with the window stretched widened so this text is on one line,
+      and menu items each on one line.
+
+      </br>
   <tr><td colspan="2">
       Copyright&copy;2016 Jonathan D. Lettvin, All Rights Reserved
   </td></tr>
