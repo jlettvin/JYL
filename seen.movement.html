@@ -560,7 +560,9 @@ also fails to trigger activity.
     };
     var kind = window.html.canvas.kind;
     var which = '== !_Emulator for neuron of kind ' + kind + '_! ==\n';
-    html.Comment('Active area', which + doc, show[kind]);
+    var detect = w.jdl.rings ? "ring crossing" : "all movements";
+    var caption = 'Active area (detecting ' + detect + ")";
+    html.Comment(caption, which + doc, show[kind]);
   };
 
   //CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
@@ -627,8 +629,7 @@ also fails to trigger activity.
   // COMMENT SERVICE FUNCTION (Used by call-by-name paper.comment functions)
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   html.Comment = function(caption, doc, visible, img) {
-    var detect = w.jdl.rings ? "ring crossing" : "all movements";
-    d.getElementById('caption').innerHTML = caption + " (" + detect + ")";
+    d.getElementById('caption').innerHTML = caption;
     d.getElementById('commentary').innerHTML = w.markdown(doc);
     canvas.Showing = [];
     for (var i = 0; i < visible.length; i++) {
