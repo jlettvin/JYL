@@ -627,7 +627,8 @@ also fails to trigger activity.
   // COMMENT SERVICE FUNCTION (Used by call-by-name paper.comment functions)
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   html.Comment = function(caption, doc, visible, img) {
-    d.getElementById('caption').innerHTML = caption;
+    var detect = w.jdl.rings ? "ring crossing" : "all movements";
+    d.getElementById('caption').innerHTML = caption + " (" + detect + ")";
     d.getElementById('commentary').innerHTML = w.markdown(doc);
     canvas.Showing = [];
     for (var i = 0; i < visible.length; i++) {
