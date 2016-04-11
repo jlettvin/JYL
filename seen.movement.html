@@ -165,6 +165,7 @@ ol {
     'Airy_3mm_BonW':'Airy_3mm_BonW',
     'Airy_3mm_WonB':'Airy_3mm_WonB',
     'Fiber':'Fiber',
+    'Rana_Pipiens':'Eastern Leopard Frog',
   };
 
   // CONTROL DATA /////////////////////////////////////////////////////////////
@@ -231,19 +232,18 @@ March 1959 Pages 393 and 354.^^^
   paper.citation += '!w' + 'RLE' + '|' + paper.where['RLE'] + 'w!\n';
 
   paper.menu = HERE(function() {/*
-___This menu enables execution of emulators
-for all five feature detections described in
-the original paper to the left.^^^
-___Turn on the sound using the above button.^^^
-___Hover over a menu item to choose,
-then mouse over to canvas and move the cursor
-to either cross the shown boundary centrifugally
-or up/down for brighter/darker.
 # Wide/low: !:Kind1Black,black:! or !:Kind1White,white:!
 # !:Kind2,Constricted:!
 # !:Kind3,Directional:!
 # !:Kind4,Annular:!
 # !:Kind5,Illumination:!
+___This menu enables execution of emulators
+for all five feature detections described in
+the original paper to the far left.
+Hover over a menu item to choose,
+then mouse over to canvas and move the cursor
+to either cross the shown boundaries centrifugally
+or up/down for brighter/darker.
 */});
 
   //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
@@ -251,7 +251,8 @@ or up/down for brighter/darker.
 Commentary by
 !aJonathan_Lettvin|Jonathan D. Lettvin|http://jonathan.lettvin.coma!
 20160322-20160406^^^
-with experiment emulation on a !:Neutral,Neutral Gray Background:!
+with !:Experiment,experiment:! emulation on
+a !:Neutral,Neutral Gray Background:!
 */});
 
   //PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
@@ -650,24 +651,36 @@ These included counting the members of individual axon species in optic nerve.
     html.Comment('Maturana', doc, [], 'Humberto_Maturana');
   };
 
-  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-  comment.Jerome_Lettvin  = function() { var doc = HERE(function() {/*
-== Jerome Y. Lettvin ==
-=== The lab for "experimental epistemology" ===
-___Jerry kept his central lab in !wBuilding_20|MIT Building 20 wing Cw!.
-He performed pulse recordings on both myelinated and unmyelinated single axons
-on frog optic nerve in a Faraday cage using 1 micron Dowben and Rose
-metal filled electrodes through a high gain amplifier where
-pulses were also made audible over a loudspeaker.
-These audible indicators of activity are simulated on this page
-by clicking on the "Click to HEAR" toggle button above.
+//copper and !wWood\%27s_metal|Cerrolow 136w!
+  comment.Experiment = function() { var doc = HERE(function() {/*
 === This experiment ===
 ___A frog is prepared with an electrode recording optic nerve discharges.
 The frog is mounted with the experimental eye pointed into
 the concave side of an aluminum hemisphere where
 objects both lighter and darker are moved within the hemisphere
 using a magnet on the convex surface, hiding all but the object from the frog.
-Discharge rates increase as objects cross circles as described.
+Discharge rates increase as objects cross circles as described.^^^
+___Pulse recordings on both myelinated and unmyelinated single axons
+on frog optic nerve were performed in
+a Faraday cage using 1 micron Dowben and Rose
+copper and Cerrolow 136 filled electrodes with a
+thalic gold tip capped with platinum black
+through a high gain amplifier where
+pulses were made audible over a loudspeaker.
+These audible indicators of activity are emulated on this page
+by clicking on the "Click to HEAR" toggle button above.
+    */});
+    html.Comment('Rana_Pipiens', doc, [], 'Rana_Pipiens');
+  };
+
+  //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  comment.Jerome_Lettvin  = function() { var doc = HERE(function() {/*
+== Jerome Y. Lettvin ==
+=== The lab for "experimental epistemology" ===
+___Jerry kept his central lab in !wBuilding_20|MIT Building 20 wing Cw!.
+He considered an experiment on a frog a failure if
+the frog did not recover after the experiment to live
+a life of leisure in the tank, enjoying mealworms.
     */});
     html.Comment('Lettvin', doc, [], 'Jerome_Lettvin');
   };
@@ -676,7 +689,7 @@ Discharge rates increase as objects cross circles as described.
   comment.Walter_Pitts  = function() { var doc = HERE(function() {/*
 == Walter Pitts ==
 === Mathematical Analysis ===
-Walter provided important insight into the character and utility
+___Walter provided important insight into the character and utility
 of neural discharges, both in terms of pulse-interval analysis
 and the geometric aspects of experiments.
     */});
@@ -687,7 +700,7 @@ and the geometric aspects of experiments.
   comment.Warren_McCulloch  = function() { var doc = HERE(function() {/*
 == Warren McCulloch ==
 === Philosophical Insights ===
-Warren provided both philosophical and historical context
+___Warren provided both philosophical and historical context
 to the experiments and post-experiment analysis.
     */});
     html.Comment('McCulloch', doc, [], 'Warren_McCulloch');
@@ -929,12 +942,13 @@ No other location in the diagram is considered.
   comment.Jonathan_Lettvin  = function() { var doc = HERE(function() {/*
 == Jonathan D. Lettvin ==
 === TODO ===
-@- Fill in more comment doc values
-@- Consolidate separate accessors into single objects
-@- Enable Safari and IE support
+@- Enable IE support
 
 @+ Use setTimeout to control object movement
 @+ Cause pulse interval shortening when object centrifugally crosses zero
+@+ Consolidate separate accessors into single objects
+@+ Fill in more comment doc values
+@+ Enable Safari support
     */});
     html.Comment('Jonathan_Lettvin', doc, [], 'Jonathan_Lettvin');
   };
@@ -1110,6 +1124,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
     Discharge       :canvas.Discharge,
     Airy            :canvas.Airy,
     Fiber           :canvas.Fiber,
+    Rana_Pipiens    :canvas.Rana_Pipiens,
 
     // where
     RLE             :canvas.RLE,
@@ -1298,6 +1313,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
               <button id="hear">HEAR</button><br />
               <button id="ring">RING</button><br />
             </div>
+            <br />
             <div align="center"><big><b><u>MENU</u></b></big></div>
             <div id="menu">
             </div>

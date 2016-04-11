@@ -1,6 +1,8 @@
 (function(w, d) {
   //'use strict';
 
+  function HERE(f) { return f.toString().split('\n').slice(1,-1).join('\n'); }
+
   w.jdl = w.jdl || {};
   w.jdl.Discharge = w.jdl.Discharge || {fixed:false};
   var jdl = w.jdl;
@@ -12,6 +14,22 @@
     hear.css(           "color", face.color[+ parity]);
     hear.css("background-color", face.color[+!parity]);
     hear.text('Click to ' + face.text[+!heard] + ' discharge emulator.');
+    var commentary = document.getElementById("commentary");
+    if (commentary) {
+      commentary.innerHTML = window.markdown(HERE(function() {/*
+___This button toggles emulation of sound produced
+on a loudspeaker during the experiment.
+___The default output is with the sound turned off.
+___These experiments included amplifying neuron discharges and
+producing sounds over a loudspeaker as well as
+recording the discharges on a Tektronix storage oscilloscope
+and photographing the display using a Polaroid camera.^^^
+___The sounds were highly characteristic and allowed
+uninterrupted attention to be paid to the animal,
+positioning of the electrode, and movement of objects
+rather than looking away to view results on a display.
+      */}));
+    }
   }
 
   // Ring Button appearance adjustment code
@@ -21,6 +39,21 @@
     ring.css(           "color", face.color[+ parity]);
     ring.css("background-color", face.color[+!parity]);
     ring.text('Click to detect ' + face.text[+!rings]);
+    var commentary = document.getElementById("commentary");
+    if (commentary) {
+      commentary.innerHTML = window.markdown(HERE(function() {/*
+___This button toggles between two emulations.^^^
+___The default emulation is "ring-crossing".
+___The paper is ambiguous about whether the sound changes
+accompanied general centrifugal movements or only for ring-crossings.
+___For the "ring-crossing" emulation, changes in discharge rates
+are absent for all movement other than centrifugal ring-crossings
+exceeding a threshold velocity.
+___For the "all movements" emulation, changes in discharge rates
+accompany all movements having a centrifugal component
+exceeding a threshold velocity.
+      */}));
+    }
   }
 
   // Interval timing and rate variables, gain volume, and active timeout array
