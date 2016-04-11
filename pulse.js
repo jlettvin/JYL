@@ -17,10 +17,10 @@
   // Ring Button appearance adjustment code
   var ring = $("#ring"), rings = true;
   function reRing(parity) {
-    const face = {color:['black', 'white'], text:['all moves', 'just rings']};
+    const face = {color:['black', 'white'], text:['all movements', 'ring crossing']};
     ring.css(           "color", face.color[+ parity]);
     ring.css("background-color", face.color[+!parity]);
-    ring.text('Click to respond to ' + face.text[+!rings]);
+    ring.text('Click to detect ' + face.text[+!rings]);
   }
 
   // Interval timing and rate variables, gain volume, and active timeout array
