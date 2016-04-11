@@ -5,18 +5,28 @@
   w.jdl.Discharge = w.jdl.Discharge || {fixed:false};
   var jdl = w.jdl;
 
-  // Button appearance adjustment code
-  var button = $("#hear"), hear = false;
-  function reButton(parity) {
+  // Hear Button appearance adjustment code
+  var hear = $("#hear"), heard = false;
+  function reHear(parity) {
     const face = {color:['black', 'white'], text:['mute', 'hear']};
-    button.css(           "color", face.color[+ parity]);
-    button.css("background-color", face.color[+!parity]);
-    button.text('Click to ' + face.text[+!hear] + ' discharge emulator.');
+    hear.css(           "color", face.color[+ parity]);
+    hear.css("background-color", face.color[+!parity]);
+    hear.text('Click to ' + face.text[+!heard] + ' discharge emulator.');
+  }
+
+  // Ring Button appearance adjustment code
+  var ring = $("#ring"), rings = true;
+  function reRing(parity) {
+    const face = {color:['black', 'white'], text:['all moves', 'just rings']};
+    ring.css(           "color", face.color[+ parity]);
+    ring.css("background-color", face.color[+!parity]);
+    ring.text('Click to respond to ' + face.text[+!rings]);
   }
 
   // Interval timing and rate variables, gain volume, and active timeout array
   var dtRest = 2e3, dtThis = dtRest, dtFast = 20, rate = 5e-2, delta = 20;
-  var volume  = hear ? 1.0 : 0.0;
+  var volume  = heard ? 1.0 : 0.0;
+  w.jdl.rings = rings;
   var timeouts = [];
 
   // Local renames
@@ -67,10 +77,14 @@
   }
 
   // This function mutes and unmutes sound production
-  var doButton = w.jdl.Discharge.doButton = function() {
+  var doHear = w.jdl.Discharge.doHear = function() {
     volume = (volume == 0.0) ? 1.0 : 0.0;
     if (volume == 0.0) context.suspend();
     else context.resume();
+  };
+
+  var doRoll = w.jdl.Discharge.doRoll = function() {
+    w.jdl.rings = rings;
   };
 
   // Functions visible to other scripts through the jdl namespace
@@ -80,9 +94,12 @@
 
   w.jdl.Discharge.onload = function() {
     // initialize button and attach events
-    reButton(false);
-    button.hover(function(){ reButton(true); }, function(){ reButton(false); });
-    button.click(function(){ hear = !hear; reButton(true); doButton(); });
+    reHear(false);
+    hear.hover(function(){ reHear(true); }, function(){ reHear(false); });
+    hear.click(function(){ heard = !heard; reHear(true); doHear(); });
+    reRing(false);
+    ring.hover(function(){ reRing(true); }, function(){ reRing(false); });
+    ring.click(function(){ rings = !rings; reRing(true); doRoll(); });
   };
 
   // Initialize execution

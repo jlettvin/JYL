@@ -182,12 +182,13 @@ ol {
   canvas.Showing  = [];
   canvas.R        = Math.floor(canvas.Edge / 2);
   canvas.X0       = canvas.Y0 = canvas.R;
-  canvas.XY1      = [canvas.R, canvas.R];
+  canvas.XYbefore = [canvas.R, canvas.R];
   canvas.threshold= 1.5; // ring-crossing vector magnitude needed to discharge.
   canvas.kind     = 3;  // Make links to choose this number.
   canvas.cursor   = 'crosshair';
 
   speaker.fixed   = false;
+  speaker.ring    = false;
   //canvas.Every    = 2;
   //canvas.Ignore   = canvas.Every;
 
@@ -393,8 +394,8 @@ at the !:Center,center:! of the circle described.
     var inner  = radius - epsilon;
     var twixt  = radius;
     var outer  = radius + epsilon;
-    window.html.canvas.XY0 = center;
-    window.html.canvas.R0 = radius;
+    window.html.canvas.XYcenter = center;
+    window.html.canvas.Rcenter = radius;
 
     canvas.Neutral();
     // Outer adjacent ring
@@ -413,8 +414,8 @@ at the !:Center,center:! of the circle described.
     var inner  = radius - epsilon;
     var twixt  = radius;
     var outer  = radius + epsilon;
-    window.html.canvas.XY0 = center;
-    window.html.canvas.R0 = radius;
+    window.html.canvas.XYcenter = center;
+    window.html.canvas.Rcenter = radius;
 
     canvas.Neutral();
     // Outer adjacent ring
@@ -433,8 +434,8 @@ at the !:Center,center:! of the circle described.
     var inner  = radius - epsilon;
     var twixt  = radius;
     var outer  = radius + epsilon;
-    window.html.canvas.XY0 = center;
-    window.html.canvas.R0 = radius;
+    window.html.canvas.XYcenter = center;
+    window.html.canvas.Rcenter = radius;
 
     canvas.Neutral();
     // Outer adjacent ring
@@ -453,8 +454,8 @@ at the !:Center,center:! of the circle described.
     var inner  = radius - epsilon;
     var twixt  = radius;
     var outer  = radius + epsilon;
-    window.html.canvas.XY0 = center;
-    window.html.canvas.R0 = radius;
+    window.html.canvas.XYcenter = center;
+    window.html.canvas.Rcenter = radius;
 
     canvas.Neutral();
     // Outer adjacent ring
@@ -478,7 +479,7 @@ at the !:Center,center:! of the circle described.
       var outer = radius+epsilon;
       var twixt = radius;
       var inner = radius-epsilon;
-      window.html.canvas.XY0 = [window.html.canvas.X0, window.html.canvas.Y0];
+      window.html.canvas.XYcenter = [window.html.canvas.X0, window.html.canvas.Y0];
 
       // Outer adjacent ring
       canvas.drawCircle(center, outer, canvas.Color.white, canvas.Line);
@@ -1139,7 +1140,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
       //canvas.Ignore  = canvas.Every;
 
       // Generate current mouse location coordinates
-      var XY2 = [e.layerX, e.layerY];
+      var XYcursor = [e.layerX, e.layerY];
 
       // canvas.inside > 1 protects against invalid references off canvas
       if (canvas.inside > 1) {
@@ -1149,7 +1150,11 @@ The !wAiry_disk|Airy pattern|w! is well documented.
         // Detect whether a movement crossed a ring
         function across(r0, r1, r2) {
           var dr = Math.abs(r2 - r1);
-          return (r1 < r0 && r0 < r2 && dr >= html.canvas.threshold);
+          if (window.jdl.rings || kind == 4) {
+            return (r1 < r0 && r0 < r2 && dr >= html.canvas.threshold);
+          } else {
+            return (r1 <= r2 && r2 <= r0 && dr >= html.canvas.threshold);
+          }
         };
 
         // This function computes distance between points a(head) and b(tail)
@@ -1157,6 +1162,15 @@ The !wAiry_disk|Airy pattern|w! is well documented.
           var dx = a[0] - b[0], dy = a[1] - b[1];
           return Math.sqrt(dx*dx + dy*dy);
         };
+
+        // Make coordinate pair for canvas center
+        var XYcenter = window.html.canvas.XYcenter;
+        // Make local reference to previous mouse location
+        var XYbefore = canvas.XYbefore;
+        // Calculate distances from center.
+        var Rcenter = window.html.canvas.Rcenter;
+        var Rcursor = radius(XYcursor, XYcenter);
+        var Rbefore = radius(XYbefore, XYcenter);
 
         if        (kind == 1) {
           //1111111111111111111111111111111111111111111111111111111111111111111
@@ -1168,18 +1182,10 @@ The !wAiry_disk|Airy pattern|w! is well documented.
           for (var i = 0; i < visible.length; i++) {
             html.canvas.Showing.push(visible[i]);
           }
-          html.canvas.threshold = 1.5;
+          html.canvas.threshold = window.jdl.rings ? 1.5 : 5;
 
-          // Make coordinate pair for canvas center
-          var XY0 = window.html.canvas.XY0;
-          // Make local reference to previous mouse location
-          var XY1 = canvas.XY1;
-          // Calculate distances from center.
-          var R0 = window.html.canvas.R0;
-          var R2 = radius(XY2, XY0);
-          var R1 = radius(XY1, XY0);
           // Iterate through rings, detect ring-crossing, begin excitation.
-          if (across(R0, R1, R2)) w.jdl.Discharge.excited();
+          if (across(Rcenter, Rbefore, Rcursor)) w.jdl.Discharge.excited();
           window.jdl.Discharge.fixed = false;
         } else if (kind == 2) {
           //2222222222222222222222222222222222222222222222222222222222222222222
@@ -1190,17 +1196,8 @@ The !wAiry_disk|Airy pattern|w! is well documented.
             html.canvas.Showing.push(visible[i]);
           }
           html.canvas.threshold = 0.5;
-
-          // Make coordinate pair for canvas center
-          var XY0 = window.html.canvas.XY0;
-          // Make local reference to previous mouse location
-          var XY1 = canvas.XY1;
-          // Calculate distances from center.
-          var R0 = window.html.canvas.R0;
-          var R2 = radius(XY2, XY0);
-          var R1 = radius(XY1, XY0);
           // Iterate through rings, detect ring-crossing, begin excitation.
-          if (across(R0, R1, R2)) w.jdl.Discharge.excited();
+          if (across(Rcenter, Rbefore, Rcursor)) w.jdl.Discharge.excited();
           window.jdl.Discharge.fixed = false;
         } else if (kind == 3) {
           //3333333333333333333333333333333333333333333333333333333333333333333
@@ -1209,18 +1206,9 @@ The !wAiry_disk|Airy pattern|w! is well documented.
           for (var i = 0; i < visible.length; i++) {
             html.canvas.Showing.push(visible[i]);
           }
-          html.canvas.threshold = 1.5;
-
-          // Make coordinate pair for canvas center
-          var XY0 = window.html.canvas.XY0;
-          // Make local reference to previous mouse location
-          var XY1 = canvas.XY1;
-          // Calculate distances from center.
-          var R0 = window.html.canvas.R0;
-          var R2 = radius(XY2, XY0);
-          var R1 = radius(XY1, XY0);
+          html.canvas.threshold = window.jdl.rings ? 1.5 : 5;
           // Iterate through rings, detect ring-crossing, begin excitation.
-          if (across(R0, R1, R2)) w.jdl.Discharge.excited();
+          if (across(Rcenter, Rbefore, Rcursor)) w.jdl.Discharge.excited();
           window.jdl.Discharge.fixed = false;
         } else if (kind == 4) {
           //4444444444444444444444444444444444444444444444444444444444444444444
@@ -1232,27 +1220,18 @@ The !wAiry_disk|Airy pattern|w! is well documented.
           for (var i = 0; i < visible.length; i++) {
             html.canvas.Showing.push(visible[i]);
           }
-          html.canvas.threshold = 1.5;
-
-          // Make coordinate pair for canvas center
-          var XY0 = window.html.canvas.XY0;
-          //console.log('center: ' + XY0);
-          // Make local reference to previous mouse location
-          var XY1 = canvas.XY1;
-          // Calculate distances from center.
-          var R2 = radius(XY2, XY0);
-          var R1 = radius(XY1, XY0);
+          html.canvas.threshold = window.jdl.rings ? 1.5 : 5;
           // Iterate through rings, detect ring-crossing, begin excitation.
           for (var z of html.canvas.Z) {
-            if (across(z, R1, R2)) w.jdl.Discharge.excited();
+            if (across(z, Rbefore, Rcursor)) w.jdl.Discharge.excited();
           }
           window.jdl.Discharge.fixed = false;
         } else if (kind == 5) {
           //5555555555555555555555555555555555555555555555555555555555555555555
           // A fifth variety measures inversely the average intensity of
           // illumination in a region.  Its maximum rate is in the dark.
-          var XY1 = canvas.XY1;
-          var y = Math.min(255, Math.max(0, 255 - XY1[1]));
+          var XYbefore = canvas.XYbefore;
+          var y = Math.min(255, Math.max(0, 255 - XYbefore[1]));
           var twixt = 20 + (1e3 * y / 255);
           var level = y.toString(0x10);
           if (level.length < 2) level = '0' + level;
@@ -1268,7 +1247,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
         }
       }
       // Store current mouse location for next call to handleMouseMove
-      canvas.XY1 = XY2;
+      canvas.XYbefore = XYcursor;
     } else {
       canvas.inside = 0;
     }
@@ -1315,7 +1294,10 @@ The !wAiry_disk|Airy pattern|w! is well documented.
             </canvas>
             <br /><b id="caption"></b>
           </td><td>
-            <div align="center"><button id="hear">HEAR</button><br /></div>
+            <div align="center">
+              <button id="hear">HEAR</button><br />
+              <button id="ring">RING</button><br />
+            </div>
             <div align="center"><big><b><u>MENU</u></b></big></div>
             <div id="menu">
             </div>
@@ -1331,7 +1313,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
   </tr>
   <tr><td colspan="2" bgcolor="#cccccc">
       This page is best viewed with either
-      google "chrome" or apple "safari" browser at zoom:100%,
+      a google "chrome" or apple "safari" browser at zoom:100%,
       with the window widened so this text is all on one line.
       </br>
   <tr><td colspan="2">
