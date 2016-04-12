@@ -112,8 +112,11 @@ exceeding a threshold velocity.
   // This function mutes and unmutes sound production
   var doHear = w.jdl.Discharge.doHear = function() {
     volume = (volume == 0.0) ? 1.0 : 0.0;
+    /*
+       // suspend/resume fails in IE, so just don't use it for now.
     if (volume == 0.0) context.suspend();
     else context.resume();
+    */
   };
 
   var doRoll = w.jdl.Discharge.doRoll = function() {
