@@ -572,7 +572,7 @@ also fails to trigger activity.
     var kind = window.html.canvas.kind;
     var which = '== !_Emulator for neuron of kind ' + kind + '_! ==\n';
     var detect = w.jdl.rings ? "ring crossing" : "all movements";
-    var caption = 'Active area (detecting ' + detect + ")";
+    var caption = 'Active area (' + detect + ")";
     html.Comment(caption, which + doc, show[kind]);
   };
 
@@ -1182,7 +1182,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
       }
       XYcursor = [x, y];
       var notation = by + '(' + e.layerX + ',' + e.layerY + ')';
-      document.getElementById('cursor').innerHTML = notation;
+      //document.getElementById('cursor').innerHTML = notation;
 
       // canvas.inside > 1 protects against invalid references off canvas
       if (canvas.inside > 1) {
