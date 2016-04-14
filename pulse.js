@@ -66,7 +66,15 @@ exceeding a threshold velocity.
   var floor = Math.floor, ceil = Math.ceil, rand = Math.random;
 
   // webaudio
-  var context = w.AudioContext?new w.AudioContext():new w.webkitAudioContext();
+  var context;
+  if (typeof w.AudioContext !== 'undefined') {
+    context = new w.AudioContext();
+  } else if (typeof w.webkitAudioContext !== 'undefined') {
+    context = new w.webkitAudioContext();
+  } else {
+    console.log('No audiocontext');
+  }
+  //var context = w.AudioContext?new w.AudioContext():new w.webkitAudioContext();
   // Setup single-shot waveform
   var samples = context.sampleRate;
   var frames  = samples * 5e-3, frame2 = frames / 2, frame3 = frames / 3;
