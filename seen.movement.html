@@ -1175,7 +1175,11 @@ The !wAiry_disk|Airy pattern|w! is well documented.
       }
       var by = 'unknown', x = 0, y = 0, XYcursor = [x, y];
       mouseXY(e);
-      if (typeof e.layerX !== 'undefined') {
+      if (true) {
+        var rect = canvas.getBoundingClientRect();
+        x = e.clientX - rect.left,
+        y = e.clientY - rect.top
+      } else if (typeof e.layerX !== 'undefined') {
         by = 'layer';
         x = e.layerX;
         y = e.layerY;
