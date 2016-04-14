@@ -348,7 +348,8 @@ at the !:Center,center:! of the circle described.
       'partII_title',
       'partII_body'
     ];
-    for (var element of elements) {
+    for (var e in elements) {
+      var element = elements[e];
       d.getElementById(element).innerHTML = w.markdown(paper[element]);
     }
   };
@@ -482,7 +483,7 @@ at the !:Center,center:! of the circle described.
   canvas.Kind4 = function(radius) {
     if (!radius) {
       canvas.Neutral();
-      for (var z of canvas.Z) canvas.Kind4(z);
+      for (var z in canvas.Z) canvas.Kind4(canvas.Z[z]);
     } else {
       radius = radius || 10;
       var ctx = canvas.ctx;
@@ -511,7 +512,7 @@ at the !:Center,center:! of the circle described.
   // Concentric Rings
   canvas.Ring = function(radius) {
     if (!radius) {
-      for (var z of canvas.Z) canvas.Kind4(z);
+      for (var z in canvas.Z) canvas.Kind4(canvas.Z[z]);
     } else {
       //console.log('badness');
       canvas.Kind4();
@@ -632,7 +633,7 @@ also fails to trigger activity.
     for (var z = 1; z < canvas.Zeros; z++) canvas.Z.push(Z0 + z * canvas.Gap);
 
     // For each element of Showing, in order, add components to canvas.
-    for (var fun of canvas.Showing) canvas.callable[fun]();
+    for (var f in canvas.Showing) canvas.callable[canvas.Showing[f]]();
 
     html.Paper();
   };
@@ -1166,7 +1167,9 @@ The !wAiry_disk|Airy pattern|w! is well documented.
       // Generate current mouse location coordinates
       function mouseXY(e) {
         console.log('mouseXY');
-        for (var name of ['layer', 'client', 'page']) {
+        var names = ['layer', 'client', 'page'];
+        for (var n of names) {
+          var name = names[n];
           console.log(name, '(' + e[name + 'X'] + ',' + e[name + 'Y'] + ')');
         }
       }
@@ -1275,8 +1278,8 @@ The !wAiry_disk|Airy pattern|w! is well documented.
           }
           html.canvas.threshold = 1.5;
           // Iterate through rings, detect ring-crossing, begin excitation.
-          for (var z of html.canvas.Z) {
-            if (across(z, Rbefore, Rcursor)) w.jdl.Discharge.excited();
+          for (var z in html.canvas.Z) {
+            if (across(html.canvas.Z[z], Rbefore, Rcursor)) w.jdl.Discharge.excited();
           }
           window.jdl.Discharge.fixed = false;
         } else if (kind == 5) {

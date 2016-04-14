@@ -357,7 +357,9 @@ var wiki = (function(w,d) {
     /* special case */
     //target.replace('\n{2,}', '\n<p />\n');
 
-    for (patterns of [basic_patterns, added_patterns]) {
+    var combined = [basic_patterns, added_patterns];
+    for (var p in combined) {
+        var patterns = combined[p];
         for (var key in patterns) {
             var triple = patterns[key];
             var name = triple[0], re = triple[1], to = triple[2];

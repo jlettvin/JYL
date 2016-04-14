@@ -81,7 +81,7 @@ exceeding a threshold velocity.
   function now()   { return context.currentTime; }
   function plus(t) { return now() + t;           };
   function band()  { return floor(dtThis + delta * (rand() - rand())); };
-  function clear() { for (var timeout of timeouts) clearTimeout(timeout); }
+  function clear() { for (var t in timeouts) clearTimeout(timeouts[t]); }
 
   // Fire and forget single-shot
   function sound() {
