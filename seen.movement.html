@@ -1174,12 +1174,14 @@ The !wAiry_disk|Airy pattern|w! is well documented.
         }
       }
       var by = 'unknown', x = 0, y = 0, XYcursor = [x, y];
-      mouseXY(e);
+      //mouseXY(e);
       if (true) {
         var rect = canvas.getBoundingClientRect();
         x = e.clientX - rect.left,
         y = e.clientY - rect.top
-      } else if (typeof e.layerX !== 'undefined') {
+      }
+      /*
+      else if (typeof e.layerX !== 'undefined') {
         by = 'layer';
         x = e.layerX;
         y = e.layerY;
@@ -1191,7 +1193,9 @@ The !wAiry_disk|Airy pattern|w! is well documented.
         by = 'page';
         x = e.pageX - canvas.offsetLeft;
         y = e.pageY - canvas.offsetTop;
-      } else {
+      }
+      */
+      else {
         var elem = document.documentElement;
         var body = document.body;
         by = 'client +-';
