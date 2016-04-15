@@ -83,7 +83,7 @@ ol {
   // $1 always refers to the internal function name provided here.
   // $2 always refers to the text to be displayed inline.
   // $3, when present, embodies or enhances a URL.
-  w.wikiappend([
+  window.wikiappend([
     'Arbitrary',
     /\!a\s*(.*)\s*\|\s*(.*)\s*\|\s*(.*)\s*a\!/g,
     '<a href="$3" '+
@@ -92,7 +92,7 @@ ol {
     '<a href="c" '+
     'onmouseover="window.paper.comment.a()">b</a>'
     ]);
-  w.wikiappend([
+  window.wikiappend([
     'Nobel',
     /\!n\s*(.*)\s*\|\s*(.*)\s*\|\s*(.*)\s*n\!/g,
     '<a href="http://www.nobelprize.org/nobel_prizes/$3" '+
@@ -101,7 +101,7 @@ ol {
     '<a href="http://www.nobelprize.org/nobel_prizes/c" '+
     'onmouseover="window.paper.comment.a()">b</a>'
     ]);
-  w.wikiappend([
+  window.wikiappend([
     'wikipedia',
     /\!w\s*(.*)\s*\|\s*(.*)\s*w\!/g,
     '<a href="https://en.wikipedia.org/wiki/$1" '+
@@ -110,7 +110,7 @@ ol {
     '<a href="https://en.wikipedia.org/wiki/a" '+
     'onmouseover="window.paper.comment.a()">b</a>'
     ]);
-  w.wikiappend([
+  window.wikiappend([
     'mouseover',
     /!:\s*([^\,]*)\s*\,\s*([^:]*)\s*:!/g,
     '<a href="" onmouseover="window.paper.comment.$1()">$2</a>',
@@ -137,17 +137,17 @@ ol {
 
   // Two top level branch namespaces off of window are reasonable.
   //window.jlettvin.namespace('html');
-  w.html          = {};   // Control data for generating comment in HTML
-  w.paper         = {};   // Content of the scientific paper
+  window.html          = {};   // Control data for generating comment in HTML
+  window.paper         = {};   // Content of the scientific paper
 
   // Secondary html control data
-  w.html.speaker  = {};   // Sound to exemplify pulse rate changes
-  w.html.canvas   = {};   // Control data for generating images on the canvas
-  w.html.image    = {};   // Images of paper authors
+  window.html.speaker  = {};   // Sound to exemplify pulse rate changes
+  window.html.canvas   = {};   // Control data for generating images on the canvas
+  window.html.image    = {};   // Images of paper authors
 
   // Enable syntactic sugar accessors to the two namespaces.
-  var html    = w.html;
-  var paper   = w.paper;
+  var html    = window.html;
+  var paper   = window.paper;
   var speaker = html.speaker;
   var canvas  = html.canvas;
   var image   = html.image;
@@ -350,7 +350,7 @@ at the !:Center,center:! of the circle described.
     ];
     for (var e in elements) {
       var element = elements[e];
-      d.getElementById(element).innerHTML = w.markdown(paper[element]);
+      document.getElementById(element).innerHTML = window.markdown(paper[element]);
     }
   };
 
@@ -572,7 +572,7 @@ also fails to trigger activity.
     };
     var kind = window.html.canvas.kind;
     var which = '== !_Emulator for neuron of kind ' + kind + '_! ==\n';
-    var detect = w.jdl.rings ? "ring crossing" : "all movements";
+    var detect = window.jdl.rings ? "ring crossing" : "all movements";
     var caption = 'Active area (' + detect + ")";
     html.Comment(caption, which + doc, show[kind]);
   };
@@ -641,8 +641,8 @@ also fails to trigger activity.
   // COMMENT SERVICE FUNCTION (Used by call-by-name paper.comment functions)
   //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   html.Comment = function(caption, doc, visible, img) {
-    d.getElementById('caption').innerHTML = caption;
-    d.getElementById('commentary').innerHTML = w.markdown(doc);
+    document.getElementById('caption').innerHTML = caption;
+    document.getElementById('commentary').innerHTML = window.markdown(doc);
     canvas.Showing = [];
     for (var i = 0; i < visible.length; i++) {
       canvas.Showing.push(visible[i]);
@@ -762,13 +762,13 @@ ___A monochromatic point source through the pupil produces an Airy pattern.
 A calculated over-saturated Airy pattern is shown.
 Concentric zones described may map to Airy pattern zeros.
     */});
-    var Airy = d.getElementById("Airy").innerHTML;
-    var Parm = d.getElementById("Parameter").innerHTML;
-    var Comp = d.getElementById("Components").innerHTML;
+    var Airy = document.getElementById("Airy").innerHTML;
+    var Parm = document.getElementById("Parameter").innerHTML;
+    var Comp = document.getElementById("Components").innerHTML;
     doc += "<table>" +
       "<tr><td>" + Airy + "</td><td>" + Parm + "</td></tr>" +
       "<tr><td>" + Comp + "</td></tr></table>";
-      //d.getElementById("Airy").innerHTML;
+      //document.getElementById("Airy").innerHTML;
     var tail = HERE(function() {/*
 === When are signals generated? ===
 ___Responses accompany crossing from inside to outside an annulus.
@@ -1092,7 +1092,7 @@ ___As discussed in Concentric, Airy pattern zeros are suspected to correlate
 with the locations that cause neuron discharges.
 The !wAiry_disk|Airy pattern|w! is well documented.
     */});
-    doc += d.getElementById("Airy").innerHTML;
+    doc += document.getElementById("Airy").innerHTML;
     html.Comment('Point Spread Function', doc, ['Neutral']);
   };
 
@@ -1250,7 +1250,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
           html.canvas.threshold = window.jdl.rings ? 1.5 : 5;
 
           // Iterate through rings, detect ring-crossing, begin excitation.
-          if (across(Rcenter, Rbefore, Rcursor)) w.jdl.Discharge.excited();
+          if (across(Rcenter, Rbefore, Rcursor)) window.jdl.Discharge.excited();
           window.jdl.Discharge.fixed = false;
         } else if (kind == 2) {
           //2222222222222222222222222222222222222222222222222222222222222222222
@@ -1262,7 +1262,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
           }
           html.canvas.threshold = 0.5;
           // Iterate through rings, detect ring-crossing, begin excitation.
-          if (across(Rcenter, Rbefore, Rcursor)) w.jdl.Discharge.excited();
+          if (across(Rcenter, Rbefore, Rcursor)) window.jdl.Discharge.excited();
           window.jdl.Discharge.fixed = false;
         } else if (kind == 3) {
           //3333333333333333333333333333333333333333333333333333333333333333333
@@ -1273,7 +1273,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
           }
           html.canvas.threshold = window.jdl.rings ? 1.5 : 5;
           // Iterate through rings, detect ring-crossing, begin excitation.
-          if (across(Rcenter, Rbefore, Rcursor)) w.jdl.Discharge.excited();
+          if (across(Rcenter, Rbefore, Rcursor)) window.jdl.Discharge.excited();
           window.jdl.Discharge.fixed = false;
         } else if (kind == 4) {
           //4444444444444444444444444444444444444444444444444444444444444444444
@@ -1288,7 +1288,7 @@ The !wAiry_disk|Airy pattern|w! is well documented.
           html.canvas.threshold = 1.5;
           // Iterate through rings, detect ring-crossing, begin excitation.
           for (var z in html.canvas.Z) {
-            if (across(html.canvas.Z[z], Rbefore, Rcursor)) w.jdl.Discharge.excited();
+            if (across(html.canvas.Z[z], Rbefore, Rcursor)) window.jdl.Discharge.excited();
           }
           window.jdl.Discharge.fixed = false;
         } else if (kind == 5) {
@@ -1379,9 +1379,10 @@ The !wAiry_disk|Airy pattern|w! is well documented.
     </td>
   </tr>
   <tr><td colspan="2" bgcolor="#cccccc">
-      This page is best viewed with either
-      a google "chrome" or apple "safari" browser at zoom:100%,
-      with the window widened so this text is all on one line.
+      This page is best viewed with either a
+      google "chrome" browser or
+      apple "safari" browser
+      at zoom:100%, with the window widened so this text is all on one line.
       <br />
   <tr><td colspan="2">
       Copyright&copy;2016 Jonathan D. Lettvin, All Rights Reserved

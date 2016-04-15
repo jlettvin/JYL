@@ -414,9 +414,9 @@ var wiki = (function(w,d) {
     module.exports = markdown;
     //console.log("wiki.js as MAIN");
   } else {
-    w.wiki = {markdown:markdown, append:append};
-    w.markdown = markdown;
-    w.wikiappend = append;
+    window.wiki = {markdown:markdown, append:append};
+    window.markdown = markdown;
+    window.wikiappend = append;
     //console.log("wiki.js as MODULE");
     //export {markdown, append};
   }

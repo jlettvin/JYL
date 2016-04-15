@@ -3,9 +3,9 @@
 
   function HERE(f) { return f.toString().split('\n').slice(1,-1).join('\n'); }
 
-  w.jdl = w.jdl || {};
-  w.jdl.Discharge = w.jdl.Discharge || {fixed:false};
-  var jdl = w.jdl;
+  window.jdl = window.jdl || {};
+  window.jdl.Discharge = window.jdl.Discharge || {fixed:false};
+  var jdl = window.jdl;
 
   // Hear Button appearance adjustment code
   var hear = $("#hear"), heard = false;
@@ -59,7 +59,7 @@ exceeding a threshold velocity.
   // Interval timing and rate variables, gain volume, and active timeout array
   var dtRest = 2e3, dtThis = dtRest, dtFast = 20, rate = 5e-2, delta = 20;
   var volume  = heard ? 1.0 : 0.0;
-  w.jdl.rings = rings;
+  window.jdl.rings = rings;
   var timeouts = [];
 
   // Local renames
@@ -67,14 +67,14 @@ exceeding a threshold velocity.
 
   // webaudio
   var context;
-  if (typeof w.AudioContext !== 'undefined') {
-    context = new w.AudioContext();
-  } else if (typeof w.webkitAudioContext !== 'undefined') {
-    context = new w.webkitAudioContext();
+  if (typeof window.AudioContext !== 'undefined') {
+    context = new window.AudioContext();
+  } else if (typeof window.webkitAudioContext !== 'undefined') {
+    context = new window.webkitAudioContext();
   } else {
     console.log('No audiocontext');
   }
-  //var context = w.AudioContext?new w.AudioContext():new w.webkitAudioContext();
+  //var context = window.AudioContext?new window.AudioContext():new window.webkitAudioContext();
   // Setup single-shot waveform
   var samples = context.sampleRate;
   var frames  = samples * 5e-3, frame2 = frames / 2, frame3 = frames / 3;
@@ -104,7 +104,7 @@ exceeding a threshold velocity.
 
   // Provide timing for pulse interval minimizing and decay to max
   function interval(t, f) {
-      dtThis = w.jdl.Discharge.fixed || t;
+      dtThis = window.jdl.Discharge.fixed || t;
       sound();
       timeouts.push(setTimeout(f, band()));
   }
@@ -118,7 +118,7 @@ exceeding a threshold velocity.
   }
 
   // This function mutes and unmutes sound production
-  var doHear = w.jdl.Discharge.doHear = function() {
+  var doHear = window.jdl.Discharge.doHear = function() {
     volume = (volume == 0.0) ? 1.0 : 0.0;
     /*
        // suspend/resume fails in IE, so just don't use it for now.
@@ -127,16 +127,16 @@ exceeding a threshold velocity.
     */
   };
 
-  var doRoll = w.jdl.Discharge.doRoll = function() {
-    w.jdl.rings = rings;
+  var doRoll = window.jdl.Discharge.doRoll = function() {
+    window.jdl.rings = rings;
   };
 
   // Functions visible to other scripts through the jdl namespace
-  w.jdl.Discharge.excited = function() {
+  window.jdl.Discharge.excited = function() {
       interval(dtFast, decay);
   };
 
-  w.jdl.Discharge.onload = function() {
+  window.jdl.Discharge.onload = function() {
     // initialize button and attach events
     reHear(false);
     hear.hover(function(){ reHear(true); }, function(){ reHear(false); });
