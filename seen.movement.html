@@ -1165,15 +1165,15 @@ The !wAiry_disk|Airy pattern|w! is well documented.
       $('#canvas').css('cursor', window.html.canvas.cursor);
 
       // Generate current mouse location coordinates
-      function mouseXY(e) {
-        console.log('mouseXY');
-        var names = ['layer', 'client', 'page'];
-        for (var n in names) {
-          var name = names[n];
-          console.log(name);
-          console.log(name, '(' + e[name + 'X'] + ',' + e[name + 'Y'] + ')');
-        }
-      }
+      //function mouseXY(e) {
+        //console.log('mouseXY');
+        //var names = ['layer', 'client', 'page'];
+        //for (var n in names) {
+          //var name = names[n];
+          //console.log(name);
+          //console.log(name, '(' + e[name + 'X'] + ',' + e[name + 'Y'] + ')');
+        //}
+      //}
       var by = 'unknown', x = 0, y = 0, XYcursor = [x, y];
       //mouseXY(e);
       if (true) {
@@ -1384,6 +1384,9 @@ The !wAiry_disk|Airy pattern|w! is well documented.
       apple "safari" browser
       at zoom:100%, with the window widened so this text is all on one line.
       <br />
+      This page fails to display properly
+      when using Microsoft Internet Explorer
+      or Firefox.
   <tr><td colspan="2">
       Copyright&copy;2016 Jonathan D. Lettvin, All Rights Reserved
   </td></tr>
